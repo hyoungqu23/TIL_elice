@@ -94,7 +94,7 @@ HTML은 줄바꿈을 무시한다.
 </body>
 ```
 
-## WEB, Internet
+### WEB, Internet
 WEB(1990년)이 하나의 건물이라면, Internet(1960년 말, 미국)은 그러한 건물들이 여럿 있는 하나의 도시이다.
 중앙집권적인 통신 시스템을 극복하기 위해 Internet이 생겼고, 이는 분산적인 형태를 취했다. 통신 장치, 케이블, 교육 등으로 인해 널리 퍼지지 못했지만, 1990년 11월, 스위스 CERN 물리학 연구소의 팀 버너스 리에 의해 세계 최초의 웹 브라우저인 WWW를 만들고, 12월 24일 세계 최초의 WEB 서버가 등장했다. 이후 두 컴퓨터에 각각 웹 브라우저와 웹 서버를 설치하고, IP 주소에 `info.cern.ch`라는 이름을 붙였다. 또한 웹 서버 컴퓨터에 `htdocs` 디렉토리를 설치하고, `index.html`, `1.html`, `2.html`...등을 작성하고, 누군가에 요청에 따라 해당 디렉토리에서 파일을 찾게 설정했다. 웹 브라우저가 설치된 컴퓨터에서는 `http://info.cern.ch/index.html` 주소(프로토콜://서버 위치/요청 파일)로 접속하여 웹 서버에 요청하면, 웹 서버는 설정된 디렉토리에서 찾아 `index.html`의 내용을 응답하게 된다. 최소 2대의 호스트 컴퓨터가 필요하고, 요청하는 컴퓨터가 결국 클라이언트, 요청을 받는 컴퓨터가 결국 서버가 되었다.
 이후 Internet과 WEB은 폭발적으로 동반적인 성장을 이룩했고, 지금은 모든 것이 CPU를 가지고 컴퓨터가 되어 사물 인터넷, IoT가 발전하고 있다.
@@ -104,4 +104,25 @@ WEB(1990년)이 하나의 건물이라면, Internet(1960년 말, 미국)은 그�
 IP 주소는 0~255 사이의 숫자 4개가 `.`으로 구분된다. 이때 `127.0.0.1`은 자기 자신을 나타내는 IP 주소로 약속되어 있다.
 
 ### Hosting
-호스트 컴퓨터를 임대하여 서버로 활용할 수 있게끔 하는 서비스를 호스팅 서비스라고 하며, 
+호스트 컴퓨터를 임대하여 서버로 활용할 수 있게끔 하는 서비스를 호스팅 서비스
+
+## 0404 | 월요일 실습 강의
+[Quiz 001 - Heading Tags](https://www.w3schools.com/tags/tag_hn.asp)
+[Quiz 002 - HTML Colors](https://www.w3schools.com/html/html_colors.asp)
+Inline Style / Style Tag / Style.css
+[Quiz 003 - Selectors](https://www.w3schools.com/cssref/css_selectors.asp)
+[Quiz 004 - backgroundColor](https://www.w3schools.com/cssref/pr_background-color.asp)
+[Quiz 005 - font-family](https://www.w3schools.com/cssref/pr_font_font-family.asp)
+[Quiz 006 - float](https://www.w3schools.com/cssref/pr_class_float.asp)
+[Quiz 006 - clear](https://www.w3schools.com/cssref/pr_class_clear.asp)
+
+<hr>
+
+반응형 웹 사이트 제작
+`em`
+
+데스크탑은 16px, 모바일은 12px 기준
+
+[color picker](https://www.w3schools.com/colors/colors_picker.asp)
+Hex , RGB, 예약어
+#6667AB

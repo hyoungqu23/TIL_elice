@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  color: white;
+  background-color: #6667AB;
+}
+
+.hello {
+  background: linear-gradient(60deg, #2e8b57, #6667AB);
+  width: 100vw;
+  height: 100vh;
+
+  /* 가운데 정렬 1 */
+  text-align: center;
+  
+  /* 가운데 정렬 2 */
+  display: flex;
+  justify-content: center;  /* 수평 가운데 정렬 */
+  align-items: center;      /* 수직 가운데 정렬 */
+}
