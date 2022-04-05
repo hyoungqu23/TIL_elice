@@ -151,7 +151,7 @@ JavaScript: 웹 사이트의 동적인 효과를 부여(슬라이드, 팝업 등
 3. **크로스 브라우징**
    모든 브라우저와 기기에서 웹사이트가 제대로 작동하는지 여부
 
-#### (실습 01) HTML을 구성하는 태그
+**실습 01 | HTML을 구성하는 태그**
 ```html
 <!DOCTYPE html>               <!-- html5 문서를 선언 -->
 <html>                        <!-- 문서의 시작과 끝 -->
@@ -234,3 +234,90 @@ Ordered List의 약자로, 순서가 존재하는 리스트를 생성하는 태�
 Anchor의 약자로, 링크를 연결하는 태그이다. 기본값으로, 파란색 글씨와 밑줄이 부여된다.
 - `href`: 연결할 주소
 - `target`: 해당 주소를 여는 방식 설정
+
+#### 구조를 설정하는 태그
+이러한 구조를 설정하는 태그들은 대다수 HTML5에서 등장했기 때문에 `!Doctype`으로 선언된 HTML 문서에서만 활용할 수 있다.
+##### `<header>`, `<nav>`
+```html
+<header>
+  <nav>
+    ...
+  </nav>
+</header>
+```
+`<header>` 태그는 웹 사이트의 머리글을 담는 공간으로, 보통 가장 먼저 보여지는 것을 작업한다. 또한, 일반적으로 내부에 `<nav>` 태그(navigation)를 통해 메뉴 버튼을 담는 공간을 구성한다.
+이때 주로 `<nav>` 태그 내에는 `<ul>`, `<li>`, `<a>` 태그들이 존재한다.
+```html
+<header>
+  <img src="logo.png" alt="Logo" />
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About Me</a></li>
+      <li><a href="#">Skills</a></li>
+      <li><a href="#">Projects</a></li>
+      <li><a href="#">Contact Me</a></li>
+    </ul>
+  </nav>
+</header>
+```
+
+##### `<main>`, `<article>`
+```html
+<main role="main">
+  <article>
+    ...
+  </article>
+  
+  <article>
+    ...
+  </article>
+</main>
+```
+`<main>` 태그는 문서의 주요 내용을 담는 태그로, IE는 미지원하므로 `role="main"` 속성을 필수적으로 입력해야 한다.
+`<article>` 태그는 문서의 주요 이미지나 텍스트 등의 정보를 담고 구역을 설정하는 태그로, 태그 내 구역을 대표하는 타이틀 `<h1> ~ <h6>` 태그가 존재해야만 한다.(웹 표준)
+
+##### `<footer>`
+`<footer>` 태그는 가장 하단에 들어가는 정보들을 표기할 때 사용하는 태그로, 아래와 같이 활용된다.
+```html
+<footer>
+  <div>
+    <p>주소</p>
+    <p>이메일</p>
+    <p>전화번호</p>
+  </div>
+  <div>
+    <p>사업자등록번호</p></p>
+    <p>통신판매업 신고번호</p>
+  </div>
+</footer>
+```
+
+##### `<div>`
+`<div>` 태그는 임의의 공간을 만들 때 사용하는 태그이다.
+
+#### HTML 태그의 두 가지 성격
+Block Elements와 Inline Elements는 줄 바꿈 현상이 있는지, 공간에 대한 크기를 만들어낼 수 있는지, 수직적으로 배치 작업이 가능한지 여부에 따라 구분된다.
+##### Block Elements
+```html
+<p>Hello World</p>
+<p>Hello World</p>
+<p>Hello World</p>
+```
+> Hello World
+> Hello World
+> Hello World
+
+Block Elements인 `<p>`, `<h1>` 등의 태그는 아래로 줄 바꿈되며 y축 정렬 형태로 출력된다. 따라서 공간을 만들 수 있어 `width`, `height` 속성을 설정할 수 있고, 수직적인 배치 작업이 가능하다.
+즉, 공간의 구성을 설정하는 태그들은 모두 Block Elements이다.
+
+##### Inline Elements
+```html
+<a>Hello World</a>
+<a>Hello World</a>
+<a>Hello World</a>
+```
+> Hello World Hello World Hello World
+
+Inline Elements인 `<a>`, `<span>` 등의 태그는 한 줄로, 즉 x축 정렬 형태로 출력된다. 따라서 공간을 만들 수 없고, 수직적인 배치 작업이 불가능하다.
+
