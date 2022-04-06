@@ -1595,3 +1595,23 @@ External CSS: `<link rel="stylesheet" href="style.css">`
 CSS 우선순위
 [참고자료](https://stuffandnonsense.co.uk/archives/css_specificity_wars.html)
 [참고자료-게임](https://flukeout.github.io/)
+style attributes > !important > ...
+
+`display`
+Block 화면 전체 만큼
+Inline 자기 크기 만큼
+기본값이 있고 이를 CSS로 수정할 수 있다.
+
+❗ user agent = 브라우저 ... 브라우저의 기본 설정 값이 존재한다.(F12 통한 개발자 도구에서 확인 가능)
+
+`margin`
+외부 여백
+마진 겹침 현상 -> 형제 요소인 경우, Block Level Element
+
+`padding`
+내부 여백
+
+`border`
+
+Grid Layout
+[참고자료 - 코드 공유](https://jsbin.com/?html,css,output)
