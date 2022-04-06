@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid</title>
+  <style>
+    div {
+      border: 20px solid #6667ab;
+      margin: 10px;
+    }
+    .header, .container, .footer {
+      display: grid;
+      border: 20px solid red;
+    }
+    .header {
+      grid-template-columns: 1fr 1fr;
+    }
+    .container {
+      grid-template-columns: 1fr 2fr 1fr;
+    }
+    .footer {
+      grid-template-columns: 1fr 1fr;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="">LOGO</div>
+    <div class="">MENU</div>
+  </div>
+  <div class="container">
+    <div class="">ASIDE</div>
+    <div class="">MAIN</div>
+    <div class="">SIDEBAR</div>
+  </div>
+  <div class="footer">
+    <div class="">COPYRIGHT</div>
+    <div class="">ADDRESS</div>
+  </div>
+</body>
+</html>

@@ -2,32 +2,62 @@
   <head>
     <title>WEB - Welcome</title>
     <meta charset="utf-8">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      
+      h1 {
+        border-bottom: solid 10px gray;
+        padding: 30px;
+      }
+
+      h1 a {
+        text-decoration: none;
+      }
+
+      ol {
+        width: 30%;
+        border-right: solid 10px gray;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 500px  2fr;
+      }
+    </style>
   </head>
   
   <body>
     <!-- 웹 페이지 구현 -->
     <h1><a href="./index.html">WEB</a></h1>
-    WWW is <strong>World <u>Wide</u> WEB</strong>.
-    <br />
-    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kaW5nfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1000&q=60" alt="Coding" style="width: 100;" />
-  
-    <ol>
-      <li><a href="./HTML.html">HTML</a></li>
-      <li><a href="./CSS.html">CSS</a></li>
-      <li><a href="./JavaScript.html">JavaScript</a></li>
-    </ol>
-  
-    <ul>
-      <li>VS code</li>
-      <li>Git</li>
-      <li>Chrome</li>
-    </ul>
 
-    <h2>Welcome</h2>
-    Hello, Web!!!!!!
+    <!-- WWW is <strong>World <u>Wide</u> WEB</strong>. -->
+
+    <!-- <br /> -->
+
+    <!-- <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y29kaW5nfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=1000&q=60" alt="Coding" style="width: 100;" /> -->
+  
+    <div class="container">
+      <ol>
+        <li><a href="./HTML.html">HTML</a></li>
+        <li><a href="./CSS.html">CSS</a></li>
+        <li><a href="./JavaScript.html">JavaScript</a></li>
+      </ol>
+      <!-- <ul>
+        <li>VS code</li>
+        <li>Git</li>
+        <li>Chrome</li>
+      </ul> -->
+      <div>
+        <h2>Welcome</h2>
+        Hello, Web!!!!!!
+      </div>
+    </div>
 
     <!-- Disqus 댓글 기능 추가 -->
-    <div id="disqus_thread"></div>
+    <!-- <div id="disqus_thread"></div>
     <script>
         /**
         *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -45,6 +75,6 @@
         (d.head || d.body).appendChild(s);
         })();
     </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
   </body>
 </html>
