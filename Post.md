@@ -1572,3 +1572,26 @@ div {
 </body>
 </html>
 ```
+
+복습
+깃헙 페이지 열기 + 소스 업로드 + 디스커스 댓글 구현
+index.html을 홈페이지라고 하는 이유는 웹 페이지 주소에서 기본적으로 index.html 파일이 주소에 없더라고 열기 때문이다.
+
+CSS
+1. 디자인을 하는 태그를 만들었다.(`<font>`)
+   HTML은 정보를 다루고, WEB은 정보인데, 디자인을 위한 태그들의 등장으로 가치가 떨어졌다.
+2. 디자인을 하는 언어를 새로 만들었다.
+   CSS 등 장 -> HTML의 정보적 기능을 온전히 보존하고 디자인 기능을 별도로 분리.
+
+기본 문법
+Selector Declaration
+Selector { Property: Value; }
+
+적용 방법
+Inline CSS: `style="..."`
+Internal CSS: `<style>...</style>`
+External CSS: `<link rel="stylesheet" href="style.css">`
+
+CSS 우선순위
+[참고자료](https://stuffandnonsense.co.uk/archives/css_specificity_wars.html)
+[참고자료-게임](https://flukeout.github.io/)
