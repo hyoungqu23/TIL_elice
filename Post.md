@@ -1615,3 +1615,12 @@ Inline 자기 크기 만큼
 
 Grid Layout
 [참고자료 - 코드 공유](https://jsbin.com/?html,css,output)
+
+미디어쿼리
+[bootstrap](https://getbootstrap.com/)
+반응형 웹 디자인
+CheatSheet 검색 << 정리 요약본 활용 가능
+
+`max-height: 480px`: 480px 이하에서 적용되는 쿼리
+`min-height: 480px`: 480px 이상에서 적용되는 쿼리
+
