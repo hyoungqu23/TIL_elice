@@ -2,6 +2,15 @@
   <head>
     <title>WEB - Welcome</title>
     <meta charset="utf-8">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PR7FLZV1XQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-PR7FLZV1XQ');
+    </script>
     <style>
       * {
         margin: 0;
@@ -18,13 +27,22 @@
       }
 
       ol {
-        width: 30%;
-        border-right: solid 10px gray;
+        /* width: 30%; */
+        margin-left: 50px;
+        /* border-right: solid 10px gray; */
       }
 
-      .container {
-        display: grid;
-        grid-template-columns: 500px  2fr;
+      @media all and (min-width: 480px) {
+        body {
+          background-color: lightgreen;
+        }
+        .container {
+          display: grid;
+          grid-template-columns: 300px  2fr;
+        }
+        ol {
+          border-right: solid 10px gray;
+        }
       }
     </style>
   </head>
