@@ -15,7 +15,7 @@ CSS3에서만 가능하므로, 브라우저 하위 버전에서는 prefix 접두
 .transition {
   -webkit-transform: translate(100px, 200px);     /* 크롬, 사파리 */
   -mox-transform: translate(100px, 200px);        /* 파이어폭스 */
-  -ms-transform: translate(100px, 200px ;         /* 익스플로러 9.0 */
+  -ms-transform: translate(100px, 200px) ;         /* 익스플로러 9.0 */
   -o-transform: translate(100px, 200px);          /* 오페라 */
 }
 ```
