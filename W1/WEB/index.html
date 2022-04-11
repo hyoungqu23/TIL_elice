@@ -16,6 +16,10 @@
         margin: 0;
         padding: 0;
       }
+
+      body {
+        display: relative;
+      }
       
       h1 {
         border-bottom: solid 10px gray;
@@ -32,9 +36,13 @@
         /* border-right: solid 10px gray; */
       }
 
+      #darkMode {
+        display: sticky;
+      }
+
       @media all and (min-width: 480px) {
         body {
-          background-color: lightgreen;
+          /* background-color: lightgreen; */
         }
         .container {
           display: grid;
@@ -48,6 +56,25 @@
   </head>
   
   <body>
+    <!-- Dark Mode 구현(Event driven Programming) -->
+    <input type="button" id="darkMode" value="Dark Mode" 
+      onclick="
+        document.querySelector('body').style.backgroundColor = 'black';
+        document.querySelector('body').style.color = 'white';
+        event.target.value='Light Mode';
+      "
+    >
+
+
+    <!-- <input type="button" id="darkMode" value="Dark Mode"
+      onclick="
+        alert('Dark Mode');
+      " 
+      onmouseleave="
+        alert('bye');
+      "> -->
+
+
     <!-- 웹 페이지 구현 -->
     <h1><a href="./index.html">WEB</a></h1>
 
@@ -73,7 +100,8 @@
         Hello, Web!!!!!!
       </div>
     </div>
-
+    
+    
     <!-- Disqus 댓글 기능 추가 -->
     <!-- <div id="disqus_thread"></div>
     <script>
