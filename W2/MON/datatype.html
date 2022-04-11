@@ -6,6 +6,7 @@
       document.write("<br>");           // 줄바꿈
       document.write(1.1);              // realNumber, float(실수)
       document.write("<br>");           // 줄바꿈
+
       document.write(1+1);              // 덧셈 연산
       document.write("<br>");           // 줄바꿈
       document.write(4-1);              // 뺄셈 연산
@@ -21,6 +22,28 @@
       document.write(Math.pow(2, 3));   // 제곱수 출력
       document.write("<br>");           // 줄바꿈
     </script>
+    <h1>String</h1>
+    <script>
+      document.write("Hello, world! <br>");   // 큰따옴표
+      document.write('Hello, \
+      world! <br>');   // 작은 따옴표(줄바꿈 불가능: `\`를 통해 코드 상으로만 가능케 함)
+      document.write(`Hello, 
+      world! <br>`);   // 백틱(줄바꿈 가능)
+      console.log('Hello, \
+      world! <br>');   // 작은 따옴표(줄바꿈 불가능: `\`를 통해 코드 상으로만 가능케 함)
+      console.log(`Hello, 
+      world! <br>`);   // 백틱(줄바꿈 가능)
 
+      document.write("asndoannjsbuvbbasb aisdownaobqbg aisdpap pnanifsia dopsmfpzbninsdf aspfdoampdansonakas  aksdkasdwnnqwndinlanfknk aspdpa".length);
+      document.write("<br>");
+      
+      document.write("Hell, world!".replace("Hell", "Hello"));
+      document.write("<br>");
+      
+      document.write(1+1);        // 2 (이항 산술 연산자)
+      document.write("<br>");
+      document.write("1"+"1");    // 11 (이항 결합 연산자)
+      document.write("<br>");
+    </script>
   </body>
 </html>
