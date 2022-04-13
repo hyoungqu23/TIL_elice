@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+    <head>
+        <title>WEB - Welcome</title>
+        <meta charset="utf-8">
+        <style>
+            h1{
+                border-bottom:10px solid green;
+                padding:30px;
+                margin-bottom:0;
+            }
+            h1 a{
+                text-decoration: none;
+            }
+            ol{
+                
+                margin-top:0;
+            }
+            @media all and (min-width: 480px) {
+                #container{
+                    display:grid;
+                    grid-template-columns: 150px 1fr;
+                }
+                ol{
+                    border-right:10px solid pink;
+                }
+            }
+            
+        </style>
+    </head>
+    <body>
+        <script>
+            console.log(this);
+        </script>
+        <input type="button" onclick="console.log(this);" value="1">
+        <input type="button" onclick="console.log(this);" value="2">
+        <input type="button" value="night" 
+            onclick="
+                // 만약에 이 버튼의 value 값이 night라면 아래 코드가 실행되고, 
+                if(this.value === 'night'){
+                    document.querySelector('body').style.backgroundColor = 'black';
+                    document.querySelector('body').style.color = 'white';
+                    let list = document.querySelectorAll('a');
+                    for (let i = 0; i < list.length; i++) {
+                      list[i].style.color='white';
+                    }
+                    // 이 버튼의 value값을 day로 변경한다. 
+                    this.value = 'day';
+                } else {
+                    // 아니라면 아래 코드가 실행된다. 
+                    document.querySelector('body').style.backgroundColor = 'white';
+                    document.querySelector('body').style.color = 'black';
+                    let list = document.querySelectorAll('a');
+                    for (let i = 0; i < list.length; i++) {
+                      list[i].style.color='black';
+                    }
+                    // 이 버튼의 value값을 night로 변경한다. 
+                    this.value = 'night';
+                }
+            "
+        >
+        <!--         
+        <input type="button" value="night" 
+            onclick="
+                document.querySelector('body').style.backgroundColor = 'black';
+                document.querySelector('body').style.color = 'white';
+            "
+        >
+        <input type="button" value="day" 
+            onclick="
+                document.querySelector('body').style.backgroundColor = 'white';
+                document.querySelector('body').style.color = 'black';
+            "
+        > -->
+        <h1><a href="index.html">WEB</a></h1>
+
+        <div id="container">
+            <ol>
+                <li><a href="1.html">html</a></li>
+                <li><a href="2.html">css</a></li>
+                <li><a href="3.html">javascript</a></li>
+            </ol>
+            <div>
+                <h2>Welcome</h2>
+                Hello, WEB!!!!!
+            </div>
+        </div>
+        <script>
+          let list = document.querySelectorAll('a');
+          for (let i = 0; i < list.length; i++) {
+            console.log(list[i]);
+            list[i].style.color='#6667ab';
+          }
+        </script>
+    </body>
+</html>
