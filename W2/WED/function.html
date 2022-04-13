@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Function</title>
+</head>
+<body>
+  <h1>Function</h1>
+  <script>
+    // 직접 계산
+    console.log(100000*0.1);
+
+    // 변수 활용
+    let price = 100000;
+    let tax_rate = 0.1;
+
+    console.log(price * tax_rate);
+
+    // 함수 설정
+    function calc_tax(price, tax_rate=0.1) {
+      // console.log(price * tax_rate);
+      return price * tax_rate;
+    }
+
+    calc_tax(100000, 0.1);
+    calc_tax(20000, 0.1);
+    calc_tax(20000);
+
+    console.log(calc_tax(100000, 0.1));
+    alert(calc_tax(20000, 0.1));
+    // file.save('result.txt', calc_tax(20000));
+
+
+  </script>
+
+</body>
+</html>

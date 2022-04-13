@@ -34,28 +34,39 @@
         </script>
         <input type="button" onclick="console.log(this);" value="1">
         <input type="button" onclick="console.log(this);" value="2">
+        <script>
+          function dark() {
+            document.querySelector('body').style.backgroundColor = 'black';
+            document.querySelector('body').style.color = 'white';
+            let list = document.querySelectorAll('a');
+            for (let i = 0; i < list.length; i++) {
+              list[i].style.color='white';
+            }
+          }
+
+          function light() {
+            // 아니라면 아래 코드가 실행된다. 
+            document.querySelector('body').style.backgroundColor = 'white';
+            document.querySelector('body').style.color = 'black';
+            let list = document.querySelectorAll('a');
+            for (let i = 0; i < list.length; i++) {
+              list[i].style.color='black';
+            }
+          }
+        </script>
         <input type="button" value="night" 
             onclick="
                 // 만약에 이 버튼의 value 값이 night라면 아래 코드가 실행되고, 
                 if(this.value === 'night'){
-                    document.querySelector('body').style.backgroundColor = 'black';
-                    document.querySelector('body').style.color = 'white';
-                    let list = document.querySelectorAll('a');
-                    for (let i = 0; i < list.length; i++) {
-                      list[i].style.color='white';
-                    }
-                    // 이 버튼의 value값을 day로 변경한다. 
-                    this.value = 'day';
+                  // 다크모드 함수 호출
+                  dark();
+                  // 이 버튼의 value값을 day로 변경한다. 
+                  this.value = 'day';
                 } else {
-                    // 아니라면 아래 코드가 실행된다. 
-                    document.querySelector('body').style.backgroundColor = 'white';
-                    document.querySelector('body').style.color = 'black';
-                    let list = document.querySelectorAll('a');
-                    for (let i = 0; i < list.length; i++) {
-                      list[i].style.color='black';
-                    }
-                    // 이 버튼의 value값을 night로 변경한다. 
-                    this.value = 'night';
+                  // 브라이트 모드 함수 호출
+                  light();
+                  // 이 버튼의 value값을 night로 변경한다. 
+                  this.value = 'night';
                 }
             "
         >
