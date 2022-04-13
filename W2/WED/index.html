@@ -53,18 +53,26 @@
               list[i].style.color='black';
             }
           }
+
+          function darkLight(mode) {
+            if (mode === 'dark') {
+              dark();
+            } else {
+              light();
+            }
+          }
         </script>
         <input type="button" value="night" 
             onclick="
                 // 만약에 이 버튼의 value 값이 night라면 아래 코드가 실행되고, 
                 if(this.value === 'night'){
                   // 다크모드 함수 호출
-                  dark();
+                  darkLight('dark');
                   // 이 버튼의 value값을 day로 변경한다. 
                   this.value = 'day';
                 } else {
                   // 브라이트 모드 함수 호출
-                  light();
+                  darkLight('light');
                   // 이 버튼의 value값을 night로 변경한다. 
                   this.value = 'night';
                 }
