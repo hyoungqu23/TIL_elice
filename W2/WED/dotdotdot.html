@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dot, Dot, Dot</title>
+</head>
+<body>
+  <!-- 직접 구현한 version -->
+  <!-- <div>
+    JavaScript is <input type="button" value="..." onclick="
+      if (this.display !== 'none') {
+        document.querySelector('input').style.display='none';
+        document.querySelector('span').style.display='inline';
+      } else {
+        document.querySelector('input').style.display='inline';
+        document.querySelector('span').style.display='none';
+      }
+    ">
+    <span style="display: none">
+      a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS.
+    </span>
+  </div> -->
+
+  <!-- 강의 version 1 -->
+  <div>
+    JavaScript is
+    <span
+      style="background-color: grey; padding: 0 5px; cursor: pointer;"
+      onclick="
+        if (this.display !== 'none') {
+          this.style.display='none';
+          document.getElementById('hidden').style.display='inline';
+        } else {
+          this.style.display='inline';
+          document.getElementById('hidden').style.display='none';
+        }
+      "
+    >
+      ...
+    </span>
+    <span id="hidden" style="display: none">
+      a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS.
+    </span>
+  </div>
+  
+  <hr>
+  
+  <!-- 강의 version 2 -->
+  <div>
+    JavaScript is
+    <span
+      style="background-color: grey; padding: 0 5px; cursor: pointer;"
+      onclick="
+        if (this.display !== 'none') {
+          this.style.display='none';
+          document.getElementById('content').innerHTML =`a <strong><u>programming language</u></strong> that is one of the core technologies of the World Wide Web, alongside HTML and CSS.`;
+        } else {
+          this.style.display='inline';
+          document.getElementById('content').innerHTML='';
+        }
+      "
+    >
+      ...
+    </span>
+    <span id="content"></span>
+  </div>
+
+</body>
+</html>
