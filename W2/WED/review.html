@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Review_0413</title>
+</head>
+<body>
+  <!-- Dark Mode 구현 -->
+  <input type="button" value="Dark Mode" onclick="
+      if (this.value === 'Dark Mode') {
+        document.querySelector('body').style.backgroundColor= '#000000';
+        document.querySelector('body').style.color= '#ffffff';
+        this.value= 'Light Mode';
+      } else {
+        document.querySelector('body').style.backgroundColor= '#ffffff';
+        document.querySelector('body').style.color= '#000000';
+        this.value= 'Dark Mode';
+      }
+    "
+  >
+  <h1><a href="#">WEB</a></h1>
+  <ol>
+    <li><a href="#">HTML</a></li>
+    <li><a href="#">CSS</a></li>
+    <li><a href="#">JavaScript</a></li>
+  </ol>
+  <h2>Welcome, WEB</h2>
+  <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perferendis recusandae velit nisi hic fuga aliquid tenetur adipisci dignissimos. Recusandae ea dolorum quidem cupiditate repellendus sit illum quae quas, corrupti facilis!</p>
+</body>
+</html>
