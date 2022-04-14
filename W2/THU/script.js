@@ -88,3 +88,95 @@ for (let i = 0; i < $items.length; i++) {
     this.classList.add("active");
   }
 }
+
+// 4. Click Image Slider
+// arrow-right
+// 오른쪽 화살표 버튼에 click Event Handler 추가
+document.querySelector(".right-arrow").onclick = function () {
+  // 현재 슬라이드 이미지 선택
+  let currentSlide = document.querySelector("#photo .slide.active");
+
+  // 다음 슬라이드 이미지 선택
+  let nextSlide = currentSlide.nextElementSibling;
+
+  // 다음 슬라이드 이미지가 없는 경우(현재 슬라이드 이미지가 마지막 슬라이드 이미지인 경우)
+  if (nextSlide === null) {
+    // 첫 번째 슬라이드 이미지로 돌아가기
+    nextSlide = currentSlide.parentElement.firstElementChild;
+  }
+
+  // 현재 슬라이드 이미지에 애니메이션 추가
+  currentSlide.animate({
+    // Fade-out 효과 지정
+    opacity: [1, 0]
+  }, {
+    // 애니메이션 세부 설정
+    duration: 500,
+    easing: "ease",
+    iterations: 1,
+    fill: "both"
+  });
+
+  // 현재 슬라이드 이미지에 `active` 클래스 제거
+  currentSlide.classList.remove("active");
+
+  // 다음 슬라이드 이미지에 애니메이션 추가
+  nextSlide.animate({
+    // Fade-in 효과 지정
+    opacity: [0, 1]
+  }, {
+    // 애니메이션 세부 설정
+    duration: 500,
+    easing: "ease",
+    iterations: 1,
+    fill: "both"
+  });
+
+  // 다음 슬라이드 이미지에 `active` 클래스 추가
+  nextSlide.classList.add("active");
+}
+
+// arrow-left
+document.querySelector(".left-arrow").onclick = function () {
+  // 현재 슬라이드 이미지 선택
+  let currentSlide = document.querySelector("#photo .slide.active");
+
+  // 이전 슬라이드 이미지 선택
+  let previousSlide = currentSlide.previousElementSibling;
+
+  // 이전 슬라이드 이미지가 없는 경우(현재 슬라이드 이미지가 첫 번쨰 슬라이드 이미지인 경우)
+  if (previousSlide === null) {
+    // 마지막 슬라이드 이미지로 돌아가기
+    previousSlide = currentSlide.parentElement.lastElementChild;
+  }
+
+  // 현재 슬라이드 이미지에 애니메이션 추가
+  currentSlide.animate({
+    // Fade-out 효과 지정
+    opacity: [1, 0]
+  }, {
+    // 애니메이션 세부 설정
+    duration: 500,
+    easing: "ease",
+    iterations: 1,
+    fill: "both"
+  });
+
+  // 현재 슬라이드 이미지에 `active` 클래스 제거
+  currentSlide.classList.remove("active");
+
+  // 이전 슬라이드 이미지에 애니메이션 추가
+  previousSlide.animate({
+    // Fade-in 효과 지정
+    opacity: [0, 1]
+  }, {
+    // 애니메이션 세부 설정
+    duration: 500,
+    easing: "ease",
+    iterations: 1,
+    fill: "both"
+  });
+
+  // 이전 슬라이드 이미지에 `active` 클래스 추가
+  previousSlide.classList.add("active");
+}
