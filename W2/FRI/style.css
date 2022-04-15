@@ -1,0 +1,317 @@
+/* ##### Default Style ##### */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+img {
+  vertical-align: middle;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: black
+}
+
+/* ##### CLASS Style ##### */
+
+.container {
+  width: 100%;
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+
+/* ##### HEADER Style ##### */
+header.flex {
+  width: 100%;
+  height: 80px;
+  padding: 0 10px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  justify-content: space-between;
+
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+header #logo {
+  padding: 0 20px;
+
+  font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header #logo a {
+  color: white;
+}
+
+header #navbar ul.flex {
+  justify-content: space-between;
+  align-items: center;
+}
+
+header #navbar ul li a {
+  display: inline-block;
+
+  width: 120px;
+  height: 80px;
+
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+
+  text-align: center;
+  line-height: 4em;
+}
+
+header #navbar ul li a:hover {
+  font-size: 28px;
+  line-height: 2.8em;
+  transition: all 1s 0.1s;
+}
+
+input#top, input#darkMode {
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50%;
+  border: 5px solid #b721ff;
+  
+  background-color: #b721ff;
+  color: white;
+
+  font-family: 'Noto Sans', 'Helvetica Neue', sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.3);
+}
+
+input#top {
+  position: fixed;
+  bottom: 60px;
+  right: 120px;
+}
+
+input#darkMode {
+  position: fixed;
+  bottom: 60px;
+  right: 50px;
+}
+
+/* ##### MAIN Style ##### */
+main article, section {
+  width: 100vw;
+  height: 100vh;
+  padding-top: 80px;
+}
+
+main article h2 {
+  font-size: 48px;
+}
+
+/* ##### MAIN Style - HOME ##### */
+main article#home .intro {
+  width: 50%;
+  padding-left: 100px;
+}
+
+main article#home .intro h2 {
+  font-size: 64px;
+  margin-bottom: 50px;
+}
+
+main article#home .intro p {
+  font-size: 32px;
+  text-align: left;
+}
+
+/* ##### MAIN Style - DREAM ##### */
+main section#dream .text_box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  margin-top: 150px;
+  font-size: 3rem;
+}
+
+main section#dream p.text {
+  color: #b721ff;
+  font-weight: bold;
+}
+
+/* ##### MAIN Style - ABOUT ##### */
+main section#about .cards {
+  width: 75vw;
+  font-size: 32px;
+}
+
+main section#about p {
+  font-weight: bold;
+  text-align: left;
+}
+
+/* main section#about .card {
+  width: 50vw;
+  height: 10vh;
+  margin: 10px auto;
+  font-size: 24px;
+
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  border-radius: 30px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+} */
+
+
+/* ##### MAIN Style - SKILL ##### */
+main article#skill .skill-intro {
+  margin: 50px auto;
+}
+
+main article#skill h2, p {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+main article#skill .tab-container {
+  width: 75vw;
+  height: 90vh;
+  margin: 0 auto;
+}
+
+main article#skill .tab-container .tab-list li {
+  width: 16.666%;
+  padding: 20px 10px;
+
+  text-align: center;
+  font-weight: bold;
+
+  background-color: #cfd9df;
+}
+
+main article#skill .tab-container .tab-list li:hover {
+  cursor: pointer;
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  transform: scale(1.2);
+  transition: all 2s;
+}
+
+main article#skill .tab-container .tab {
+  display: none;
+  width: 100%;
+  height: 40%;
+  padding: 30px;
+
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+main article#skill .tab-container .tab h3 {
+  border-bottom: 1px solid black;
+  padding-bottom: 5px;
+  
+}
+
+main article#skill .tab-container .tab p {
+  margin-top: 10px;
+  padding: 10px;
+  text-align: left;
+}
+
+.active {
+  display:block !important;
+}
+
+main article#skill .tab-container .tab-list li.active{
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%) !important;
+  color:black !important;
+}
+
+.active a {
+  color:black !important;
+}
+
+
+
+/* ##### MAIN Style - Words ##### */
+main article#words .letter.hidden {
+  display: none;
+}
+
+main article#words #open {
+  display: block;
+  width: 200px;
+  height: 100px;
+  margin: 50px auto;
+  
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+  border: none;
+  border-radius: 20px;
+  box-shadow: 8px 8px 5px rgba( 0, 0, 0, 0.25);
+
+  font-size: 32px;
+  font-weight: bold;
+  color: white;
+}
+
+main article#words .letter {
+  width: 75vw;
+  height: 300px;
+  margin: 50px auto 0px auto;
+  padding: 30px;
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+main article#words .letter p {
+  margin-top: 20px;
+  text-align: left;
+}
+
+/* ##### FOOTER Style ##### */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+  height: 50px;
+  padding: 10px 0;
+
+  font-size: 14px;
+  background-image: linear-gradient(-20deg, #b721ff 0%, #21d4fd 100%);
+}
+
+footer div.copyright {
+  margin-left: 30px;
+}
+
+footer div.contact {
+  width: 30%;
+  margin-right: 30px;
+  justify-content: space-between;
+
+  font-weight: 600;
+}
+
+@keyframes

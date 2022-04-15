@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HyoungMin</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="shortcut icon" href="favicon.png" />
+  <script src="./script.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header class="flex">
+      <h1 id="logo">
+        <a href="#home">HYOUNGMIN</a>
+      </h1>
+      <nav id="navbar">
+        <ul class="flex">
+          <li><a href="#home">HOME</a></li>
+          <li><a href="#dream">DREAM</a></li>
+          <li><a href="#about">ABOUT</a></li>
+          <li><a href="#skill">SKILL</a></li>
+          <li><a href="#words">WORDS</a></li>
+        </ul>
+      </nav>
+    </header>
+    <input type="button" id="top" value="Top" onclick="window.scrollTo({'behavior':'smooth', 'top':0 ,})" />
+    
+    <input type="button" id="darkMode" value="Dark" 
+    onclick="
+    if (this.value === 'Dark') { 
+      document.querySelector('.container').style.backgroundImage = 'linear-gradient(to top, #09203f 0%, #537895 100%)';
+      document.querySelector('.container').style.color = 'white';
+      this.value='Light';
+    } else {
+      document.querySelector('.container').style.backgroundImage = 'linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)';
+      document.querySelector('.container').style.color = 'black';
+      this.value='Dark';
+    }
+    "
+    >
+    <main role="main">
+      <article id="home" class="flex">
+        <div class="profile">
+          <img src="./profile.png" alt="profile">
+        </div>
+        <div class="intro">
+          <h2>
+            HYOUNGMIN
+          </h2>
+          <p>프론트엔드 개발자를 꿈꾸는 이형민입니다.</p>
+        </div>
+      </article>
+      <section id="dream">
+        <div class="text_box">
+          <p>저는</p>
+          <p class="text"> </p>
+          <p>개발자가 되고 싶습니다.</p>
+        </div>
+      </section>
+      <section id="about" class="flex">
+        <ul class="cards">
+          <li class="card">
+            <p>💻 개발을 취미이자 특기로 하려고 노력하는 중입니다.</p>
+          </li>
+          <li class="card">
+            <p>⚽ 축구와 야구를 좋아합니다.</p>
+          </li>
+          <li class="card">
+            <p>🧱 집 인테리어에 관심이 있습니다.</p>
+          </li>
+          <li class="card">
+            <p>🎶 음악 듣는 것을 좋아합니다.</p>
+          </li>
+          <li class="card">
+            <p>🎮 게임을 즐겨 합니다.</p>
+          </li>
+        </ul>
+      </section>
+
+      <article id="skill">
+        <div class="skill-intro">
+          <h2>Skill I want</h2>
+          <p>저는 프론트엔드에 관심이 많으며, JavaScript와 React를 활용한 웹 개발을 하고 싶습니다.</p>
+        </div>
+        <div class="tab-container">
+          <ul class="tab-list flex">
+              <li class="active"><a href="#tab1">HTML5</a></li>
+              <li ><a href="#tab2">CSS3</a></li>
+              <li ><a href="#tab3">JavaScript</a></li>
+              <li ><a href="#tab4">React</a></li>
+              <li ><a href="#tab5">Node.js</a></li>
+              <li ><a href="#tab6">Git</a></li>
+          </ul>
+
+          <div id="tab1" class="tab active">
+              <h3>HTML5</h3>
+              <p>
+                The HyperText Markup Language or HTML is the standard markup language for documents designed to be displayed in a web browser.(<a href="https://en.wikipedia.org/wiki/HTML">참고</a>)
+              </p>
+          </div>
+          <div id="tab2" class="tab">
+              <h3>CSS3</h3>
+              <p>
+                Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in a markup language such as HTML.(<a href="https://en.wikipedia.org/wiki/CSS">참고</a>)
+              </p>
+          </div>
+          <div id="tab3" class="tab">
+              <h3>JavaScript</h3>
+              <p>
+                JavaScript often abbreviated JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS. Over 97% of websites use JavaScript on the client side for web page behavior, often incorporating third-party libraries. All major web browsers have a dedicated JavaScript engine to execute the code on users' devices.(<a href="https://en.wikipedia.org/wiki/JavaScript">참고</a>)
+              </p>
+          </div>
+          <div id="tab4" class="tab">
+              <h3>React</h3>
+              <p>
+                React (also known as React.js or ReactJS) is a free and open-source front-end JavaScript library for building user interfaces based on UI components.(<a href="https://en.wikipedia.org/wiki/React_(JavaScript_library)">참고</a>)
+              </p>
+          </div>
+          <div id="tab5" class="tab">
+              <h3>Node.js</h3>
+              <p>
+                Node.js is an open-source, cross-platform, back-end JavaScript runtime environment that runs on the V8 engine and executes JavaScript code outside a web browser.(<a href="https://en.wikipedia.org/wiki/Node.js">참고</a>)
+              </p>
+          </div>
+          <div id="tab6" class="tab">
+              <h3>Git</h3>
+              <p>
+                Git is software for tracking changes in any set of files, usually used for coordinating work among programmers collaboratively developing source code during software development.(<a href="https://en.wikipedia.org/wiki/Git">참고</a>)
+              </p>
+              
+          </div>
+
+      </div>
+      </article>
+      <article id="words">
+        <button id="open">OPEN</button>
+        <div class="letter hidden">
+          <h2>To. Racer</h2>
+          <p>
+            이번 엘리스 SW 트랙에 참여하면서, 부족한 부분의 지식을 채우고 자료를 제공해주는 것도 기대한 점이지만 사실 협업 경험이 없는 저는 팀 프로젝트를 제일 기대하고 있습니다.
+          </p>
+          <p>
+            아쉽게도 이번에는 비대면으로 진행되는 만큼 서로에게 자극이 되기 어려울 수 있지만, 그래도 함께 완주해 개발자로서 한걸음 더 성장하는 기회가 되면 좋겠습니다!
+          </p>
+        </div>
+      </article>
+    </main>
+    <footer>
+      <div class="copyright left">
+        © 2022, HyoungMin, Built with HTML, CSS, JavaScript
+      </div>
+      <div class="contact right flex">
+        <div class="btn">
+          <a href="https://github.com/hyoungqu23">GitHub</a>
+        </div>
+        <div class="btn">
+          <a href="https://hyoungqu23.github.io/">Blog</a>
+        </div>
+        <div class="btn">
+          <a href="https://www.instagram.com/hyoungqu23/">Instagram</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
