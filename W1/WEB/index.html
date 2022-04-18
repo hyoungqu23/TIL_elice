@@ -1,5 +1,6 @@
 <html>
   <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <title>WEB - Welcome</title>
     <meta charset="utf-8">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -69,7 +70,9 @@
       onclick="
       if (this.value === 'Dark Mode') {   // 만약 버튼의 value가 다크모드라면, 
         document.querySelector('body').style.backgroundColor = 'black';
+        // $('body').css('background-color', 'black');  // jQuery 버전의 동일 코드
         document.querySelector('body').style.color = 'white';
+        // $('body').css('color', 'white');  // jQuery 버전의 동일 코드
         this.value='Light Mode';
       } else {    // 아니라면
         document.querySelector('body').style.backgroundColor = 'white';
