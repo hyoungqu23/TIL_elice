@@ -27,9 +27,6 @@ ol {
 }
 
 @media all and (min-width: 480px) {
-  body {
-    /* background-color: lightgreen; */
-  }
   .container {
     display: grid;
     grid-template-columns: 300px  2fr;
