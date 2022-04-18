@@ -23,21 +23,46 @@
 </head>
 <body>
   <h1><a href="index.html">WEB</a></h1>
-
   <nav>
-    <ol id="topics">
+    <ol>
     </ol>
   </nav>
-
-  <h2>Welcome</h2>
-  <p>Hello, WEB</p>
+  <article>
+    <h2>Welcome</h2>
+    <p>Hello, WEB</p>
+  </article>
 
   <script>
     function nav() {
-      for (let i = 0; i < objData.length; i++) {
-        const $list = document.querySelector('#topics');
-        $list.innerHTML += `<li><a href="${objData[i].id}.html"> ${objData[i].title}</a></li>`;
-      }
+      // map join 활용 --> 일단 생각해보기
+      // function nav() {
+      //   const $list = document.querySelector('nav ol');
+      //   let navTags = objData.map(e => `<li><a href="${e.title}.html">${e.title}</a></li>`).join('');
+      //   console.log(navTags);
+      //   $list.innerHTML = navTags;
+      // }
+
+      // map 활용
+      objData.map((e) => {
+        const $list = document.querySelector('nav ol');
+        $list.innerHTML += `<li><a href="${e.title}.html" id="${e.id}" onclick="
+            event.preventDefault();
+            console.log(event.target.id);
+            for (let i = 0; i < objData.length; i++) {
+              if (objData[i].id === +event.target.id) {
+                document.querySelector('article h2').innerHTML = objData[i].title;
+                document.querySelector('article p').innerHTML = objData[i].body;
+                break;
+              }
+            }
+          ">${e.title}</a></li>`;
+      })
+
+      // 반복문 활용
+      // for (let i = 0; i < objData.length; i++) {
+      //   const $list = document.querySelector('nav ol');
+      //   $list.innerHTML += `<li><a href="${objData[i].id}.html"> ${objData[i].title}</a></li>`;
+      // }
     }
 
     nav();
