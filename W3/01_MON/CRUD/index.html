@@ -5,8 +5,42 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CRUD</title>
+  <script>
+    let title = ['HTML', 'CSS', 'JavaScript',];
+
+    let arrData = [
+      [1, 'HTML', 'HTML is ...',],
+      [2, 'CSS', 'CSS is ...',],
+      [3, 'JavaScript', 'JavaScript is ...',],
+    ]
+
+    let objData = [
+      {id: 1, title: 'HTML', body: 'HTML is ...',},
+      {id: 2, title: 'CSS', body: 'CSS is ...',},
+      {id: 3, title: 'JavaScript', body: 'JavaScript is ...',},
+    ];
+  </script>
 </head>
 <body>
-  
+  <h1><a href="index.html">WEB</a></h1>
+
+  <nav>
+    <ol id="topics">
+    </ol>
+  </nav>
+
+  <h2>Welcome</h2>
+  <p>Hello, WEB</p>
+
+  <script>
+    function nav() {
+      for (let i = 0; i < objData.length; i++) {
+        const $list = document.querySelector('#topics');
+        $list.innerHTML += `<li><a href="${objData[i].id}.html"> ${objData[i].title}</a></li>`;
+      }
+    }
+
+    nav();
+  </script>
 </body>
 </html>
