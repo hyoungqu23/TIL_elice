@@ -1,0 +1,52 @@
+<html>
+<head>
+  <title>WEB - import/export</title>
+  <meta charset="utf-8">
+
+  <style type="text/css">
+    @font-face { font-family: Roboto; src: url("chrome-extension://mcgbeeipkmelnpldkobichboakdfaeon/css/Roboto-Regular.ttf"); }
+  </style>
+
+  <link rel="stylesheet" href="./style.css">
+
+  <!-- <script src="./darkmode.js" defer></script> -->
+  <script type="module">
+    import {darkMode} from './darkmode.js';
+    // console.log(darkMode);
+    // debugger
+    document.querySelector("#darkModeBtn").addEventListener("click", darkMode);
+  </script>
+</head>
+<body>
+  <!-- Dark Mode 구현(Event driven Programming) -->
+  <input type="button" id="darkModeBtn" value="Dark Mode" />
+
+  <!-- 웹 페이지 구현 -->
+  <h1><a href="./index.html">WEB</a></h1>
+
+  <div class="container">
+    <ol>
+      <li><a href="./HTML.html">HTML</a></li>
+      <li><a href="./CSS.html">CSS</a></li>
+      <li><a href="./JavaScript.html">JavaScript</a></li>
+    </ol>
+    <div>
+      <h2>Welcome</h2>
+      Hello, Web!!!!!!
+    </div>
+  </div>
+  <input type="button" id="btn1" value="btn1" onclick="l()">
+  <input type="button" id="btn2" value="btn2" onclick="">
+  <script>
+    function l() {
+      alert("button!")
+    }
+    function l2(evt) {
+      alert(`2nd ${evt.target.value}`);
+    }
+    // document.querySelector("#btn1").addEventListener("click", l);
+    document.querySelector("#btn1").addEventListener("click", l2);
+    document.querySelector("#btn2").addEventListener("click", l);
+  </script>
+</body>
+</html>
