@@ -77,6 +77,7 @@
       // (4) 본문을 만든다.
       // (5) 본문을 출력한다.
       read();   // (3) ~ (5) 작업은 추후 반복될 여지가 있어 독립적인 하나의 함수로 설계하고 생성한 후 호출한다.
+      control();
     }
 
     // Navigation Renderer
@@ -121,12 +122,23 @@
 
     // UI 동적 Renderer(#control list)
     function control () {
-
-    }
+      let contextUI = '';
+      if (selectedId !== null) {
+        contextUI = `
+          <li><a href=''>Update</a></li>
+          <li><a href=''>Delete</a></li>
+        `;
+      }
+      document.querySelector('#control').innerHTML = `
+        <li><a href=''>Create</a></li>
+        ${contextUI}
+      `;
+    };
 
     // 최초 출력을 위한 함수 호출
     nav();
     welcome();
+    control();
   </script>
 </body>
 </html>
