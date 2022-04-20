@@ -29,10 +29,9 @@
 </head>
 <body>
   <h1>
-    <a href="index.html" onclick="() => {
-    event.preventDefault();
-    document.querySelector('article h2').innerHTML = 'WEB';
-    document.querySelector('article p').innerHTML = 'Hello, WEB!';
+    <a href="index.html" onclick="(e) => {
+    e.preventDefault();
+    welcome();
     }">WEB</a>
   </h1>
   <nav>
@@ -88,7 +87,7 @@
 
     // 각 기능 함수 구현
     function welcome () {
-
+      document.querySelector('article').innerHTML = `<h2>Welcome</h2><p>Hello, Web</p>`
     }
 
     // Nav Handler에서 호출될 예정
@@ -127,6 +126,7 @@
 
     // 최초 출력을 위한 함수 호출
     nav();
+    welcome();
   </script>
 </body>
 </html>
