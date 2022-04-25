@@ -94,7 +94,8 @@
 
     // 각 기능 함수 구현
     function welcome() {
-      $article.innerHTML = `<h2>Welcome</h2><p>Hello, Web</p>`
+      $article.innerHTML = `<h2>Welcome</h2><p>Hello, Web</p>`;
+      control();
     }
 
     // Nav Handler에서 호출될 예정
@@ -106,6 +107,7 @@
           // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
           const content = `<h2>${topic.title}</h2><p>${topic.body}</p>`
           $article.innerHTML = content;
+          control();
         })
     }
 
@@ -123,7 +125,7 @@
         headers: {
           'Content-Type': "application/json"
         },
-        // JavaScript 데이터 객체 -> JSON.stringfy()로 변환(id 값은 json server에서 자동으로 지정)
+        // JavaScript 데이터 객체 -> JSON.stringify()로 변환(id 값은 json server에서 자동으로 지정)
         body: JSON.stringify({
           title: t,
           body: b,
@@ -131,7 +133,33 @@
       }).then(response => response.json())
         .then(data => {
           nav();
-          selectedId = data.id;
+          selectedId = data.id;     // this.id 가능
+          read();
+        })
+    }
+
+    function updateHandler(e) {
+      e.preventDefault();
+      const t = e.target.title.value;
+      const b = e.target.body.value;
+
+      // fetch API
+      fetch('http://localhost:3000/topics/'+selectedId, {
+        // 수정 메서드 PUT 활용
+        method: 'PUT',
+        // 보내는 데이터 타입을 고지.
+        headers: {
+          'Content-Type': "application/json"
+        },
+        // JavaScript 데이터 객체 -> JSON.stringify()로 변환(id 값은 json server에서 자동으로 지정)
+        body: JSON.stringify({
+          title: t,
+          body: b,
+        })
+      }).then(response => response.json())
+        .then(data => {
+          nav();
+          // selectedId = data.id;
           read();
         })
     }
@@ -148,13 +176,35 @@
       $article.innerHTML = content;
     }
 
+    // update는 사실상 read + create이다.
     function update() {
-
+      fetch("http://localhost:3000/topics/"+selectedId)
+        .then(response => response.json())
+        .then(topic => {
+          // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
+          const content = `
+            <form onsubmit='updateHandler(event);'>
+              <p><input type='text' name='title' placeholder='title' value="${topic.title}" /></p>
+              <p><textarea name='body' placeholder='content'>${topic.body}</textarea></p>
+              <p><input type='submit' value='update' /></p>
+            </form>
+          `;
+          $article.innerHTML = content;
+          control();
+        });
     }
 
     // delete는 예약어이기 때문에 함수 이름으로 사용 불가능
     function del() {
-
+      fetch("http://localhost:3000/topics/"+selectedId, {
+        method: "DELETE"
+      })
+        .then(response => response.json())
+        .then(topic => {
+          nav();
+          selectedId = null;
+          welcome();
+        });
     }
 
     // UI 동적 Renderer(#control list)
@@ -162,8 +212,8 @@
       let contextUI = '';
       if (selectedId !== null) {
         contextUI = `
-          <li><a href=''>Update</a></li>
-          <li><a href=''>Delete</a></li>
+          <li><a href='' onclick="event.preventDefault(); update();">Update</a></li>
+          <li><a href='' onclick="event.preventDefault(); del();">Delete</a></li>
         `;
       }
       document.querySelector('#control').innerHTML = `

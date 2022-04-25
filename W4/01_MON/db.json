@@ -16,19 +16,9 @@
       "body": "JavaScript is ..."
     },
     {
-      "title": "json",
-      "body": "json is..",
-      "id": 4
-    },
-    {
       "title": "React",
       "body": "React is...",
-      "id": 5
-    },
-    {
-      "title": "Node.js",
-      "body": "Node.js is...",
-      "id": 6
+      "id": 4
     }
   ]
 }
