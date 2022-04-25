@@ -1,21 +1,4 @@
 {
-  "posts": [
-    {
-      "id": 1,
-      "title": "json-server",
-      "author": "typicode"
-    }
-  ],
-  "comments": [
-    {
-      "id": 1,
-      "body": "some comment",
-      "postId": 1
-    }
-  ],
-  "profile": {
-    "name": "typicode"
-  },
   "topics": [
     {
       "id": 1,
@@ -31,6 +14,21 @@
       "id": 3,
       "title": "JavaScript",
       "body": "JavaScript is ..."
+    },
+    {
+      "title": "json",
+      "body": "json is..",
+      "id": 4
+    },
+    {
+      "title": "React",
+      "body": "React is...",
+      "id": 5
+    },
+    {
+      "title": "Node.js",
+      "body": "Node.js is...",
+      "id": 6
     }
   ]
 }

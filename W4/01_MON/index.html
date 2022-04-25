@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRUD</title>
+  <title>CRUD with fetch API</title>
   <style>
     a {
       color: black; 
@@ -65,24 +65,14 @@
     //   {id: 3, title: 'JavaScript', body: 'JavaScript is ...'},
     // ];
     let nextId = 4;
-
-    // 선택되어 있는 id 값 할당할 데이터 추가
     let selectedId = null;
-
-    // 중복 활용되는 태그의 변수화
     const $article = document.querySelector('article');
 
     // Navigation list click event handler 선언
-    // 필요 기능: (1) 링크 작동 하지 않아야 한다. (2) id 값을 가져와야 한다. (3) id 값과 일치하는 topics의 원소를 찾아야 한다. (4) 본문을 만든다. (5) 본문을 출력한다.
     function navHandler(e) {
-      // (1) 링크 작동을 막는다.
       e.preventDefault();
-      // (2) id 값을 추출한다. (e.target.id => from String to Number)
       selectedId = +e.target.id;
-      // (3) id 값과 일치하는 topics의 원소를 찾아야 한다.
-      // (4) 본문을 만든다.
-      // (5) 본문을 출력한다.
-      read();   // (3) ~ (5) 작업은 추후 반복될 여지가 있어 독립적인 하나의 함수로 설계하고 생성한 후 호출한다.
+      read();
       control();
     }
 
@@ -91,12 +81,15 @@
       fetch("http://localhost:3000/topics")
         .then(response => response.json())
         .then(topics => {
+          // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
           const tag = topics
                         .map(el => `<li><a href='/read/${el.id}.html' id='${el.id}' onclick='navHandler(event);'>${el.title}</a></li>`)
                         .join(" ");
-                        
+
           document.querySelector('nav>ol').innerHTML = tag;
         })
+      // fetch API가 종료되고 바로 즉시 실행되는 부분.
+      document.querySelector('nav>ol').innerHTML = 'Loading...';
     }
 
     // 각 기능 함수 구현
@@ -106,18 +99,14 @@
 
     // Nav Handler에서 호출될 예정
     function read() {
-      // filter의 콜백 함수는 일치할 때 true, 일치하지 않을 때 false를 return한다. 즉, 콜백 함수의 return 값이 true인 원소만으로 담은 배열을 반환한다.(원본 수정 X)
-      // (3) 
-      // topics.filter(el => { if (el.id === selectedId) { return true; } else { return false; } });의 축약
-      const topic = topics.filter(el => el.id === selectedId);
-      // 다른 방법: const topic = topics.filter(el => el.id === selectedId)[0];
-      
-      // (4)
-      const content = `<h2>${topic[0].title}</h2><p>${topic[0].body}</p>`
-      // 다른 방법: const content = `<h2>${topic.title}</h2><p>${topic.body}</p>`
-      
-      // (5)
-      $article.innerHTML = content;
+      // selectedId를 주소에 추가하여 해당 데이터 1개만 가져오기 때문에 topic만 가져와도 된다.
+      fetch("http://localhost:3000/topics/"+selectedId)
+        .then(response => response.json())
+        .then(topic => {
+          // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
+          const content = `<h2>${topic.title}</h2><p>${topic.body}</p>`
+          $article.innerHTML = content;
+        })
     }
 
     // submit 버튼 클릭 시
@@ -125,18 +114,26 @@
       e.preventDefault();
       const t = e.target.title.value;
       const b = e.target.body.value;
-      const newTopic = {id: nextId,title: t, body: b};
-      topics.push(newTopic);
 
-      // navigation list 새로고침
-      nav();
-
-      // 다음 추가를 위해 +1
-      selectedId = nextId;
-      nextId++;
-
-      // 상세보기로 이동 및 UI 창 제거 < parameter로 selectedId 추가하는 것이 훨 나음
-      read();
+      // fetch API
+      fetch('http://localhost:3000/topics', {
+        // 생성 메서드 POST 활용
+        method: 'POST',
+        // 보내는 데이터 타입을 고지.
+        headers: {
+          'Content-Type': "application/json"
+        },
+        // JavaScript 데이터 객체 -> JSON.stringfy()로 변환(id 값은 json server에서 자동으로 지정)
+        body: JSON.stringify({
+          title: t,
+          body: b,
+        })
+      }).then(response => response.json())
+        .then(data => {
+          nav();
+          selectedId = data.id;
+          read();
+        })
     }
 
     // 클릭 시 하단 UI로 작성 창 오픈

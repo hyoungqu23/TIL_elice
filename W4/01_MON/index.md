@@ -83,6 +83,7 @@ fetch('http://localhost:3000/topics')
 
 > CRUD 프로젝트 JSON으로 변경하기
 
+다만, 이렇게 변경하면 json-server를 종료하면 더이상 데이터를 가져오지 못한다.
 ```javascript
 function nav() {
   fetch("http://localhost:3000/topics")
@@ -91,8 +92,36 @@ function nav() {
       const tag = topics
                     .map(el => `<li><a href='/read/${el.id}.html' id='${el.id}' onclick='navHandler(event);'>${el.title}</a></li>`)
                     .join(" ");
-                    
       document.querySelector('nav>ol').innerHTML = tag;
     })
 }
+```
+
+json-server는 id 값을 주소에 추가하면, 해당 데이터만 가져올 수 있다. 즉, id 값을 통해 해당 데이터만 가져오게 할 수 있다.
+
+```javascript
+function read() {
+  // selectedId를 주소에 추가하여 해당 데이터 1개만 가져오기 때문에 topic만 가져와도 된다.
+  fetch("http://localhost:3000/topics/"+selectedId)
+    .then(response => response.json())
+    .then(topic => {
+      // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
+      const content = `<h2>${topic.title}</h2><p>${topic.body}</p>`
+      $article.innerHTML = content;
+    })
+}
+```
+
+## 04. Rest API
+http의 기능을 최대한 활용해 서버와 통신할 것을 제안하는 모범 사례. (URL의 모범 사례를 보여준다.)
+![rest api](restapi.png)
+
+데이터를 제공할 때 Rest API에 준수하면 좋다.
+![crud](image4.png)
+
+GET method를 활용해 보통 데이터를 조회한다.
+
+POST method를 활용하면 데이터를 생성할 수 있다.
+```javascript
+fetch('http://localhost:3000/topics', {method: 'POST'} )
 ```
