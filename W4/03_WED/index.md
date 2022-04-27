@@ -170,3 +170,144 @@ topics = await response.json();
 
 console.log(topics);
 ```
+
+## Promise
+
+`setTimeout(callback, time)`을 통해 `time`(ms 단위) 시간이 지난 후 `callback` 함수를 실행하게끔 설정할 수 있다.
+
+```javascript
+setTimeout(() => {
+  console.log("Hello");
+}, 1000);
+
+> Hello
+```
+
+이 또한 비동기 함수이기 때문에 순서를 확인해보면 다음과 같다.
+
+```javascript
+console.log(1)
+setTimeout(() => {
+  console.log("Hello");
+}, 1000);
+console.log(2)
+
+> 1
+> 2
+> Hello
+```
+
+참고: `setTimeout()`과 같은 작업을 하는 `timer()` 함수 구현하기
+
+```javascript
+function timer(callback, time) {      // 여기서 callback의 타입은 함수이다.
+  setTimeout(() => { callback(); }, time);
+}
+
+timer(() => {console.log("timeout")}, 1000);
+```
+
+```javascript
+function timer(callback, time) {      // 여기서 callback의 타입은 함수이다.
+  setTimeout(() => { callback(time); }, time);
+}
+
+timer((time) => {console.log("timeout ", time)}, 1000);
+```
+
+`timer` 내부에서 또 다시 timer를 활용하면 다음과 같다.
+
+```javascript
+function timer(callback, time) {      // 여기서 callback의 타입은 함수이다.
+  setTimeout(() => { callback(time); }, time);
+}
+
+timer((time) => {
+  console.log("timeout ", time);
+  timer((time) => {
+    console.log("timeout ", time);
+  }, 2000);
+}, 1000);
+```
+
+### Promise 만들기
+
+```javascript
+function timer(time) {
+  return new Promise(function(resolve) {
+    setTimeout(function() {
+      resolve(time);
+    }, time);
+  });
+}
+```
+
+`timer` 함수가 Promise를 반환하면 된다.
+
+만든 Promise는 콜백 함수를 매개변수로 받는 `then` 메서드로 실행시킬 수 있다.
+
+```javascript
+timer(1000).then(() => {console.log("hi");});
+```
+
+await활용
+
+```javascript
+await timer(1000); console.log("hi")
+```
+
+입력한 시간을 확인하고자 하면
+
+```javascript
+time = await timer(1000); console.log(time);
+```
+
+동기적으로
+
+```javascript
+time = await timer(1000);
+console.log(time);
+time = await timer(1000 + time);
+console.log(time);
+time = await timer(1000 + time);
+console.log(time);
+
+> 1000
+> 2000
+> 3000
+```
+
+비동기적으로
+then 쓰기
+
+여러 서버에서 데이터를 동시에 가져올 때 가장 빠르게 종료되는 작업 이후로 그 데이터를 활용해 다른 작업을 진행하고자 할 때
+`race` 메서드를 사용한다.
+
+```javascript
+Promise.race([timer(1000), timer(2000), timer(3000)]);
+
+result = await Promise.race([timer(1000), timer(2000), timer(3000)]);
+> 1000
+```
+
+```javascript
+console.time('race');
+result = await Promise.race([timer(1000), timer(2000), timer(3000)]);
+console.log(result)
+console.timeEnd('race');
+
+> 1000
+> race: 1000.6630859375 ms
+```
+
+all 메서드 동시에 진행해 모두 종료되는 시간에 반환된다.
+
+```javascript
+console.time('race');
+result = await Promise.all([timer(1000), timer(2000), timer(3000)]);
+console.log(result)
+console.timeEnd('race');
+
+> (3) [1000, 2000, 3000]
+> race: 3003.092041015625 ms
+```
