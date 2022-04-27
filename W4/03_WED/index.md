@@ -311,3 +311,93 @@ console.timeEnd('race');
 > (3) [1000, 2000, 3000]
 > race: 3003.092041015625 ms
 ```
+
+```javascript
+const btn = document.getElementById("btn");
+const mes = document.getElementById("message");
+
+async function triathlon() {
+    let swimEnd = await exercise(0, "swim");
+    let bicycleEnd = await exercise(swimEnd, "bicycle");
+    let runEnd = await exercise(bicycleEnd, "run");
+
+    return runEnd;
+}
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function exercise(startTime, name) {
+        // name을 넣으면 그 input 태그를 선택한다.
+        const exerciseInput = document.getElementById(name);
+        
+        // 1. 완주에 걸리는 시간을 구하세요.
+        const time = +exerciseInput.value;       // 여기서 input의 값을 가져와서 times에 할당함
+        const endTime = startTime + time;       // 각 종목 당 완주 시간을 찾아야함
+        
+        // 2. setTimeout 대신 delay 함수를 사용해 비동기처리를 하세요.
+        await delay(time);          // 끝나는 시간을 기다리는 중
+        mes.innerHTML +=  `${name} finished at ${endTime} <br>`     // 각 종목 당 완주 시간을 적기
+        
+        // 3. 완주한 후의 시간을 반환하세요.
+        return endTime;                         // 최종 완주 시간을 반환해야 하기 때문에 각각 완주 시간을 반환하고 상술한 triathlon 함수에서 총 최종 완주 시간 반환함
+}
+
+btn.addEventListener("click", () => {
+  triathlon().then((param) => {                                         // return한 최종 완주 시간을 매개변수로 받아
+    mes.innerText += `total time : ${param}`;               // 그것을 여기서 total time으로 렌더링함
+  });
+});
+```
+
+---
+
+# let, const, var
+
+변수/상수
+scope
+재할당
+
+# null, undefined
+
+차이
+
+# falsy
+
+거짓으로 판단되는 값 -> 예시 확인하기
+truthy와 차이
+
+# innerText, innerHTML
+
+textContent까지 차이와 용례
+
+# querySelector, getElementById
+
+모두 확인하고 용례
+선택자
+
+# addEventListener, removeEventListener
+
+주요 이벤트
+용례
+
+# setTimeout, clearTimeout (cf. setInterval, clearInterval)
+
+# classList add, remove
+
+# module import, export, export default
+
+# arrow function
+
+# spread operator, rest operator
+
+# class
+
+# forEach, map, reduce (cf. filter)
+
+# hoisting
+
+# fetch
+
+# Promise
+
+# async await
