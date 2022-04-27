@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD with fetch API</title>
+  <style>
+    a {
+      color: black; 
+      text-decoration: none;
+    }
+  </style>
+  <script>
+    let title = ['HTML', 'CSS', 'JavaScript',];
+
+    let arrData = [
+      [1, 'HTML', 'HTML is ...',],
+      [2, 'CSS', 'CSS is ...',],
+      [3, 'JavaScript', 'JavaScript is ...',],
+    ]
+
+    let objData = [
+      {id: 1, title: 'HTML', body: 'HTML is ...',},
+      {id: 2, title: 'CSS', body: 'CSS is ...',},
+      {id: 3, title: 'JavaScript', body: 'JavaScript is ...',},
+    ];
+  </script>
+</head>
+<body>
+  <h1>
+    <a href="index.html" onclick="(e) => {
+    e.preventDefault();
+    welcome();
+    }">WEB</a>
+  </h1>
+  <nav>
+    <ol>
+      <!-- 동적 변경 대상
+        <li><a href="/read/1.html">HTML</a></li>
+        <li><a href="/read/2.html">CSS</a></li>
+       -->
+    </ol>
+  </nav>
+  <article>
+    <!-- 동적 변경 대상
+      <h2>Welcome</h2>
+      <p>Hello, WEB</p>
+     -->
+  </article>
+  <ul id="control">
+    <!-- 동적 변경 대상
+      <li><a href="/create">CREATE</a></li>
+      <li><a href="/update">UPDATE</a></li>
+      <li><a href="/delete">DELETE</a></li>
+     -->
+  </ul>
+  <script>
+    // 재할당 불가 주제 데이터 설정
+
+    // !! JSON으로 변경하기
+    // const topics = [
+    //   {id: 1, title: 'HTML', body: 'HTML is ...'},
+    //   {id: 2, title: 'CSS', body: 'CSS is ...'},
+    //   {id: 3, title: 'JavaScript', body: 'JavaScript is ...'},
+    // ];
+    let nextId = 4;
+    let selectedId = null;
+    const $article = document.querySelector('article');
+
+    // Navigation list click event handler 선언
+    function navHandler(e) {
+      e.preventDefault();
+      selectedId = +e.target.id;
+      read();
+      control();
+    }
+
+    // Navigation Renderer
+    async function nav() {
+      document.querySelector('nav>ol').innerHTML = 'Loading...';
+
+      const response = await fetch("http://localhost:3000/topics");
+      let topics = await response.json();
+      const tag = topics
+                      .map(el => `<li><a href='/read/${el.id}.html' id='${el.id}' onclick='navHandler(event);'>${el.title}</a></li>`)
+                      .join(" ");
+
+      document.querySelector('nav>ol').innerHTML = tag;
+
+      /* 
+      fetch("http://localhost:3000/topics")
+        .then(response => response.json())
+        .then(topics => {
+          // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
+          const tag = topics
+                        .map(el => `<li><a href='/read/${el.id}.html' id='${el.id}' onclick='navHandler(event);'>${el.title}</a></li>`)
+                        .join(" ");
+
+          document.querySelector('nav>ol').innerHTML = tag;
+        })
+      
+
+      // fetch API가 종료되고 바로 즉시 실행되는 부분.
+      document.querySelector('nav>ol').innerHTML = 'Loading...';
+      */ 
+    }
+
+    // 각 기능 함수 구현
+    function welcome() {
+      $article.innerHTML = `<h2>Welcome</h2><p>Hello, Web</p>`;
+      control();
+    }
+
+    // Nav Handler에서 호출될 예정
+    async function read() {
+      /* 
+      // selectedId를 주소에 추가하여 해당 데이터 1개만 가져오기 때문에 topic만 가져와도 된다.
+      fetch("http://localhost:3000/topics/"+selectedId)
+        .then(response => response.json())
+        .then(topic => {
+          // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
+          const content = `<h2>${topic.title}</h2><p>${topic.body}</p>`
+          $article.innerHTML = content;
+          control();
+        })
+      */
+
+      const response = await fetch("http://localhost:3000/topics/" + selectedId);
+      let topic = await response.json();
+      const content = `<h2>${topic.title}</h2><p>${topic.body}</p>`
+      $article.innerHTML = content;
+      control();
+    }
+
+    // submit 버튼 클릭 시
+    async function createHandler(e) {
+      e.preventDefault();
+      const t = e.target.title.value;
+      const b = e.target.body.value;
+
+      /*
+      // fetch API
+      fetch('http://localhost:3000/topics', {
+        // 생성 메서드 POST 활용
+        method: 'POST',
+        // 보내는 데이터 타입을 고지.
+        headers: {
+          'Content-Type': "application/json"
+        },
+        // JavaScript 데이터 객체 -> JSON.stringify()로 변환(id 값은 json server에서 자동으로 지정)
+        body: JSON.stringify({
+          title: t,
+          body: b,
+        })
+      }).then(response => response.json())
+        .then(data => {
+          nav();
+          selectedId = data.id;     // this.id 가능
+          read();
+        })
+      */
+      
+      const response = await fetch('http://localhost:3000/topics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': "application/json"
+        },
+        body: JSON.stringify({
+          title: t,
+          body: b,
+        })
+      })
+      let topic = await response.json();
+      nav();
+      selectedId = topic.id;
+      read();
+    }
+
+    async function updateHandler(e) {
+      e.preventDefault();
+      const t = e.target.title.value;
+      const b = e.target.body.value;
+      /*
+      // fetch API
+      fetch('http://localhost:3000/topics/'+selectedId, {
+        // 수정 메서드 PUT 활용
+        method: 'PUT',
+        // 보내는 데이터 타입을 고지.
+        headers: {
+          'Content-Type': "application/json"
+        },
+        // JavaScript 데이터 객체 -> JSON.stringify()로 변환(id 값은 json server에서 자동으로 지정)
+        body: JSON.stringify({
+          title: t,
+          body: b,
+        })
+      }).then(response => response.json())
+        .then(data => {
+          nav();
+          // selectedId = data.id;
+          read();
+        })
+      */
+      const response = await fetch('http://localhost:3000/topics/'+selectedId, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': "application/json"
+        },
+        body: JSON.stringify({
+          title: t,
+          body: b,
+        })
+      })
+
+      let topic = await response.json();
+      nav();
+      read();
+    }
+
+    // 클릭 시 하단 UI로 작성 창 오픈
+    function create() {
+      const content = `
+        <form onsubmit='createHandler(event);'>
+          <p><input type='text' name='title' placeholder='title' /></p>
+          <p><textarea name='body' placeholder='content'></textarea></p>
+          <p><input type='submit' value='create' /></p>
+        </form>
+      `;
+      $article.innerHTML = content;
+    }
+
+    // update는 사실상 read + create이다.
+    async function update() {
+      /*
+      fetch("http://localhost:3000/topics/"+selectedId)
+        .then(response => response.json())
+        .then(topic => {
+          // 서버로부터 데이터를 받아오고, json 데이터로 변환한 이후에 실행되는 부분
+          const content = `
+            <form onsubmit='updateHandler(event);'>
+              <p><input type='text' name='title' placeholder='title' value="${topic.title}" /></p>
+              <p><textarea name='body' placeholder='content'>${topic.body}</textarea></p>
+              <p><input type='submit' value='update' /></p>
+            </form>
+          `;
+          $article.innerHTML = content;
+          control();
+        });
+      */
+
+      const response = await fetch("http://localhost:3000/topics/"+selectedId);
+      let topic = await response.json();
+      const content = `
+            <form onsubmit='updateHandler(event);'>
+              <p><input type='text' name='title' placeholder='title' value="${topic.title}" /></p>
+              <p><textarea name='body' placeholder='content'>${topic.body}</textarea></p>
+              <p><input type='submit' value='update' /></p>
+            </form>
+          `;
+      $article.innerHTML = content;
+      control();
+    }
+
+    // delete는 예약어이기 때문에 함수 이름으로 사용 불가능
+    async function del() {
+      /*
+      fetch("http://localhost:3000/topics/"+selectedId, {
+        method: "DELETE"
+      })
+        .then(response => response.json())
+        .then(topic => {
+          nav();
+          selectedId = null;
+          welcome();
+        });
+      */
+      
+      const response = await fetch("http://localhost:3000/topics/"+selectedId, {
+        method: "DELETE"
+      });
+      let topic = await response.json();
+      nav();
+      selectedId = null;
+      welcome();
+    }
+
+    // UI 동적 Renderer(#control list)
+    function control () {
+      let contextUI = '';
+      if (selectedId !== null) {
+        contextUI = `
+          <li><a href='' onclick="event.preventDefault(); update();">Update</a></li>
+          <li><a href='' onclick="event.preventDefault(); del();">Delete</a></li>
+        `;
+      }
+      document.querySelector('#control').innerHTML = `
+        <li><a href='' onclick='event.preventDefault(); create();'>Create</a></li>
+        ${contextUI}
+      `;
+    };
+
+    // 최초 출력을 위한 함수 호출
+    nav();
+    welcome();
+    control();
+  </script>
+</body>
+</html>
