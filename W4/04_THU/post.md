@@ -110,3 +110,16 @@ HTTP 요청 시, 클라이언트는 요청의 결과에 대한 상태 정보를 
 
 **요청 메서드**
 클라이언트가 서버로 요청을 보낼 때 커스텀이 가능한 GET(조회), POST(생성), PUT(수정), PATCH(수정), DELETE(삭제)와 브라우저가 자동으로 처리하는 OPTIONS, CONNECT, TRACE 등의 요청 메서드를 활용해 특정 요청에 대한 동작을 정의한다.
+
+## REST API
+
+Representational State Transfer API의 약어로, HTTP의 요청 메서드에 응하는 서버 API와 클라이언트 간 통신의 구조가 지켜야 할 좋은 **방법**을 명시한 것으로, 요청 메서드의 의미, URI 설계, 클라이언트 상태에 대한 동작 등을 정의한다.
+
+참고로, API는 Application Programming Interface의 약어로, 사용자가 특정 기능을 사용할 수 있도록 제공하는 함수를 의미한다.
+
+### 요청 메서드의 의미
+
+- GET: 리소스 정보를 얻음
+- POST: 리소스를 생성
+- PUT: 리소스를 생성하거나 업데이트
+- DELETE 리소스를 제거
