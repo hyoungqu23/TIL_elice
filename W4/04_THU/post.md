@@ -89,3 +89,24 @@ const wait = (ms) => {
 ```javascript
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 ```
+
+## HTTP
+
+HyperText Transfer Protocol의 약어로, Web에서 서버와 클라이언트 간의 통신 방법(OSI 7계층)을 정한 규약이다. 서버와 클라이언트 사이에는 무수히 많은 요소(CDN, Proxy 서버, Gateway 서버, DNS, Core Network(통신망과 라우터), Tunnel 서버 등)가 존재하는데, HTTP는 이러한 존재들 사이의 통신 방법을 규정하게 된다.
+
+클라이언트는 모바일, 웹 브라우저 등으로 서버로 요청을 보내는 주체인데, 서버는 클라이언트가 요청을 보내기 전까지 대응하지 않는다.
+
+### [HTTP Message](https://developer.mozilla.org/ko/docs/Web/HTTP/Messages)
+
+요청과 응답 메시지는 HTTP 규약에서 규정한 형식을 따르는데, 둘은 조금 다른 형태를 갖는다.
+![msg](./HTTPMsgStructure2.png)
+서버 주소, 요청 메서드, 상태 코드, Target path, 헤더, 바디 등이 포함된다. 이때 HTTP/1.1 메시지는 사람이 읽을 수 있어, 문제를 확인할 수 있지만, HTTP2는 사람이 읽을 수 없다.
+
+**HTTP Header**
+HTTP 메시지의 Header에는 컨텐츠 관련 정보(타입 등), 파일 정보, 인증 관련 정보(authorization), 쿠키 정보(검색 데이터 등 가벼운 데이터), 캐시 정보(페이지 관련 정보를 보유해 로드를 줄여 성능을 높일 수 있음) 등 서버와 클라이언트 간 통신 시 필요한 정보를 담는다. 클라이언트가 요청하는 경우, 서버가 응답하는 경우 모두 Header에 정보를 담을 수 있다.
+
+**HTTP Status**
+HTTP 요청 시, 클라이언트는 요청의 결과에 대한 상태 정보를 얻는다. 200, 400, 500 등 숫자 코드와 OK, NOT FOUND 등의 숫자 코드로 이루어진 코드를 이용해 각 결과에 해당하는 행위를 할 수 있다.
+
+**요청 메서드**
+클라이언트가 서버로 요청을 보낼 때 커스텀이 가능한 GET(조회), POST(생성), PUT(수정), PATCH(수정), DELETE(삭제)와 브라우저가 자동으로 처리하는 OPTIONS, CONNECT, TRACE 등의 요청 메서드를 활용해 특정 요청에 대한 동작을 정의한다.
