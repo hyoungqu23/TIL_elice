@@ -123,3 +123,69 @@ Representational State Transfer API의 약어로, HTTP의 요청 메서드에 �
 - POST: 리소스를 생성
 - PUT: 리소스를 생성하거나 업데이트
 - DELETE 리소스를 제거
+
+## Fetch API
+
+JavaScript에서 HTTP를 활용할 수 있는 API로, 기존 XMLHTTPRequest를 대체하는 HTTP 요청 API이다. ES6에 추가된 Promise를 반환하도록 정의되며, 네트워크 요청 성공 시 Promise는 Response 객체를 `resolve`하고, 요청 실패 시 Promise는 에러를 `reject`하게 된다.
+
+```javascript
+let result = fetch(serverURL);
+
+result
+  .then(response => {
+    if (response.ok) {
+      // resolve
+    }
+  })
+  .catch(error => {
+    // reject
+  })
+```
+
+이때, Response 객체는 결과에 대한 다양한 정보를 담을 수 있다.
+
+```javascript
+fetch(serverURL)
+  .then(response => {
+    response.ok
+    response.status
+    response.statusText
+    response.url
+    response.bodyUsed
+  })
+```
+
+- `.ok`는 HTTP Status Code가 200 ~ 299 이면 `true`를 반환하고, 그 외에는 `false`를 반환한다.
+- `.status`는 HTTP Status Code를 담고 있다.
+- `.url`는 요청한 URL 정보를 담고 있다.
+- `.headers`로 Response 객체의 헤더 정보를 얻을 수 있다.
+- `.json()` 메서드로 얻어온 body 정보를 **`json` 객체로 만드는 Promise를 반환**한다. 이때 Promise가 `resolve`되면 얻어온 body 정보를 읽게 된다. 만약 다른 형태의 body 정보라면 `.text()`, `.blob()`, `.formData()` 등의 메서드를 활용한다.
+
+```javascript
+fetch(serverURL)
+  .then(response => {
+    return response.json();         // Promise
+  })
+  .then(json => {                   // 상단의 Promise가 resolve되는 경우에 body 정보 읽기 가능
+    console.log("Body: ", json);
+  })
+```
+
+fetch API는 `url`과 함께 여러 옵션을 활용하는데, `method` 필드를 통해 여러 요청 메서드를 활용할 수 있고, `headers`, `body` 필드를 통해 서버에 추가적인 정보를 보낼 수 있다.
+
+```javascript
+fetch(serverURL, {
+  method: 'post',
+  headers: {
+    'Content-Type': 'application/json;charset=utf-8',
+    Authentication: 'mysecret',
+  },
+  body: JSON.stringify(formData),
+})
+  .then(response => {
+    return response.json();
+  })
+  .then(json => {
+    console.log("POST 요청 결과: ", json);
+  })
+```
