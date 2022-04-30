@@ -32,8 +32,10 @@ const App = () => {
 
   // ! 01 키보드를 눌렀을 때 호출되는 함수로, 추후 작성 예정
   function onClickItem(c) {
+    console.log('[onClickItem] c: ', c);
     // 알파벳 하나를 선택하면 호출되는 함수.
     changeState((state) => selectCharacter(state, c));
+    changeState((state) => checkGameStatus(state))
   }
 
   // ! 01 게임을 시작했을 때 어떤 일이 발생하는 지를 가진 함수
@@ -65,6 +67,7 @@ const App = () => {
           }
           // 안끝났다면, 타이머의 시간 감소
           changeState(state => decreaseTimer(state));
+          changeState(state => checkGameStatus(state));
 
           // 게임 상태 확인하기
           changeState(state => checkGameStatus(state));
