@@ -95,6 +95,8 @@ main();
 
 non-Blocking 방식은 하나의 작업을 실행시키고, 그 작업이 종료되지 않아도 다음 작업을 실행하는 방식으로, **작업을 실행시켜 놓기만 하는 방식**이다.
 
+JavaScript는 실행 환경인 Runtime의 Web APIs, Event Loop의 도움으로 non-Blocking 방식을 유지하고 있다.
+
 작업이 길어지더라도 다음 작업이 지연되는 문제가 없고, 보통 결과 값을 `return`으로 바로 받지 않으며, 콜백 함수를 통해 받는 경우가 많다.(단, Promise의 등장으로 콜백 함수가 아닌 `then` 메서드를 통해 받게 된다.) JavaScript에서는 **비동기(asynchronous)**와 혼용된다.
 
 ```javascript
@@ -136,11 +138,11 @@ JavaScript 실행 환경(Runtime)는 크게 3가지로 구성된다. JavaScript 
 
 JavaScript 코드를 읽어서 해석하고 작업을 수행하는 역할로, Interpreter 언어인 JavaScript를 즉시 읽어 해석하고 작업을 수행한다. 이때, 엔진 자체는 작업을 수행만 할 뿐 비동기/동기 처리 방식과는 관계가 없다.(V8(Chrome), SpiderMonkey(Firefox), JavaScriptCore(Safari))
 
-#### Event Loop와 Queue
+#### [Event Loop](https://html.spec.whatwg.org/multipage/webappapis.html#event-loops)와 [Queue](https://developer.mozilla.org/ko/docs/Web/API/HTML_DOM_API/Microtask_guide)
 
 JavaScript 코드가 비동기적으로 처리될 수 있도록 도와주는 중심적인 역할을 담당한다.
 
-**Queue**는 비동기 작업을 마친 후 실행될 **콜백 함수**가 쌓이는 곳이다. Task Queue, Job Queue 등이 있다.(우선순위에 의해 나누어짐)
+**Queue**는 비동기 작업을 마친 후 실행될 **콜백 함수**가 쌓이는 곳이다. Task Queue, Job Queue 등이 있다.(우선순위에 의해 나누어짐, [참고자료](https://velog.io/@titu/JavaScript-Task-Queue%EB%A7%90%EA%B3%A0-%EB%8B%A4%EB%A5%B8-%ED%81%90%EA%B0%80-%EB%8D%94-%EC%9E%88%EB%8B%A4%EA%B3%A0-MicroTask-Queue-Animation-Frames-Render-Queue))
 
 **Event Loop**는 Queue 쌓여있는 우선순위에 따라 콜백 함수들을 꺼내 JavaScript Engine에게 전달해주는 역할을 담당한다. JavaScript Engine은 해당 함수들을 전달 받은 순서대로 실행하게 된다.(Node.js의 libuv)
 
@@ -156,7 +158,7 @@ JavaScript 코드가 비동기적으로 처리될 수 있도록 도와주는 중
 
 #### 콜백 패턴
 
-**콜백 함수**는 작업이 종료되었을 때 해당 작업이 종료되었음과 해당 작업의 결과 값을 사용할 수 있도록 반환해주는 함수이다.(고차함수와 헷갈리지 않도록 한다.)
+**콜백 함수**는 작업이 종료되었을 때 **해당 작업이 종료되었음**과 **해당 작업의 결과 값을 사용**할 수 있도록 반환해주는 함수이다.(배열의 `map`, `filter`, `forEach`, `reduce` 등의 메서드에서 활용되는 고차함수와 헷갈리지 않도록 한다.)
 
 비동기 작업들은 `return`으로 해당 작업의 결과 값을 반환하는 것이 아니라 별도의 결과를 반환하는 방식이 필요해 **콜백 패턴**을 활용하게 되었다. 만약 콜백 패턴이 없었다면, JavaScript는 비동기 작업의 완료 여부를 지속적이고 수동으로 확인해야 했기 때문에 프로그래밍적으로 낭비가 된다. 이러한 콜백 패턴은 JavaScript가 함수를 **일급 객체**(함수의 변수 취급이 가능한 특성)로 취급하기에 가능하다.
 
@@ -175,10 +177,11 @@ console.log('종료');
 
 콜백 패턴의 경우 비동기 작업을 순차적으로 실행하고자 콜백 함수를 중첩적으로 활용하면 이러한 중첩 함수로 인해 가로로 코드가 길어지는 문제가 발생할 수 있다. 이를 **콜백 지옥**이라고 하는데, 이는 매우 좋지 않은 **DX**(Developer Experience)를 제공하게 된다.
 
-> 콜백 함수를 사용한다고 모두 다 비동기 작업은 아니다. 다만, 보통 비동기를 처리할 때 콜백 패턴을 사용하기는 한다.
+> 콜백 함수를 사용한다고 모두 다 비동기 작업은 아니다. 다만, 보통 비동기를 처리할 때 작업이 끝났음을 알리기 위해 콜백 패턴을 사용한다.
 
 ```javascript
 function foo(callback) {
+  // 콜백 함수를 사용하지만, 동기 함수
   let a = 1;
   callback();
 }
@@ -186,7 +189,7 @@ function foo(callback) {
 function main() {
   console.log("Hello, World");
 
-  // 동기 함수
+  // 콜백 함수를 사용하지만 동기적으로 실행된다.
   foo(() => {
     console.log("Callback called, but not the end");
   });
@@ -201,7 +204,7 @@ main();
 > This is the real end.
 ```
 
-#### Promise 패턴
+#### [Promise 패턴](https://dev.to/lydiahallie/javascript-visualized-promises-async-await-5gke#syntax)
 
 콜백 지옥에서 벗어나고, 콜백 패턴을 더 일관성 있고, 통일성 있는 형식으로 보여주기 위한 필요성이 증대되면서 **Promise 패턴**이 등장했다. 로직 상 순차적으로 호출되어야 하는 비동기 함수들을 쉽게 연결해주는 `then` 메서드, 비동기 함수에서 에러가 발생했을 때 쉽게 에러 처리를 할 수 있도록 해주는 `catch` 메서드을 활용한다. 즉, 비동기 함수를 *일관성 있는 형식으로 관리*하게 되었다.(`then`, `catch`, `finally`)
 
@@ -227,7 +230,7 @@ main();
   Promise.race([fetch, () => setTimeout(() => {}, 3000)]);
   ```
 
-> 비동기는 사실상 위임 작업의 결과값이 필요하기 때문에 발생한 것이다.
+> 비동기는 사실상 위임 작업의 결과 값이 필요하기 때문에 발생한 것이다.
 
 ```javascript
 // Promise 패턴 구조
@@ -238,12 +241,13 @@ fetch('/data/sample.json')
   .catch(error => console.log(error.message))
 ```
 
-> 이벤트 핸들러는 Promise 패턴으로 할 수 없다.
+> 이벤트 핸들러는 콜백 패턴처럼 보이지만, Promise 패턴으로 활용할 수 없다.
 
-초기에는 호환성 문제가 있었다. ES 표준이 되기 이전에 만들어진 비동기 함수들은 Promise화를 해야 했다.
+초기에는 호환성 문제가 있었다. ECMAScript 표준이 되기 이전에 만들어진 비동기 함수들은 Promise화를 해야 했다.
 
 ```javascript
 // Promise화 한 setTimeout
+
 function promisifiedSetTimeout(ms) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -253,9 +257,11 @@ function promisifiedSetTimeout(ms) {
 }
 ```
 
-여전히 연결되는 비동기 함수가 많아질수록 길어지는 then 체인에 의해 아쉬운 DX를 제공하고, 비동기 환경을 처음 접할 때 복잡하기 때문에 이해하기가 어렵다는 점이 문제가 된다.
+여전히 연결되는 비동기 함수가 많아질수록 길어지는 `then` 체이닝에 의해 아쉬운 **DX**를 제공하고, 비동기 환경을 처음 접할 때 복잡하기 때문에 이해하기가 어렵다는 점이 문제가 된다.
 
 ```javascript
+// 길어지는 then 체이닝
+
 setTimeoutPromise(1000)
   .then(asyncFn1)
   .then(asyncFn2)
@@ -268,31 +274,36 @@ setTimeoutPromise(1000)
   ...
 ```
 
-#### Async/Await 패턴
+#### [Async/Await 패턴](https://dev.to/lydiahallie/javascript-visualized-promises-async-await-5gke#syntax)
 
-비동기 코드를 동기 코드처럼 확인할 수 있게 만드는 패턴으로, 가독성 향상, 처음 봐도 읽기 쉬움, 코드 흐름도 알기 쉬움, 많은 사람들에게 익숙한 문법 등이라는 장점을 가지고 있다. 또한, 높은 호환성으로 Promise 패턴으로 되어있는 비동기 함수들을 `async` / `await` 키워드만으로 손쉽게 치환할 수 있다.
+Async/Await 패턴은 비동기 코드를 **동기 코드처럼 확인**할 수 있게 만드는 패턴이다.
+
+가독성이 보다 높고, 처음 보는 사람도 해당 코드를 읽고 이해하기 쉽고, 코드의 흐름을 파악하기 쉽다는 장점을 가지고 있다. 또한, 높은 호환성으로 Promise 패턴으로 되어있는 비동기 함수들을 `async`, `await` 키워드만으로 손쉽게 치환할 수 있다는 점도 장점이다. 다만, 원하는 Error 핸들링 관점에서 추가적인 필요하다는커스터마이징이 필요하다는 단점이 있다.
 
 ```javascript
+// Async/Await 패턴
+
 async function main() {
   try {
     const response = await fetch('/data/sample.json');
+    const samples = await response.json();
+    samples.forEach((sample) => {
+      console.log(sample);
+    })
   } catch (error) {
-    
+    console.log(error.message);
   }
 }
 ```
 
-> Error 핸들링에서 단점이 있다.
-
-> 오늘날의 JavaScript는 Worker Thread를 통해 Multi Thread를 지원한다.
-> JavaScript Engine은 최적화를 위해 컴파일 역할도 수행한다.(TurboFan)
+> 오늘날의 JavaScript는 Worker Thread를 통해 Multi Thread를 지원한다. CPU를 혼자 점유하는 머신 러닝 등의 작업은 웹 페이지를 막을 수 있는데, 이를 극복하기 위해 Multi Thread를 지원하고 있다. 기본적인 Single Thread는 계속해서 웹 페이지를 렌더링하고, CPU를 많이 사용하는 작업이 Multi Thread에서 실행된다.
+> JavaScript Engine은 최적화를 위해 Compiler 역할도 수행한다.(TurboFan)
 > axios 등 유명한 라이브러리 코드를 공부하는 것도 좋은 방법이 된다.
 
-### 동기 비동기 타이머 구현하기
+### 동기와 비동기 타이머 구현하기
 
-> 다시 듣기
-> while문, for문, map, filter, reduce 등으로 이벤트 루프를 막지 않게 조심해야 한다.
-> 비동기 함수 내부의 콜백이 이벤트 루프를 막는 지 확인해야 한다.
+> while문, for문, map, filter, reduce 등으로 Event Loop를 막지 않게 조심해야 한다.
+> 비동기 함수 내부의 콜백이 Event Loop를 막는지 확인해야 한다.
 > 함수 단위로 생각하기
 
 ```javascript
@@ -309,7 +320,7 @@ const Counter = {
 
   // 동기 타이머의 경우 3초간 웹 페이지의 상호작용이나 렌더링이 모두 정지되는 것을 확인할 수 있다.
   // 즉, 동시성을 낮추게 된다.(concurrent) 작업을 쪼개서 a, b, c, a, b, c 작업을 잘개 쪼개 번갈아가면서 진행하는데, 외부에서 보면 동시에 3가지 작업이 동시에 처리되는 것처럼 보인다. 따라서 단위 작업을 잘게 만들수록 JavaScript 성능이 높아진다.
-  // 병렬은 Parallel
+  // 병렬(Parallel)은 여러 작업을 여러 명이 작업하는 것을 말한다.
   incrementSync: function () {
     const NOW = Date.now();
     while (Date.now() - NOW <= 3000) {};    // Single Thread를 잡아먹는 중... Event Loop를 막는 중...
@@ -329,7 +340,7 @@ export default Counter;
 
 ## [Node.js 입문](https://github.com/goldbergyoni/nodebestpractices)
 
-기본적으로 서버 쪽에서 JavaScript를 사용하고자 하는 실행 환경(Runtime)이다.
+기본적으로 서버 쪽에서 JavaScript를 사용하고자 하는 **실행 환경(Runtime)**이다.
 
 ### Node.js란
 
@@ -349,7 +360,7 @@ C로 작성된 Event Loop로, 비동기 작업이 마친 후 실행되는 콜백
 
 #### Node.js 기본 라이브러리
 
-브라우저가 아닌 일반 머신 환경에서 실행되기 때문에 브라우저의 Web API와는 다른 라이브러리들이 포함되어 있다. 대표적으로, fs, path, crypto(암호화 관련), Stream(대용량 데이터를 작은 단위로 분리해 데이터를 넘김), zlib(압축 관련), childe_process(프로세스 생성), EventEmitter(프로그램 내 이벤트 발생시키기) 등이 있다.
+브라우저가 아닌 일반 머신 환경에서 실행되기 때문에 브라우저의 Web API와는 다른 라이브러리들이 포함되어 있다. 대표적으로, fs, path, crypto(암호화 관련), Stream(대용량 데이터를 작은 단위로 분리해 데이터를 활용), zlib(압축 관련), child_process(자식 프로세스 생성), EventEmitter(프로그램 내 이벤트 발생시키기) 등이 있다.
 
 ```javascript
 // EventEmitter
@@ -365,7 +376,7 @@ async function main() {
 }
 ```
 
-### Node.js 기본 생태
+### Node.js 기본 생태계
 
 Node.js Runtime, 패키지 매니저(npm, yarn, pnpm), npm registry(public, private)
 
@@ -375,11 +386,9 @@ Node.js 프로젝트의 의존성 관리, Task 작성, npm registry 배포, 프�
 
 `package.json`이라는 프로젝트 명세 파일에 따라 기능을 수행한다. 대표적으로 npm, yarn, pnpm이 있다.
 
-> 다시 듣기
-
 #### npm registry
 
-Node.js/VanillaJS로 작성한 서드 파티 라이브러리/모듈을 업로드하는 공간으로, Public registry는 누구나 접근 가능한 공간, Private registry는 제한된 공간이다. 개발자들은 registry로부터 필요한 서드 파티 라이브러리/모듈을 받아 본인 코드에서 사용할 수 있다. 회사 내부에서만 사용하는 라이브러리/모듈은 private registry에 올려서 관리하는 경우가 많다
+Node.js나 Vanilla JavaScript로 작성한 서드 파티 라이브러리/모듈을 업로드하는 공간으로, Public registry는 누구나 접근 가능한 공간, Private registry는 제한된 공간이다. 개발자들은 registry로부터 필요한 서드 파티 라이브러리/모듈을 받아 본인 코드에서 사용할 수 있다. 회사 내부에서만 사용하는 라이브러리/모듈은 private registry에 올려서 관리하는 경우가 많다.
 
 ### 정리
 
