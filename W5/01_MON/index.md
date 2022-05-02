@@ -292,3 +292,65 @@ const Counter = {
 
 export default Counter;
 ```
+
+## [Node.js 입문](https://github.com/goldbergyoni/nodebestpractices)
+
+기본적으로 서버 쪽에서 JavaScript를 사용하고자 하는 실행 환경(Runtime)이다.
+
+### Node.js란
+
+JavaScript는 브라우저의 전유물이었다. 즉, 웹 페이지 작성에만 사용하는 언어로, 웹 페이지를 조금 더 interactive하게 만들어주는 언어이다. Web 2.0 이후 JavaScript의 중요도가 높아지고, 여러 개의 브라우저 간의 경쟁이 발생했다.
+
+Ryan Dahl이 2009년에 V8 엔진, libuv(Event Loop) 그리고 Node Bindings로 이루어진 JavaScript Runtime을 만들었다. 여타 Runtime과는 다르게 비동기 실행 방식(Event Loop와 OS 커널에서 지원하는 Low level IO API를 활용)을 기본적으로 지원하여 IO(File input, output) 관련 작업 시 최고의 성능을 보여준다.(Web Proxy 등)
+
+이러한 Node.js의 비동기 모델은 다른 언어에도 큰 영향을 주게 되었고, 적절한 시점에 적절한 성능, npm으로 구성된 생태계로 인해 인기를 끌게 되었다.
+
+### Node.js 구성
+
+V8 엔진, libuv(Event Loop), Node.js 기본 라이브러리(JavaScript, C/C++ 기반)으로 구성된다.
+
+#### libuv
+
+C로 작성된 Event Loop로, 비동기 작업이 마친 후 실행되는 콜백함수들을 각종 Queue(JavaScript보다 많음: Timer Queue, MicroTask Queue 등)에서 우선순위에 맞게 꺼내 JavaScript Engine에 전달한다. Single Thread로 작동하며 Node.js를 위해 개발되었으나, 현재는 다른 언어들도 사용한다.
+
+#### Node.js 기본 라이브러리
+
+브라우저가 아닌 일반 머신 환경에서 실행되기 때문에 브라우저의 Web API와는 다른 라이브러리들이 포함되어 있다. 대표적으로, fs, path, crypto(암호화 관련), Stream(대용량 데이터를 작은 단위로 분리해 데이터를 넘김), zlib(압축 관련), childe_process(프로세스 생성), EventEmitter(프로그램 내 이벤트 발생시키기) 등이 있다.
+
+```javascript
+// EventEmitter
+async function main() {
+  const connection = await dbClient.connect();
+  connection.on('connect', () => {
+    console.log('DB연결 완료');
+  });
+  connection.on('disconnect', () => {
+    console.log('DB종료 완료');
+  })
+  await connection.disconnect();
+}
+```
+
+### Node.js 기본 생태
+
+Node.js Runtime, 패키지 매니저(npm, yarn, pnpm), npm registry(public, private)
+
+#### 패키지 매니저(npm, yarn, pnpm)
+
+Node.js 프로젝트의 의존성 관리, Task 작성, npm registry 배포, 프로젝트 메타 데이터 작성 등을 담당한다. 서드 파티 라이브러리/모듈을 npm registry로부터 다운로드 받아 프로젝트에서 사용할 수 있게 해준다. 또한 개발중인 라이브러리/모듈을 npm registry로 업로드 할 수 있다.
+
+`package.json`이라는 프로젝트 명세 파일에 따라 기능을 수행한다. 대표적으로 npm, yarn, pnpm이 있다.
+
+> 다시 듣기
+
+#### npm registry
+
+Node.js/VanillaJS로 작성한 서드 파티 라이브러리/모듈을 업로드하는 공간으로, Public registry는 누구나 접근 가능한 공간, Private registry는 제한된 공간이다. 개발자들은 registry로부터 필요한 서드 파티 라이브러리/모듈을 받아 본인 코드에서 사용할 수 있다. 회사 내부에서만 사용하는 라이브러리/모듈은 private registry에 올려서 관리하는 경우가 많다
+
+### 정리
+
+- server-side 자바스크립트의 문을 연 Node.js
+- Node.js도 브라우저와 동일하게 비동기 방식으로 작동한다(다만 내부 스펙이 다르다)
+- 브라우저의 Web API와는 다른 기본 라이브러리들을 제공한다
+- 전체적인 프로젝트 관리를 위한 패키지 매니저, 그리고 개발한 모듈을 다른 개발자가 사용할 수 있도록 올려놓을 수 있는 공간인 npm registry
+- Node.js는 특성상 IO 관련 작업(file, network)이 많을 수록 효율이 좋고 반대로 싱글스레드 특성상 CPU를 많이 사용하는 작업(고차원 연산)이 많을 수록 효율이 극단적으로 떨어진다.
