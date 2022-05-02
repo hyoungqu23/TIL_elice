@@ -157,6 +157,32 @@ console.log('종료')
 
 콜백 패턴의 경우 비동기 작업을 순차적으로 실행하고자 콜백 함수를 중첩적으로 활용하면 이러한 중첩 함수로 인해 가로로 코드가 길어지는 문제가 발생할 수 있다. 이를 콜백 지옥이라고 하는데, 이는 매우 좋지 않은 DX(Developer Experience)를 제공하게 된다.
 
+> 콜백 함수를 사용한다고 모두 다 비동기 작업은 아니다. 다만, 보통 비동기를 처리할 때 콜백 패턴을 사용하기는 한다.
+
+```javascript
+function foo(callback) {
+  let a = 1;
+  callback();
+}
+
+function main() {
+  console.log("Hello, World");
+
+  // 동기 함수
+  foo(() => {
+    console.log("Callback called, but not the end");
+  });
+
+  console.log("This is the real end.");
+}
+
+main();
+
+> Hello, World
+> Callback called, but not the end.
+> This is the real end.
+```
+
 #### Promise 패턴
 
 콜백 지옥에서 벗어나고, 콜백 패턴을 더 일관성 있는 로직으로 보여주기 위한 필요성이 증대되면서 Promise 패턴이 등장했다. 로직 상 순차적으로 호출되어야 하는 비동기 함수들을 쉽게 연결해주는 `then` 메서드, 비동기 함수에서 에러가 발생했을 때 쉽게 에러 처리를 할 수 있도록 해주는 `catch` 메서드을 활용한다. 즉, 비동기 함수를 일관성 있는 형식으로 관리하게 되었다.(`then`, `catch`, `finally`)
@@ -222,4 +248,47 @@ async function main() {
 }
 ```
 
+> Error 핸들링에서 단점이 있다.
+
 > 오늘날의 JavaScript는 Worker Thread를 통해 Multi Thread를 지원한다.
+> JavaScript Engine은 최적화를 위해 컴파일 역할도 수행한다.(TurboFan)
+> axios 등 유명한 라이브러리 코드를 공부하는 것도 좋은 방법이 된다.
+
+### 동기 비동기 타이머 구현하기
+
+> 다시 듣기
+> while문, for문, map, filter, reduce 등으로 이벤트 루프를 막지 않게 조심해야 한다.
+> 비동기 함수 내부의 콜백이 이벤트 루프를 막는 지 확인해야 한다.
+> 함수 단위로 생각하기
+
+```javascript
+const Counter = {
+  count: 0,
+
+  getCount: function () {
+    return this.count;
+  },
+
+  resetCount: function () {
+    this.count = 0;
+  },
+
+  // 동기 타이머의 경우 3초간 웹 페이지의 상호작용이나 렌더링이 모두 정지되는 것을 확인할 수 있다.
+  // 즉, 동시성을 낮추게 된다.(concurrent) 작업을 쪼개서 a, b, c, a, b, c 작업을 잘개 쪼개 번갈아가면서 진행하는데, 외부에서 보면 동시에 3가지 작업이 동시에 처리되는 것처럼 보인다. 따라서 단위 작업을 잘게 만들수록 JavaScript 성능이 높아진다.
+  // 병렬은 Parallel
+  incrementSync: function () {
+    const NOW = Date.now();
+    while (Date.now() - NOW <= 3000) {};    // Single Thread를 잡아먹는 중... Event Loop를 막는 중...
+    this.count++;
+  },
+
+  incrementAsync: function (callback) {
+    setTimeout(() => {
+        this.count++;
+        callback();
+    }, 3000)
+  },
+};
+
+export default Counter;
+```
