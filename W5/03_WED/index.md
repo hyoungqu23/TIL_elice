@@ -158,41 +158,43 @@ foo({
 
 ## 04. TypeScript 기본 환경
 
-- tsc: TypeScript 전용 컴파일러로, 이를 튜닝하기 위해 설정 파일 `tsconfig.json`을 수정한다.
-- SWC, ESBuild, vite 등 더 성능이 좋은 컴파일러를 활용하기도 한다.
+- `tsc`: TypeScript 전용 컴파일러로, 이를 튜닝하기 위해 설정 파일 `tsconfig.json`을 수정한다.
+- `SWC`, `ESBuild`, `vite` 등 더 성능이 좋은 컴파일러를 활용하기도 한다.
 
-> package.json 다시듣기
+> package.json
 
 ```json
 {
+  // 메타 데이터 설정
   "name": "typescript_sample_project",
   "version": "0.1.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.ts", // 파일이 실행되는 메인 파일을 설정
+  // 이 프로젝트에서 실행하는 작업들을 설정
   "scripts": {
-    "start": "ts-node index.ts",
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node index.ts", // 개발용 node 실행 명령, ts-node: TypeScript를 읽어주는 node로, 성능이 느려 운영용은 아니다.
+    "build": "tsc", // TypeScript 컴파일 -> 빌드
+    "test": "echo \"Error: no test specified\" && exit 1" // 기본
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {}, // 직접적으로 활용되는 라이브러리, 툴 등이 포함되는데, 이는 개발용으로도 사용되고, 운영할 때도 사용된다.
+  // 개발용으로만 사용되는 외부 라이브러리, 툴 등이 포함된다.
   "devDependencies": {
     "@tsconfig/node16": "^1.0.2",
-    "@types/node": "^17.0.31", // 에러를 즉시 확인하기 위해 사용
+    "@types/node": "^17.0.31", // node.js에서도 사용하기 위해 type을 정의해놓은 모음집/명세서라고 볼 수 있다. 이는 에러를 즉시 확인하기 위해 사용되기도 하고, 이를 통해 TypeScript에서도 JavaScript 라이브러리를 활용할 수 있다.(어댑터 느낌)
     "ts-node": "^10.7.0",
     "typescript": "^4.6.4"
   }
 }
 ```
 
-npm install 명령어를 통해 npm을 설치하면 `node_modules` 디렉토리가 생성된다.
-`node_modules` 디렉토리에는 서드파티 라이브러리가 있다. 보통 Git에 올리는 것에서 제외한다.
+`npm install` 명령어를 통해 npm을 설치하면 `node_modules` 디렉토리가 생성된다. 이러한 `node_modules` 디렉토리에는 서드파티 라이브러리가 있다. 보통 Git에 올리는 것에서 제외한다.
 
-> tsconfig.json
+> node_modules/@tsconfig/node16/tsconfig.json
 
-기본 컴파일 옵션 확인 가능
+해당 파일에서 기본 컴파일 옵션을 확인할 수 있다. 이는 루트 디렉토리의 `tsconfig.json`에 extends되어 있다.
 
 ```json
 {
@@ -446,3 +448,5 @@ tsconfig.json 파일에서 다양한 컴파일 설정을 바꿔줄 수 있다: �
 - 함수, 인터페이스, 클래스에 재사용성을 더해준 기능
 - 함수, 인터페이스, 클래스를 정의한 사람이 아닌 사용하는 사람이 필요한 타입을 제공하는 방식
 - 특정 구조를 가진 함수, 인터페이스, 클래스를 다양한 타입을 적용시킴으로 사용성을 극대화
+
+## 실습
