@@ -155,3 +155,294 @@ foo({
 - 다수의 TypeScript 기반 프로젝트를 통해 잘 갖추어진 생태계가 존재한다.(Tools, Formatter 등)
 - 다양한 프레임워크와 런타임을 지원한다.
 - 사용자가 많은 IDE에서 적극적으로 지원한다.(코드 자동 완성, 에러 체크 등 기능 제공)
+
+## 04. TypeScript 기본 환경
+
+- tsc: TypeScript 전용 컴파일러로, 이를 튜닝하기 위해 설정 파일 `tsconfig.json`을 수정한다.
+- SWC, ESBuild, vite 등 더 성능이 좋은 컴파일러를 활용하기도 한다.
+
+> package.json 다시듣기
+
+```json
+{
+  "name": "typescript_sample_project",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "@tsconfig/node16": "^1.0.2",
+    "@types/node": "^17.0.31", // 에러를 즉시 확인하기 위해 사용
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
+  }
+}
+```
+
+npm install 명령어를 통해 npm을 설치하면 `node_modules` 디렉토리가 생성된다.
+`node_modules` 디렉토리에는 서드파티 라이브러리가 있다. 보통 Git에 올리는 것에서 제외한다.
+
+> tsconfig.json
+
+기본 컴파일 옵션 확인 가능
+
+```json
+{
+  "include": [".", "src/**/*"], // 컴파일 대상을 포함하는 경로
+  "exclude": ["node_modules", "**/*.spec.ts"], // 컴파일 제외 대상의 경로(불필요한 파일은 컴파일 안함)
+  "compilerOptions": {
+    "rootDir": ".", // 루트 디렉토리가 현재 디렉토리
+    "outDir": "dist" // 결과를 받는 디렉토리 설정
+  },
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Node 16",
+
+  "compilerOptions": {
+    "lib": ["es2021"], // 기본 JavaScript
+    "module": "commonjs", // 컴파일된 파일이 node 전용
+    "target": "es2021", // 호환성
+
+    "strict": true, // 엄격한 체크
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true // 파일 이름 검증
+  }
+}
+```
+
+```typescript
+import fs from "fs/promises";
+// node `.mgs`여야만 import문 사용할 수 있다.(16버전 이후 변화 중)
+
+function sayHelloTo(target: string) {
+  console.log(`Hello, ${target}`);
+}
+
+function addTwoValues(first: number, second: number): number {
+  return first + second;
+}
+
+async function main() {
+  sayHelloTo("World");
+  addTwoValues(100, 1000);
+  const samples = await fs.readFile("./sample.json", "utf8"); // readFile을 읽어올 때 utf-8 방식으로 가져오기 때문에 string
+  console.log(samples);
+}
+
+main();
+```
+
+## 05. TypeScript 특성
+
+### Types
+
+#### any & unknown type
+
+- `any`
+
+  어떤 Type도 상관 없기 때문에 모든 Type으로 덮어쓸 수 있다. 다만, 지양하는 것이 좋다.
+
+- `unknown`
+
+  Type을 모를 때 사용한다. 이 또한 모든 Type의 데이터를 할당받을 수 있지만, 객체 할당 시 key를 불러오는 경우 문제가 발생한다. 이를 해결하기 위해 강제 Type 설정을 해야 한다.(대괄호로 앞에 설정하는 방식: <{ key: string }>)
+
+  보통 `try` - `catch` 구문의 `error`가 unknown type으로 설정된다.
+
+#### 원시 타입
+
+- `number`
+- `string`
+- `boolean`
+
+> 다만 변수 선언과 동시에 할당할 때는 굳이 작성하지 않아도 된다. 다만 선언만 할 때는 Type을 설정해주어야 한다.
+
+- `Array<number>`, `number[]`
+
+  두 가지 방식으로 배열 Type을 설정할 수 있다. 내부의 원소도 해당 Type에 맞는 것을 작성해야 한다. 중첩 배열도 설정할 수 있다. (number[][][])
+
+  배열 작성 시 다른 Type의 원소를 가지도록 작성하는 것은 좋지 않다.
+
+  ```typescript
+  const arr1: Array<number> = [1, 2, 3];
+  const arr2: number[] = [1, 2, 3];
+  ```
+
+- function
+
+  매개 변수의 Type과 return의 Type을 설정해야 한다.
+
+  ```typescript
+  const addOne: (value: number) => number = (value: number) => value + 1;
+  ```
+
+- Tuples
+
+  ```typescript
+  const tuple: [number, number, number] = [1, 2, 3];
+  ```
+
+#### Optional Values
+
+`?`를 통해 작성하고, 값이 없을 경우 나오는 값을 뒤에 설정할 수 있다.
+
+```typescript
+function sayHello(target?: string) {      // 이게 optional value
+  const t = target ?? "World";    // nullish coalescing ||으로 사용하는 것과 동일
+  console.log(`Hello, ${t}`);
+}
+sayHello("Mike");
+sayHello();
+
+> Hello, Mike
+> Hello, World
+```
+
+#### Interface
+
+객체의 형식으로 작성된 객체의 타입을 정의하기 위해 사용하는 것으로, property가 있을수도 있고 없을수도 있을 때 활용한다.
+
+즉, 객체가 어떤 모양이었으면 좋은 지를 설정하는 것이라고 볼 수 있다.
+
+프로퍼티: 타입 으로 설정한다.
+
+```typescript
+interface IDBConfig {
+  // DB 연결 인터페이스
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  schema?: string;
+}
+
+interface Machine {
+  type: string;
+  name: string;
+  run: () => void;
+  getType: () => string;
+}
+
+function foo(o: Machine) {
+  // ...
+}
+```
+
+#### Class
+
+클래스 내부의 변수, 함수 모두 Type을 설정할 수 있고, `private`을 통해 외부 접근을 배제할 수 있다.
+
+```typescript
+class Animal {
+  id: number;
+  name: string;
+  private secret: string; // 클래스 내부에서만 활용하게끔 외부 접근 배제
+
+  constructor(name: string) {
+    this.id = Date.now();
+    this.name = name;
+    this.secret = "this is secret";
+  }
+
+  public getName() {
+    // public은 생략 가능
+    this.logSecret();
+    return this.name;
+  }
+
+  private logSecret() {
+    console.log(`${this.secret}`);
+  }
+}
+```
+
+#### union
+
+`|`로 구분된 Type들이 모두 가능하다.
+
+한 변수에 여러 타입을 받고 싶을 때 사용한다. 이에 맞게 분기 처리가 필요할 수 있다.
+
+#### intersection
+
+`&`로 구분된 Type 모두를 가지고 있는 경우에 사용한다. 사실상 합집합
+
+```typescript
+interface ExtraConfig {
+  encrypt: boolean;
+  dbName: string;
+}
+
+function printDBConfig(config: IDBConfig & ExtraConfig) {
+  console.log(config);
+}
+```
+
+#### type alias
+
+자신만의 타입을 설정하는 것. 인터페이스는 확장성이 있지만, 타입으로 설정된 타입들은 확장성이 없다. 즉, 같은 이름으로 다른 인터페이스를 만들면 자동으로 합쳐지는 반면에 타입으로 설정한 것은 새로 선언하는 것이 불가능하다.
+
+implements도 안된다.
+
+일반적으로 인터페이스를 권장한다.
+
+```typescript
+type ID = string | number;
+
+type Input = string;
+
+type Point = {
+  x: number;
+  y: number;
+};
+```
+
+#### literal
+
+값을 타입으로 사용하는 것.
+
+함수 return 값을 그 중 하나의 값으로 해야하는 경우에 사용한다.
+
+```ts
+function hello(name: "james" | "smith") {}
+```
+
+#### enum
+
+일련의 객체의 이름들을 순서대로 정리하기 위해 사용한다.
+
+고정된 값을 관리하기 위해 사용한다. 단순한 값이다. 객체처럼 프로퍼티가 아니라 따라서 객체화가 안된다.
+
+enum은 const를 모아두는 객체
+
+#### utility
+
+동적으로 데이터를 삽입하고 변경할 때 사용한다.
+타입스크립트는 기본적으로 동적으로 수정 삽입이 불가능하기 때문에 이를 사용하기 위해 만든다.
+
+```typescript
+const a: Record<string, any> = {};
+
+a.key = "name";
+```
+
+```
+tsc <filename> 명령으로 .ts 파일을 컴파일 함과 동시에 타입 분석을 실행
+
+tsc <filename> 명령으로 작성한 .ts 파일들을 컴파일
+
+tsconfig.json 파일에서 다양한 컴파일 설정을 바꿔줄 수 있다: 컴파일 결과물 경로 변경,
+컴파일 대상 경로, 컴파일 제외 경로 등
+```
+
+#### Generic
+
+- 함수, 인터페이스, 클래스에 재사용성을 더해준 기능
+- 함수, 인터페이스, 클래스를 정의한 사람이 아닌 사용하는 사람이 필요한 타입을 제공하는 방식
+- 특정 구조를 가진 함수, 인터페이스, 클래스를 다양한 타입을 적용시킴으로 사용성을 극대화
