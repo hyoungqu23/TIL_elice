@@ -70,3 +70,88 @@ foo({
   name: "Pickford",
 });
 ```
+
+## 03. 타입 시스템의 적용
+
+### 왜 타입 시스템이 필요한가?
+
+#### 일상적인 프로그램 개발 과정
+
+> 코드 추가/수정 -> [ 컴파일 ] -> 커밋 -> 코드 리뷰 -> 빌드 -> 배포
+
+이 과정 속에서 후방 단계일수록 버그를 발견했을 때 처리 비용이 기하 급수적으로 늘어난다. 즉, 미리 에러를 발견할수록 처리 비용이 감소하기 때문에 코드 추가/수정 단계에서부터 코드 리뷰까지 조금 더 엄격하게 작업을 하면 잠재적인 버그를 현저히 줄일 수 있다.
+
+#### 정적 타입 시스템의 장점
+
+- **버그 발견 시점을 앞당길 수 있음**
+
+  더 적은 비용으로 잠재적인 버그를 줄일 수 있고, 안정적이다.
+
+- **상대적으로 간결한 문서화**
+
+  > JSDoc를 활용하여 문서화하는 것보다 TypeScript를 사용하는 것이 더 간결한 코드를 작성할 수 있게 된다.
+  > 주석을 포함하여 배포하면, 더 코드 용량이 커지기 때문에 성능을 위해 주석을 삭제하여 배포한다.
+
+  ```typescript
+  function addOne(value: number): number {
+    return value + 1;
+  }
+  ```
+
+- **용이한 코드 수정 및 리팩터링**
+
+  기존 함수를 수정하여 새로운 함수로 교체할 수 있지만, 함수 내용이 길고 함수가 많다면 시간 비용적인 측면에서 문제가 생긴다. 따라서 정적 타입 시스템을 채용한다면 더 빠르게 코드를 수정하고 리팩터링할 수 있게 된다.
+
+  ```javascript
+  // Americano가 아니라 Latte만 만들기로 한다면?
+  function makeLatte() {
+    return new Promise((resolve, reject) => {
+      const espresso = "에스프레소";
+      const milk = "우유";
+      const americano = espresso + "+ " + milk;
+      setTimeout(() => resolve(americano), 4000);
+    });
+  }
+
+  function order() {
+    return makeLatte();
+  }
+
+  async function main() {
+    const coffee = await order();
+    console.log(`이 커피는 ${coffee}로 구성되어 있습니다`);
+  }
+
+  main();
+  ```
+
+  ```typescript
+  function makeLatte(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const espresso = "에스프레소";
+      const milk = "우유";
+      const latte = espresso + "&" + milk;
+      setTimeout(() => resolve(latte), 4000);
+    });
+  }
+
+  function order(): Promise<string> {
+    return makeLatte();
+  }
+
+  async function main() {
+    const coffee = await order();
+    console.log(`이 커피는 ${coffee}로 구성되어 있습니다`);
+  }
+
+  main();
+  ```
+
+### Microsoft의 TypeScript
+
+- JavaScript의 Superset으로, 'JavaScript로 작성된 코드는 TypeScript 코드 이기도 하다.'
+- JavaScript에 정적 타입 시스템을 도입한 모델로, TypeScript로 작성된 코드를 단일 컴파일러를 사용해서 최적화된 JavaScript 코드를 만드는 방식.
+- 대규모 커뮤니티와 많은 사용자를 보유하고 있다.
+- 다수의 TypeScript 기반 프로젝트를 통해 잘 갖추어진 생태계가 존재한다.(Tools, Formatter 등)
+- 다양한 프레임워크와 런타임을 지원한다.
+- 사용자가 많은 IDE에서 적극적으로 지원한다.(코드 자동 완성, 에러 체크 등 기능 제공)
