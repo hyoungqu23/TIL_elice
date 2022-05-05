@@ -427,3 +427,248 @@ function func1(a: number, ...b: number[]): number {
 
 let result1 = func1(1, 2, 3, 4, 5, 6, 7, 8, 9, 10); // 55
 ```
+
+## 07. OOP(Object-oriented programming)
+
+OOP(Object-oriented programming)는 컴퓨터 프로그램을 **객체(Object)**의 모임으로 파악하려는 프로그래밍 패러다임으로, 프로그래밍을 객체 단위로 나눠서 작성하는 것을 지향한다.
+
+OOP를 적용하면 프로그램을 변경하고 싶거나, 오류를 해결할 때 모든 구조를 뜯어 고치지 않고 문제가 되는 객체만 수정하면 되기 때문에 **프로그램이 유연하고 변경이 용이**하며, **개발과 보수가 간편한 이점**이 있습니다. 잘 나누어진 객체는 **직관적인 코드 분석**을 가능하게 한다.
+
+OOP(Object-oriented programming)의 중요한 프로그래밍 특성은 **강한 응집력(Strong Cohesion)**과 **약한 결합력(Weak Coupling)**이다.
+
+- **응집력(Cohesion)**
+  프로그램의 한 요소가 여러 기능에 얼마만큼 책임을 지고 있는지 나타내는 것으로, 응집력이 높으면 하나의 요소가 하나의 기능을 관여하기 때문에 요소의 목표가 뚜렷하지만, 응집력이 낮으면 하나의 요소가 여러 기능을 관여하는 것으로 코드를 이해하기 어렵다.
+
+- **결합력(Coupling)**
+  프로그램이 기능을 수행하는 데 있어 여러 요소가 얼마만큼 연관이 되어 있는지 나타내는 것으로, 결합력이 낮으면 각 요소를 독립적으로 관리하기 용이하지만 결합력이 높으면 하나의 요소를 수정하기 위해 여러 요소를 모두 확인해야 한다.
+
+```typescript
+class Human = {
+  name: string;
+
+  // 생성자
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  // 메서드
+  move() {
+    return `${this.name} move forward!`
+  }
+}
+
+let person1 = new Human('Pickford');
+```
+
+## 08. 접근 제어자
+
+속성 또는 메서드에 접근하는 것을 제한하기 위해 접근 제어자 `public`, `protected`, `private`를 활용한다.
+
+### `public`
+
+프로그램 내에서 선언된 member들이 자유롭게 접근할 수 있다. 기본적으로 `public`으로 선언되지만, 명시적으로 표기하기도 한다.
+
+```typescript
+class Animal {
+  public name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+console.log(new Animal("Cat").name); // Cat
+```
+
+### `protected`
+
+해당 member가 포함된 클래스와 하위 클래스를 제외한 외부에서의 접근을 차단한다.
+
+```typescript
+class Person {
+  protected name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+class Student extends Person {
+  private major: string;
+  constructor(name: string, major: string) {
+    super(name);
+    this.major: major;
+  }
+
+  public getMajorScore() {
+    return `${this.name}'s ${this.major} score is 4.4/4.5`
+  }
+}
+
+let student1 = new Student('Pickford', 'Economics');
+console.log(student1.getMajorScore()); // Pickford's Economics score is 4.4/4.5`
+console.log(student1.name); // Error: Property 'name' is protected and only accessible within class 'Person' and its subclasses.
+```
+
+### `private`
+
+해당 member가 포함된 클래스 외부에서의 접근을 차단한다.
+
+```typescript
+class Animal {
+  private name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+
+console.log(new Animal("Cat").name); // Error: Property 'name' is private and only accessible within class 'Animal'.
+```
+
+## 09. 상속
+
+상속은 상위 클래스의 기능을 재사용하거나 확장하는 기법으로, OOP(Object-oriented programming)는 상속을 통해 존재하는 클래스를 확장해 새로운 클래스를 생성할 수 있다.
+
+```typescript
+class Animal {
+  move(distanceInMeters: number) {
+    console.log(`Animal moved ${distanceInMeters}m`);
+  }
+}
+
+class Dog extends Animal {
+  makeSound() {
+    console.log("BOWWOW!");
+  }
+}
+
+class Cat extends Animal {
+  makeSound() {
+    console.log("meow!");
+  }
+}
+
+const dog = new Dog();
+dog.move(10); // Animal moved 10m
+dog.makeSound(); // BOWWOW!
+
+const cat = new Cat();
+cat.move(5); // Animal moved 5m
+cat.makeSound(); // meow!
+```
+
+## 10. Getter & Setter / readonly / static
+
+### Getter & Setter
+
+비공개로 설정하려는 속성은 private으로 설정하고, 속성 값을 읽고 수정하는 getter & setter 함수를 사용한다.
+
+즉, 클래스의 속성에 직접 접근하는 것을 차단하고, getter & setter 함수를 통해 값을 받거나 수정할 수 있게 하는 것이다. 이를 통해 데이터 무결성을 확보하고 캡슐화를 유지할 수 있으며, 각 객체의 member에 접근하는 방법을 세밀하게 제어할 수 있다.
+
+```typescript
+class Person {
+  private _name: string;
+
+  get name() {
+    return this._name;
+  }
+
+  set name(name: string) {
+    if (name.length > 10) {
+      throw new Error("name is too long.");
+    }
+    this._name = name;
+  }
+}
+
+let person1 = new Person();
+
+console.log(person1.name); // undefined
+person1.name = "Pickford";
+console.log(person1.name); // Pickford
+person1.name = "abcdefghijklmnop"; // throw Error
+```
+
+### readonly
+
+읽기만 가능한 속성을 선언하기 위해 사용한다. 해당 속성은 변경할 수 없게 되어, 선언 혹은 생성자에서 한 번 설정하면 이후 수정이 불가능하다.
+
+```typescript
+class Person {
+  readonly age: number = 20; // 선언 초기화
+
+  constructor(age: number) {
+    this.age = age;
+  }
+}
+
+let person = new Person(10); // 생성자 초기화
+person.age = 30; // Error: Cannot assign to 'age' because it is a readonly property.
+```
+
+### static
+
+객체마다 할당되지 않고 클래스의 모든 객체가 공유하는 member를 선언할 때 사용한다. 즉, 각 인스턴스가 아닌 클래스 자체에서 보이는 전역 member, 범용적으로 사용되는 값을 생성한다. static member에는 `className.`을 통해 내외부 어디에서든 접근하고 수정할 수 있다.
+
+```typescript
+class Grid {
+  static origin = {
+    x: 0,
+    y: 0,
+  };
+
+  distanceFromOrigin(point: { x: number; y: number }) {
+    let xDist = point.x - Grid.origin.x;
+    let yDist = point.y - Grid.origin.y;
+
+    return Math.sqrt(xDist * xDist + yDist * yDist) / this.scale;
+  }
+
+  constructor(public scale: number) {}
+}
+
+let grid1 = new Grid(1.0);
+let grid2 = new Grid(5.0);
+```
+
+## 11. 추상 클래스
+
+다른 클래스들이 파생될 수 있는 기초 클래스로, 직접 인스턴스화 할 수 없고, `abstract` 키워드를 사용한다. 추가적으로 추상 메서드는 추상 클래스가 아닌 파생된 클래스에서 구현해야 한다.
+
+```typescript
+abstract class Animal {
+  protected name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
+
+  abstract makeSound(): void;
+
+  move(): void {
+    console.log("move! move!");
+  }
+}
+
+class Dog extends Animal {
+  constructor(name: string) {
+    super(name); // 파생된 클래스의 생성자는 반드시 super()를 통해 추상 클래스의 필드를 가져와야 한다.
+  }
+
+  makeSound(): void {
+    console.log(this.name + "bowwow!"); // 추상 메서드를 재구현
+  }
+}
+
+const animal = new Animal("animal"); // Error: Cannot create an instance of an abstract class.
+
+const dog = new Dog("진돗개");
+dog.makeSound(); // 진돗개 bowwow!
+```
+
+### 추상 클래스를 활용한 디자인 패턴(Template Method Pattern)
+
+프로그램의 일부분을 서브 클래스로 캡슐화하여 전체 구조를 바꾸지 않고 특정 단계의 기능을 바꾸는 것을 디자인 패턴이라고 한다. 전체적인 알고리즘은 상위 클래스에서 구현하고, 다른 부분은 하위 클래스에서 재구현한다.
+
+이를 통해 전체 구조는 유사하지만 부분적으로 다른 구문으로 구성된 메서드의 코드 중복을 최소화할 수 있다.
