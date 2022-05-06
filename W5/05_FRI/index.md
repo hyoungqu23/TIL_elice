@@ -2,6 +2,10 @@
 
 ## 01. Interface
 
+TypeScript의 핵심 원칙 중 하나는 Type 검사가 값의 **형태**에 초점을 맞추고 있다는 것이다.(Duck Typing, Structural Subtyping)
+
+TypeScript에서 Interface는 Type들의 이름을 짓고, 코드 안의 계약과 프로젝트 외부에서 사용하는 코드의 계약을 정의하는 역할을 한다.
+
 Interface는 변수, 함수, 클래스의 Type을 설정하기 위해 사용된다. 직접 인스턴스를 생성할 수 없으며, 모든 메서드가 추상 메서드지만, `abstract` 키워드는 사용하지 않는다. ES6에서는 Interface를 지원하지 않는다.
 
 Interface는 객체의 속성과 그 Type, 함수의 Parameters와 반환 Type, 배열과 객체에 접근하는 방식, 클래스 등에 대해 정의할 수 있다.
@@ -20,13 +24,17 @@ let person1 = { name: "John" };
 sayName(person);
 ```
 
-### Properties
+### Property
 
-TypeScript의 컴파일러는 필수 property 유무와 Type을 확인한다. 이때 `?`와 `readonly` 예약어를 활용해 더 세밀하게 제어할 수 있다.
+TypeScript의 Type 검사에서 어떤 객체가 실제로는 더 많은 Property를 가지고 있다고 하더라도, 컴파일러는 최소한 필요한 Property가 있는 지와 Type이 잘 맞는지만 검사한다. 또한, Property의 순서도 검사하지 않는다. 단지 함수에 전달된 객체(arguments)가 나열된 요구 조건을 충족하면, 허용된다.
 
-#### Optional Properties
+즉, TypeScript의 컴파일러는 필수 property 유무와 Type을 확인한다. 이때 `?`와 `readonly` 예약어를 활용해 더 세밀하게 제어할 수 있다.
 
-Interface에 속하지 않는 property의 사용을 방지하면서 사용 가능한 property를 기술할 때 사용한다. 객체 내부의 몇 개의 property만 채워 함수에 전달하는 option bags같은 패턴에 유용하게 사용된다.
+#### Optional Property
+
+Interface의 모든 Property가 반드시 필요하지는 않다. 즉, 어떤 조건에서만 필요하거나, 존재하지 않는 경우도 있을 수 있다는 것이다. 따라서 Optional Property는 Interface에 속하지 않는 property의 사용을 방지하면서 사용 가능한 property를 기술할 때 사용한다. 객체 내부의 몇 개의 Property만 채워 함수에 전달하는 'option bags'같은 패턴에 유용하게 사용된다.
+
+이러한 Optional Property는 다른 Interface와 동일하게 작성되고, 단지 `?`를 Property 이름 끝에 붙여 표시한다. 특히, Interface에 속하지 않는 Property의 사용을 방지하고, 사용 가능한 속성을 명시적으로 보여준다는 점이 그 장점이다.
 
 ```ts
 interface SquareConfig {
@@ -48,9 +56,9 @@ function createSquare(config: SquareConfig): { color: string; area: number } {
 let mySquare = createSquare({ color: "black" }); // width 값이 없어도 동작한다.
 ```
 
-#### Readonly Properties
+#### Readonly Property
 
-객체가 처음 생성될 때만 값을 설정할 수 있고, 이후 수정이나 재할당이 불가능하다. `const`와 동일한 기능을 한다.
+일부 Property는 객체가 처음 생성(할당)될 때만 수정이 가능해야 하고, 이후 수정이나 재할당이 불가능하게끔 설정해야 할 필요성이 있다. 따라서, Property 이름 앞에 `readonly` 키워드를 통해 읽기 전용으로 설정할 수 있다. 이는 `const`와 유사한 기능을 한다. 변수는 `const`를 사용하고 Property는 `readonly`를 사용한다.
 
 ```ts
 interface Point {
@@ -64,11 +72,13 @@ point.x = 60; // Cannot assign to 'x' because it is a readonly property.
 
 ### Interface type
 
-TypeScript의 Interface는 함수 혹은 클래스에서 사용할 수 있다.
+TypeScript의 Interface는 함수 혹은 클래스에서 사용할 수 있다. 즉, Interface는 Property로 객체를 기술하는 것외에도 함수의 Type을 설명할 수 있다는 것이다.
 
 #### Function Type
 
 함수의 인자와 반환 값의 Type을 정의한다. 함수의 Type을 정의할 때에도 사용한다. 미리 interface로 Type을 정의하면, contextual Typing에 의해 인수의 Type을 추론할 수 있으므로 생략해도 된다.
+
+Interface로 함수의 Type은 매개 변수 목록과 반환 타입만 주어진 함수 선언과 유사한 형태로 정의한다. 다만, 각 매개 변수는 이름과 Type이 모두 필요하다. 한 번 정의된 Interface는 다른 Interface처럼 사용할 수 있다.
 
 ```ts
 interface SearchFunc {
@@ -89,9 +99,11 @@ mySearch2 = function (src, sub) {
 // Error: Type is not assignable to type SearchFunc.
 ```
 
+TypeScript의 Contextual Typing으로 인해 인수 타입이 추론되므로, Type을 작성하지 않아도 된다.
+
 #### Class Type
 
-클래스가 특정 계약을 충족하도록 명시적으로 강제한다.
+Interface는 클래스가 특정 계약을 충족하도록 명시적으로 강제한다.
 
 ```ts
 interface Animal {
@@ -102,6 +114,21 @@ class Dog implements Animal {
   makeSound(): void {
     console.log("멍멍");
   }
+}
+```
+
+```ts
+interface ClockInterface {
+  currentTime: Date;
+  setTime(d: Date): void;
+}
+
+class Clock implements ClockInterface {
+  currentTime: Date = new Date();
+  setTime(d: Date) {
+    this.currentTime = d;
+  }
+  constructor(h: number, m: number) {}
 }
 ```
 
@@ -123,9 +150,30 @@ class Bulldog implements Dog {
 }
 ```
 
+Interface는 여러 Interface를 확장할 수 있다.
+
+```ts
+interface Shape {
+  color: string;
+}
+
+interface PenStroke {
+  penWidth: number;
+}
+
+interface Square extends Shape, PenStroke {
+  sideLength: number;
+}
+
+let square = {} as Square;
+square.color = "blue";
+square.sideLength = 10;
+square.penWidth = 5.0;
+```
+
 #### Hybrid Type
 
-유연하고 동적인 특성을 갖는 JavaScript와 유사하게 Interface도 여러 가지 Type을 조합할 수 있다.
+유연하고 동적인 특성을 갖는 JavaScript와 유사하게 Interface도 여러 가지 Type을 조합할 수 있다. 그 중 하나는 추가적인 Property와 함께 함수와 객체 역할 모두 수행하는 객체이다.
 
 ```ts
 interface Counter {
@@ -193,10 +241,24 @@ vendingMachine.pay(); // cash
 
 ## 02. Generic
 
-데이터 Type을 일반화한다는 의미를 가진 제네릭(Generic)은 어떤 함수나 클래스가 사용할 Type을 생성 단계가 아닌 사용 단계에서 정의하는 프로그래밍 기법으로, 선언 시점이 아닌 생성 시점에 Type을 명시해 하나의 Type으로만 사용하지 않고 다양한 Type을 사용할 수 있다. 즉, 일반적인 Static Typing 방식은 함수나 클래스를 정의할 때 Type을 선언하지만, 제네릭(Generic)은 외부에서 Type을 작성해 코드가 수행될 때에 Type이 명시되도록 하는 것이다.
+제네릭(Generic)을 사용하지 않는다면, 함수에 특정 Type을 정의해주거나, `any` Type을 사용해야 한다.
 
 ```ts
-function echo<T>(text: T): T {
+function identity(arg: number): number {
+  return arg;
+}
+
+function identity(arg: any): any {
+  return arg;
+}
+```
+
+데이터 Type을 일반화한다는 의미를 가진 제네릭(Generic)은 어떤 함수나 클래스가 사용할 Type을 생성 단계가 아닌 사용 단계에서 정의하는 프로그래밍 기법으로, 선언 시점이 아닌 생성 시점에 Type을 명시해 하나의 Type으로만 사용하지 않고 다양한 Type을 사용할 수 있다.
+
+즉, 일반적인 Static Typing 방식은 함수나 클래스를 정의할 때 Type을 선언하지만, 제네릭(Generic)은 외부에서 Type을 작성해 코드가 수행될 때에 Type이 명시되도록 하는 것이다.
+
+```ts
+function identity<T>(text: T): T {
   return text;
 }
 
@@ -213,7 +275,7 @@ console.log(echo<boolean>(true));
   따라서 TypeScript에서는 `any` Type의 사용을 지양하고 있다.
 
 ```ts
-function echo2(text: any): any {
+function identity(text: any): any {
   return text;
 }
 ```
