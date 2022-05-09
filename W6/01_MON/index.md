@@ -184,7 +184,7 @@ for (let i = 0; i < 10; i++) {
 > func.js
 
 ```javascript
-let number = 0;
+let number = 0; // 기능을 공유하기 때문에 number도 자연스럽게 활용이 가능하다. > 다시 듣기
 
 module.exports = () => {
   return (number += 1);
