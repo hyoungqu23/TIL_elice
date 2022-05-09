@@ -221,3 +221,92 @@ express --view=ejs myapp
 커멘드에서 보면 메서드와 주소, status code 등을 확인할 수 있다.
 
 > GET /users 200 1.368 ms - 23
+
+웹의 핵심은 요청(request)에 의해 응답(response)하는 것인데, get 이후의 형태를 미들웨어라고 한다. 즉, router.get(경로, (요청, 응답, 다음으로 갈지말지 여부) => {[기능](https://expressjs.com/ko/4x/api.html#app)})을 보여준다.
+
+Express의 핵심은 좀 더 큰 Router인 middleware이다. 즉, 요청에 따라 response를 보내는 역할로, 다음 코드에서 function이 미들웨어이다.
+
+미들웨어는 라우터가 아님
+
+요청이 왔을 때 일어나는 기능을 처리하는 것이 미들웨어이다.
+
+```javascript
+var express = require("express");
+var router = express.Router();
+
+/* GET home page. */
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
+});
+
+module.exports = router;
+```
+
+쉽게 간단한 기능을 만들 수 있는 것이 장점이지만, 페이지가 많아질수록 미들웨어를 지속적으로 만들어야 한다는 점이 단점이다.
+
+서버를 재시작하면 콘솔에도 찍히고, 화면에도 렌더링된다.
+
+test express
+GET /call 200 7.309 ms - 15
+
+node의 장점: 싱글 쓰레드 기반으로 빠르게 처리할 수 있다.
+
+```javascript
+router.get("/", (req, res, next) => {
+  console.log("test express");
+  res.send("Hello, Express!");
+  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
+});
+
+// 다음 미들웨어?
+router.get("/", function (req, res, next) {
+  console.log("2nd express");
+});
+
+module.exports = router; // ==> app.js로
+```
+
+test express
+2nd express
+GET /call 304 6.062 ms - -
+
+이렇게 잘 나온다
+
+```javascript
+router.get("/", (req, res, next) => {
+  console.log("test express");
+  console.log("2nd express");
+  res.send("Hello, Express!");
+  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
+});
+```
+
+이렇게 해도 되는데 왜 두개로 나눠서 써야하는지?
+
+-> 미들웨어가 끊기지 않고 다음 동작을 원활하게 진행할 수 있기 위해 next를 활용한다. next는 콜백을 끊어주는 느낌으로, 더 간결하고 동기적으로 작성하기 위해 쓴다.
+
+예를들어 소모임, 문토, 소셜링 신청 시 신청은 끝나지만, 그 다음 동작이 중요하다. 따라서, 미들웨어가 끊기지 않고 계속 동작을 할 수 있게 연결해주는 역할을 한다.
+
+```javascript
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404)); // 404 이후에도 진행해야 하기 때문에 next 활용
+});
+```
+
+API 문서
+함수
+post -> url/test/member/:id
+이떄 id는 회원의 id, DB 키로 한다.
+
+`:` 뭐가 들어가도 사용할 수 있게끔 변수로 만들어 받겠다.
+
+<https://trends.google.co.kr/trends/explore?q=프로그래밍&geo=KR>
+
+한국에서 검색하고 있다는 의미로 geo=KR
+
+q => 데이터 베이스를 동작하는 것
+
+이게 get 기능
+
+id로 이렇게 get 할 수 있음
