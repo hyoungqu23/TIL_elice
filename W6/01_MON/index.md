@@ -106,3 +106,98 @@ npm remove
 서버는 서비스를 운영하는데, 운영을 위해 접속 관리, 다중 접속 관리가 중요하다. 따라서 pm2, forever 등의 운영을 위한 package를 설치하는데, 이때 전역적으로 설치한다.
 
 npx, nvm: 배포에 관련된 패키지, 버전 관리를 위해 사용한다.
+
+## Module
+
+라이브러리라고도 불리는 module은 중복되는 기능이나 지속적으로 활용해야 하는 기능을 반복적으로 사용할 수 있게끔 만드는 코드를 말한다.
+
+### Module 만들어보기
+
+> calc.js
+
+```javascript
+function add1(a, b) {
+  return a + b;
+}
+
+module.exports.add = add;
+```
+
+> app.js
+
+```javascript
+const calc = require("./calc");
+// calc.js 처럼 확장자를 끝까지 작성하지 않아도 된다.
+
+console.log(calc.add(10, 20));
+```
+
+```command
+node app
+```
+
+해당 명령어를 통해 JavaScript 파일을 실행할 수 있다.
+
+### module을 내보내는 다른 방법
+
+객체로 내보낼 수 있다.
+
+> calc.js
+
+```javascript
+module.exports = {
+  add1: add,
+  sub: sub,
+  mul: mul,
+  div: div,
+};
+```
+
+단순히 함수만이 아니라 숫자, 문자열 등 변수를 내보낼 수도 있다.
+
+> func.js
+
+```javascript
+let number = 0;
+
+module.exports = number += 1;
+```
+
+추가적인 기능을 활용해 내보내면서 적용할 수 있다.
+
+다만, 같은 기능을 여러번 중복적으로 활용하고자 한다해도 사용할 수 없다.
+
+`require`의 특성상 한 번 호출된 후 바로 삭제한다. 따라서 기능을 반복적으로 활용할 수는 없다. 즉, for 반복문에서 10번 호출되고 삭제되기 때문에 1이 계속 출력된다.
+
+> app.js
+
+```javascript
+const func = require("./func");
+
+for (let i = 0; i < 10; i++) {
+  console.log(func);
+}
+```
+
+다만, 함수로 내보내는 경우 삭제되지 않고 남아있기 때문에 중복된 기능을 활용할 수 있게 된다.
+
+> func.js
+
+```javascript
+let number = 0;
+
+module.exports = () => {
+  return (number += 1);
+};
+```
+
+> app.js
+
+```javascript
+const func = require("./func");
+
+for (let i = 0; i < 10; i++) {
+  // console.log(func);
+  console.log(func());
+}
+```
