@@ -2,7 +2,7 @@
 
 ## 00. npm
 
-Node Package Manager로, Module(`lite-server`, `passport`(sns 로그인) 등)을 사용할 때 활용한다.
+Node Package Manager로, Module([`lite-server`](https://www.npmjs.com/package/lite-server), [`passport`](https://www.npmjs.com/package/passport)(sns 로그인) 등)을 사용할 때 활용한다.
 
 ```command
 npm init
@@ -201,3 +201,23 @@ for (let i = 0; i < 10; i++) {
   console.log(func());
 }
 ```
+
+## [Express.js](https://expressjs.com/)
+
+```command
+npm install express-generator -g
+```
+
+해당 명령어로 설치할 수 있다.
+
+```command
+express --view=ejs myapp
+```
+
+`myapp` 프로젝트 디렉토리를 생성하고, 이후 이동한 후 `npm install`을 통해 npm을 설치한다. 다음으로 `npm start`로 프로젝트를 시작할 수 있다.
+
+`http://localhost:3000/`에 접속해 확인할 수 있다. 또한, `http://localhost:3000/users`에 접근해 respond with a resource를 확인할 수 있다.
+
+커멘드에서 보면 메서드와 주소, status code 등을 확인할 수 있다.
+
+> GET /users 200 1.368 ms - 23
