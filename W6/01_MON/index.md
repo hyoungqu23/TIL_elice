@@ -2,13 +2,13 @@
 
 ## 00. npm
 
-Node Package Manager로, Module([`lite-server`](https://www.npmjs.com/package/lite-server), [`passport`](https://www.npmjs.com/package/passport)(sns 로그인) 등)을 사용할 때 활용한다.
+Node Package Manager로, Module(예시: [`lite-server`](https://www.npmjs.com/package/lite-server), [`passport`](https://www.npmjs.com/package/passport)(sns 로그인) 등)을 사용할 때 활용한다.
 
 ```command
 npm init
 ```
 
-세부 설정을 하고 나면 package.json이 생성된 것을 확인할 수 있다.
+세부 설정을 마치면 `package.json`이 생성된 것을 확인할 수 있다.
 
 ```json
 {
@@ -24,7 +24,7 @@ npm init
 }
 ```
 
-scripts에서 명령어를 추가할 수 있다.
+`scripts`에서 명령어를 추가할 수 있다.
 
 ```json
 "scripts": {
@@ -33,40 +33,17 @@ scripts에서 명령어를 추가할 수 있다.
 },
 ```
 
-다음 명령어를 통해 특정 모듈을 설치할 수 있다. 그렇게 되면 node_modules 디렉토리가 생성되고, 필요한 파일이 설치된다. 또한, package-lock.json 파일이 생성되는데, package.json 두 가지 파일을 통해 협업 시 공유할 수 있게 된다.
+다음 명령어를 통해 특정 모듈을 설치할 수 있다. 그렇게 되면 `node_modules` 디렉토리가 생성되고, 필요한 파일이 설치된다. 또한, `package-lock.json` 파일이 생성되는데, `package.json` 두 가지 파일을 통해 협업 시 공유할 수 있게 된다.
 
 ```command
 npm install
 ```
 
-### [lite-server](https://www.npmjs.com/package/lite-server)
+우리는 `package.json`에서 프로젝트가 어떤 패키지를 활용하고 있는지를 확인할 수 있다.
 
-```command
-npm i lite-server
-```
-
-scripts에서 시작 명령어를 추가할 수 있다.
-
-```json
-"scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "start": "lite-server"
-},
-```
-
-다음 명령어를 통해 lite-server를 시작할 수 있다.
-
-```command
-npm start
-```
-
-다만, `http://localhost:3000/`이 열리면, 에러가 발생한다. 해당 에러는 404 get 에러로, 404 GET /index.html, 404 GET /favicon.ico가 존재하지 않기 때문이다.
-
-index.html을 생성한 후 다시 서버를 재시작하면 제대로 에러가 없이 시작되는 것을 알 수 있다.
-
-> Status Code: 200(정상), 404(에러), 500(읽어야 할 파일이 존재하지 않는다.(경로 에러 등))
-
-**Status Code**를 잘 확인하는 것이 중요하다!
+- `dependencies`: 실제 서버와 개발 환경에서 모두 활용하는 것.
+- `devDependencies`: 개발 환경에서만 활용하는 package. (`--save-dev` 옵션으로 설치)
+  다만, Docker로 인해 가상 개발 환경이 활성화되면서, `devDependencies`는 유명무실해지는 추세이다.
 
 > package.json
 
@@ -88,30 +65,53 @@ index.html을 생성한 후 다시 서버를 재시작하면 제대로 에러가
 }
 ```
 
-프로젝트가 어떤 패키지를 활용하고 있는지를 보여준다.
-
-`dependencies`: 실제 서버와 개발 환경에서 모두 활용하는 것.
-`devDependencies`: 개발 환경에서만 활용하는 package. (`--save-dev` 옵션으로 설치한다.)
-
-Docker로 인해 가상 개발 환경이 활성화되면서, `devDependencies`는 유명무실해지는 추세이다.
+해당 명령어로 특정 package를 제거할 수 있다.
 
 ```command
 npm remove
 ```
 
-해당 명령어로 특정 package를 제거할 수 있다.
+`-g, --global` 옵션을 활용해 전역에서 설치할 수 있다.
 
-`-g, --global`을 통해 전역에서 설치할 수 있다.
+> 참고 - 서버는 서비스를 운영하는데, 운영을 위해 접속 관리, 다중 접속 관리가 중요하다. 따라서 pm2, forever 등의 운영을 위한 package를 설치하는데, 이때 전역적으로 설치한다.
 
-서버는 서비스를 운영하는데, 운영을 위해 접속 관리, 다중 접속 관리가 중요하다. 따라서 pm2, forever 등의 운영을 위한 package를 설치하는데, 이때 전역적으로 설치한다.
+### [lite-server](https://www.npmjs.com/package/lite-server)
 
-npx, nvm: 배포에 관련된 패키지, 버전 관리를 위해 사용한다.
+```command
+npm i lite-server
+```
+
+`scripts`에서 시작 명령어를 추가할 수 있다.
+
+```json
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "lite-server"
+},
+```
+
+다음 명령어를 통해 `lite-server`를 시작할 수 있다.
+
+```command
+npm start
+```
+
+다만, `http://localhost:3000/`이 열리면, 에러가 발생한다. 해당 에러는 `404 get 에러`로, `404 GET /index.html, 404 GET /favicon.ico`가 존재하지 않기 때문이다.
+
+`index.html`을 생성한 후 다시 서버를 재시작하면 제대로 에러 없이 시작되는 것을 알 수 있다.
+
+> 추후 설명 - Status Code: 200(정상), 404(에러), 500(읽어야 할 파일이 존재하지 않음(경로 에러 등))
+> **Status Code**를 잘 확인하는 것이 중요하다!
 
 ## Module
 
 라이브러리라고도 불리는 module은 중복되는 기능이나 지속적으로 활용해야 하는 기능을 반복적으로 사용할 수 있게끔 만드는 코드를 말한다.
 
 ### Module 만들어보기
+
+> module.exports.내보내는 이름 = 작성된 이름;
+
+이러한 형식을 통해 만들어낸 모듈을 다른 파일에서 불러와 활용할 수 있다.
 
 > calc.js
 
@@ -140,7 +140,7 @@ node app
 
 ### module을 내보내는 다른 방법
 
-객체로 내보낼 수 있다.
+객체로도 내보낼 수 있다.
 
 > calc.js
 
@@ -163,9 +163,7 @@ let number = 0;
 module.exports = number += 1;
 ```
 
-추가적인 기능을 활용해 내보내면서 적용할 수 있다.
-
-다만, 같은 기능을 여러번 중복적으로 활용하고자 한다해도 사용할 수 없다.
+추가적인 기능(1 더하기 등)을 활용해 내보내면서 적용할 수 있다. 다만, 같은 기능을 여러번 중복적으로 활용하고자 한다해도 이러한 방식으로는 사용할 수 없다.
 
 `require`의 특성상 한 번 호출된 후 바로 삭제한다. 따라서 기능을 반복적으로 활용할 수는 없다. 즉, for 반복문에서 10번 호출되고 삭제되기 때문에 1이 계속 출력된다.
 
@@ -184,7 +182,7 @@ for (let i = 0; i < 10; i++) {
 > func.js
 
 ```javascript
-let number = 0; // 기능을 공유하기 때문에 number도 자연스럽게 활용이 가능하다. > 다시 듣기
+let number = 0; // 기능을 공유하기 때문에 number도 자연스럽게 활용이 가능하다.
 
 module.exports = () => {
   return (number += 1);
