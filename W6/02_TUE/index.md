@@ -109,3 +109,20 @@ npm run [script name]
 - `npm test`: 코드 유닛 테스트 등에 활용
 - `npm start`: 프로젝트 실행
 - `npm stop`: 프로젝트 종료
+
+## npx
+
+npx는 npm의 새롭게 추가된 기능 중 하나로, npm 패키지를 설치하지 않고 사용할 수 있게 해주는 도구이다. 즉, 프로젝트에 추가하거나 전역 패키지로 추가하지 않고, npx를 이용하여 바로 실행할 수 있다.
+
+또한, 다음과 같이 Node.js의 특정 버전을 설치하지 않고 실행하여 버전별 실행 환경을 확인할 수 있다.
+
+```command
+npx node@12 index.js
+npx node@14 index.js
+```
+
+추가적으로 github에 등록된 간단한 코드 조각인 gist 코드를 실행해볼 수 있다.
+
+```command
+npx https://github.com/examples/example_gist_practice
+```
