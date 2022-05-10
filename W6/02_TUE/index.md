@@ -362,3 +362,133 @@ npm start  "서버 실행"
 ```
 
 다만, Express-generator를 사용하는 경우 프로젝트 생성 이후에는 사용되지 않기 때문에 npx를 통해 설치하지 않고 바로 사용이 가능하다.
+
+### Express.js 구조
+
+> projectName
+> ⊢ app.js → Express.js의 가장 기본 파일로, 웹 어플리케이션의 기능을 정의
+> ⊢ bin/www → Express.js의 실행부, 포트와 실행 오류 등을 정의
+> ⊢ package.json → 프로젝트 의존성 및 스크립트 정의
+> ⊢ public → 코드를 통하지 않고, 직접 제공되는 파일 디렉토리
+> ⊢ routes → 라우팅 파일 디렉토리
+> ⊢ views → HTML Template 디렉토리
+
+### Express.js 동작 방식
+
+프로젝트 디렉토리에서 `npm start` 명령어로 프로젝트를 실행할 수 있고, 이후 `http://localhost:3000/`에 접속하면 페이지를 확인할 수 있다.
+
+> `http://localhost:3000`에 접속
+> app.js → app.use('/', indexRouter)
+> routes/index.js → route.get('/', ...)
+> routes/index.js → res.render('index', ...)
+> views/index.jade
+
+#### app 객체
+
+> app.js
+
+```javascript
+var express = require("express");
+
+var app = express();
+```
+
+`app.js`에서 express.js Module을 불러온 다음, `app` 객체를 생성하는 것을 확인할 수 있다. `app` 객체는 Express.js의 기능을 담은 객체로, Express.js의 모든 동작은 `app` 객체에 정의된다.
+
+- `app.use()`: 미들웨어를 사용하기 위한 함수
+- `app.listen()`: HTTP 서버를 생성해주는 함수
+- `app.locals`: app에서 사용할 공통 상수(global 변수를 선언하지 않음)
+
+#### 라우팅
+
+Express.js는 다양한 라우팅 방식을 제공하는데, 크게 `app` 라우팅과 `Express.Router`를 통한 라우팅으로 구분된다.
+
+##### `app` 라우팅
+
+`app` 객체에서 직접 `get`, `post`, `put`, `delete`, `all` 함수를 활용해 HTTP Method로 라우팅할 수 있다. 첫 번째 인자로 **라우팅을 실행할 URL**을 받고, 마지막 인자로 **라우팅이 실행될 때 동작하는 함수**를 받는다.
+
+```javascript
+app.get("/", (req, res) => {
+  res.send("get /");
+});
+
+app.post("/", (req, res) => {
+  res.send("post /");
+});
+
+app.put("/", (req, res) => {
+  res.send("put /");
+});
+
+app.delete("/", (req, res) => {
+  res.send("delete /");
+});
+
+app.all("/", (req, res) => {
+  res.send("all /");
+});
+```
+
+다만 `app` 라우팅을 통해서는 핵심인 그룹화를 지원하지 않는다는 점이 단점이다. 따라서 Express.Router를 통해 라우팅을 모듈화할 수 있다.
+
+#### Express.Router
+
+`router` 객체에도 `get`, `post`, `put`, `delete` 함수를 활용할 수 있다. 동일한 동작을 하기 때문에 인자도 동일하게 받는다. 라우터는 일반적으로 Module로 만들어서 사용하게 된다.
+
+```javascript
+const express = require("express");
+const router = express.Router();
+
+router.get("/", (req, res, next) => {
+  res.send("respond with a resources.");
+});
+
+module.exports = router;
+```
+
+이렇게 작성한 Module을 `app.js`에서 `use` 함수로 연결해 사용할 수 있다. 또한, `router` 객체에도 하위 라우터를 `use` 함수로 연결해 사용할 수 있다.
+
+```javascript
+const userRouter = require("./routes/users");
+const app = express();
+
+app.user("/", userRouter);
+```
+
+```javascript
+const petRouter = require("./pets");
+const router = express.Router();
+
+router.user("/pets", petRouter);
+
+module.exports = router;
+```
+
+#### Path Parameters
+
+path parameter를 사용하면, 주소의 일부를 변수처럼 사용할 수 있다.
+
+#### Request Handler
+
+라우팅에 적용되는 함수로, HTTP 요청과 응답을 다루는 함수로 설정된 라우팅 경로에 해당하는 요청이 들어오면 실행된다.
+
+`router`나 `app`의 HTTP method 함수의 가장 마지막 인자로 전달되는 함수로 요청을 확인하고, 응답을 보내는 역할을 한다.
+
+##### Request 객체
+
+HTTP 요청 정보를 가진 객체로, HTTP 요청의 path parameter, query parameter, body, header 등을 확인할 수 있다.
+
+- `req.params`:
+- `req.queries`:
+- `req.body`: POST 요청의 요청 데이터를 불러오는 함수
+- `req.get('headerName')`: HTTP Request 의 헤더 값을 가져오는 함수
+
+##### Response 객체
+
+HTTP 응답을 처리하는 객체로, HTTP 응답의 데이터를 전송하거나, 응답 상태 및 header 등을 설정할 수 있다.
+
+- `res.send()`: text 형식의 HTTP 응답을 전송하는 함수
+- `res.json()`: json 형식의 HTTP 응답을 전송하는 함수
+- `res.render()`: HTML Template을 사용하여 화면을 전송하는 함수
+- `res.set()`: HTTP 응답의 헤더를 설정하는 함수
+- `res.status()`: HTTP 응답의 상태 값을 설정하는 함수
