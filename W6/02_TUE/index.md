@@ -150,3 +150,83 @@ Node.js는 다양한 Module을 기본적으로 제공한다.
 #### `http`
 
 http 서버, 클라이언트 제작을 위해 사용되는 Module로, `createServer` 함수로 서버를 생성하고, `Request` 함수로 http 요청을 생성한다.
+
+### Module 작성
+
+> module.js
+
+```javascript
+const name = "elice";
+const age = 5;
+const nationality = "korea";
+
+module.exports = {
+  name,
+  age,
+  nationality,
+};
+```
+
+> app.js
+
+```javascript
+const student = require("./module");
+
+> { name: 'elice', age: 5, nationality: 'korea' }
+```
+
+Module이 로드될 때 사용될 값을 `module.exports`로 내보내는 것을 확인할 수 있다.
+
+이와 달리 변수명을 활용해 각 key - value를 지정해 `exports`하는 방법도 있다.
+
+> module.js
+
+```javascript
+const name = "elice";
+const age = 5;
+const nationality = "korea";
+
+exports.name = name;
+exports.age = age;
+exports.nationality = nationality;
+```
+
+> app.js
+
+```javascript
+const student = require("./module");
+
+> { name: 'elice', age: 5, nationality: 'korea' }
+```
+
+함수형으로 Module을 작성해 `exports`할 수 있고, 이때 Module 사용 시 값을 정할 수 있게 내보낼 수 있다.
+
+> module.js
+
+```javascript
+module.exports = (name, age, nationality) => {
+  return {
+    name,
+    age,
+    nationality,
+  };
+};
+```
+
+함수형 Module의 경우 로드한 뒤 바로 실행되지 않고 로드한 함수를 실행해야 Module을 활용할 수 있다.
+
+> app.js
+
+```javascript
+const student = require("./module")('elice', 5, 'korea');
+
+> { name: 'elice', age: 5, nationality: 'korea' }
+```
+
+Module을 만드는 여러 방법이 있지만, 로드할 때는 `require` 함수만을 활용한다. 다만, `require`할 때 Module의 코드가 실행된다. 또한 첫 `require`시 실행되고, 이후에는 cache된 Module을 가져다가 사용하게 된다. 따라서 해당 Module의 코드를 여러 번 반복 실행하기 위해서는 함수형 Module로 작성해야 한다.
+
+참고로 JSON 파일의 경우, Module로써 로드할 수 있는데, 이는 object data로 자동으로 parsing된다.
+
+### ES Module
+
+ES6에서 등장한 JavaScript의 공식적인 표준 Module(`export`, `import`)로, 독자적인 방식으로 Node.js가 지원하는 commonjs Module(`module.exports`, `require`)과 문법, 기본적인 동작 방식 등이 다르다. 따라서 같이 사용하기에는 부적절하다.
