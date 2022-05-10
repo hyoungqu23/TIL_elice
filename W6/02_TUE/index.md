@@ -126,3 +126,27 @@ npx node@14 index.js
 ```command
 npx https://github.com/examples/example_gist_practice
 ```
+
+## Modules
+
+간단한 프로그램이라면 파일 하나만으로도 실행이 가능할 것이다. 하지만 프로젝트가 커지면 커질수록 기능에 맞게 코드를 분리하는 것이 중요해진다. 이때 Modules은 코드를 분리하기 위한 방법 중 하나이다. 즉, 반복되는 코드를 Module로 분리하여 사용할 수 있다. 참고로 앞서 살펴본 패키지는 Module의 모음이라고 볼 수 있다.
+
+### 기본 제공 Modules
+
+Node.js는 다양한 Module을 기본적으로 제공한다.
+
+#### `console`
+
+브라우저에서 제공되는 console과 유사한 디버깅 도구로, `log`, `warn`, `error` 함수로 로그 레벨을 표시하거나, `time`, `timeLog`, `timeEnd` 함수로 시간을 추적할 수 있다.
+
+#### `process`
+
+현재 실행 프로세스와 관련된 기능을 제공하는 Module로 `arch`, `argv`, `env` 등 실행 환경 및 변수 관련 값이나 `abort`, `kill`, `exit` 등 프로세스 동작에 관련된 함수를 제공한다.
+
+#### `fs`(file-system)
+
+파일의 입출력을 위한 Module로 `readFile`, `writeFile` 함수나 `readFileSync`, `writeFileSync` 함수로 동기적 작업을 제공하며, `watch` 함수로 파일이나 디렉토리의 변경 이벤트를 감지할 수 있다.
+
+#### `http`
+
+http 서버, 클라이언트 제작을 위해 사용되는 Module로, `createServer` 함수로 서버를 생성하고, `Request` 함수로 http 요청을 생성한다.
