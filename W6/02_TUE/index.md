@@ -325,3 +325,40 @@ HTTP 응답은 **HTTP 요청에 해당하는 적절한 데이터를 전달**하�
 Express.js는 Node.js의 웹 프레임워크 중 가장 유명한 웹 프레임워크로, 필요에 따라 유연하게 구조를 설정할 수 있으며 다양한 미들웨어를 통해 필요한 기능을 간단하게 추가할 수 있다는 장점을 갖고 있다.
 
 또한, 모든 동작이 명시적으로 구성되기 때문에, 웹 프레임워크의 동작 방식을 이해하기 가장 좋은 프레임워크이다.
+
+### Express.js 시작하기
+
+`npm init` 명령어로 Express.js를 시작해 처음부터 작성할 수 있지만, 직접 모든 구조를 작성해야 하는 어려움이 있다.
+
+```command
+mkdir projectName "디렉토리 생성"
+cd projectName  "디렉토리 이동"
+npm init "프로젝트 생성"
+npm i express "express 패키지 설치"
+```
+
+```javascript
+const express = require("express");
+
+const app = express();
+
+app.get("/", (req, res) => {
+  res.send("Hello Express!");
+});
+
+app.listen(3000, () => {
+  console.log("Server Started");
+});
+```
+
+따라서 Express-generator라는 프로젝트 생성기를 통해 프로젝트의 기본 구조를 자동으로 생성해 빠르게 프로젝트를 시작할 수 있다. 생성된 프로젝트는 `npm start` 명령어로 실행할 수 있다.
+
+```command
+npm i -g express-generator  "express-generator 설치"
+express projectName  "express.js 프로젝트 생성"
+cd projectName  "디렉토리 이동"
+npm install  "패키지 설치"
+npm start  "서버 실행"
+```
+
+다만, Express-generator를 사용하는 경우 프로젝트 생성 이후에는 사용되지 않기 때문에 npx를 통해 설치하지 않고 바로 사용이 가능하다.
