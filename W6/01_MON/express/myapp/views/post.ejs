@@ -7,12 +7,20 @@
   <title>Document</title>
 </head>
 <body>
-  <form action="/expost" method="post">
-    <!-- method를 post로 설정해야 한다. -->
-    <!-- /expost 화면에 출력한다. -->
+  <!-- method를 post로 설정해야 한다. -->
+  <!-- /expost 화면에 출력한다. -->
+  <!-- <form action="/expost" method="post">
     <input type="text" name="name" id="">
     <input type="number" name="phoneNumber" id="">
     <input type="date" name="bDay" id="">
+    <input type="submit" value="전송하기">
+  </form> -->
+
+  <form action="/expost/addbook" method="post">
+    <input type="text" name="name" id="">
+    <input type="text" name="author" id="">
+    <input type="number" name="price" id="">
+    <input type="date" name="publish" id="">
     <input type="submit" value="전송하기">
   </form>
 </body>

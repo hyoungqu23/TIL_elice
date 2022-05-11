@@ -9,6 +9,8 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var callRouter = require('./routes/call');
 const postRouter = require('./routes/post');  // 라우터 불러오기
+const dbconnect = require('./models/index');  // DB 불러오기
+dbconnect();  // 함수형이기 때문에 실행해주어야 한다.
 
 var app = express();
 
