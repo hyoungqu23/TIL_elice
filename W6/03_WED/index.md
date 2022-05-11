@@ -44,6 +44,10 @@ npm install -g nodemon
 
 ---
 
+### Express 구조 파악하기
+
+`app.js`는 최상단 디렉토리에 저장된 실행부로, 주로 [`app` 객체의 메서드](http://expressjs.com/ko/4x/api.html#app)로 이루어져 있다.
+
 ```js
 // app.js
 
@@ -62,7 +66,9 @@ app.set("view engine", "ejs");
 
 대략적으로 흐름을 확인해보면, express Module을 불러와 `app` 객체를 생성한 후 기타 다른 Module을 불러오고, ejs engine을 세팅하는 등의 동작이 진행된다.
 
-가장 중요한 것은 routes 디렉토리에 존재하는 index.js, users.js 라우터를 불러와 `app.use(path, router)`로 설정한다는 점이다. 즉, 해당 경로에 진입하는 경우 HTTP 요청과 응답을 해당 라우터로 진행하겠다고 설정하는 것이다.
+### Express Router와 미들웨어 확인하기
+
+가장 중요한 것은 `routes` 디렉토리에 존재하는 `index.js`, `users.js` 라우터를 불러와 `app.use(path, router)`로 설정한다는 점이다. 즉, 해당 경로에 진입하는 경우 HTTP 요청과 응답을 해당 라우터로 진행하겠다고 설정하는 것이다.
 
 ```js
 // app.js
@@ -81,10 +87,11 @@ app.use("/users", usersRouter); // 따라서 여기 path는 http://localhost:300
 // routes/index.js
 
 var express = require("express");
-var router = express.Router(); // express 객체의 새로운 라우터를 생성하는 메서드 Router()를 활용해 라우터를 생성하기
+var router = express.Router(); // express 객체의 새로운 라우터를 생성하는 메서드 Router()를 활용해 라우터 인스턴스를 생성하기
 
 /* GET home page. */
 // router.get(), router.post() 메서드는 Express에서 라우팅 기능을 제공한다.
+// 이는 사실상 미들웨어
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express" });
   // 응답 객체의 render 메서드를 활용해 views 디렉토리의 index.ejs 템플릿을 화면에 출력한다.
@@ -122,7 +129,9 @@ module.exports = router; // 라우터 내보내기
 
 이렇게 정의된 라우터는 `app.js`에서 불러와 활용되는 것을 이미 확인했다.
 
-그럼 이제 새로운 라우터를 만들어보자!
+### Express 미들웨어 만들어보기
+
+그럼 이제 새로운 미들웨어를 만들어보자!
 
 ```js
 // routes/hello.js
@@ -130,6 +139,7 @@ module.exports = router; // 라우터 내보내기
 const express = require("express");
 const router = express.Router();
 
+// http://localhost:3000/hello
 router.get("/", (req, res, next) => {
   console.log("Test hello router."); // 터미널 출력
   res.send("Hello Express!"); // 화면 출력
@@ -138,118 +148,79 @@ router.get("/", (req, res, next) => {
 module.exports = router;
 ```
 
-이렇게 정의한 라우터를 app.js에서 불러와 use 메서드를 활용해 연결해주면 된다.
+이렇게 정의한 라우터를 `app.js`에서 불러와 `use` 메서드를 활용해 마운트해주면 된다. 즉, 지정된 경로에서 해당 라우터가 실행되게끔 설정한다.
+
+```js
+// app.js
+
+var helloRouter = require("./routes/hello");
+
+app.use("/hello", helloRouter);
+```
 
 > Test hello router.
 > GET /hello 200 6.367 ms - 14
 
 ![hello page](img/express%20hello%20page.png)
 
-웹의 핵심은 요청(request)에 의해 응답(response)하는 것인데, get 이후의 형태를 미들웨어라고 한다. 즉, router.get(경로, (요청, 응답, 다음으로 갈지말지 여부) => {[기능](https://expressjs.com/ko/4x/api.html#app)})을 보여준다.
+---
 
-Express의 핵심은 좀 더 큰 Router인 middleware이다. 즉, 요청에 따라 response를 보내는 역할로, 다음 코드에서 function이 미들웨어이다.
+웹의 핵심은 요청(request)에 의해 응답(response)하는 것인데, 이를 [미들웨어](http://expressjs.com/ko/guide/writing-middleware.html#mw-fig)가 담당하고 있다. 미들웨어는 Express.js 동작의 핵심으로, HTTP 요청(request)과 응답(response) 사이에서 단계별 동작을 수행해주는 함수이다. 미들웨어는 HTTP 요청이 들어온 시점부터 시작되며, **HTTP [요청](https://expressjs.com/ko/4x/api.html#req)과 [응답](https://expressjs.com/ko/4x/api.html#res) 객체를 처리**하거나, **다음 미들웨어를 실행**하는데, HTTP 응답이 마무리될 때까지 미들웨어의 동작 사이클이 실행된다.
 
-미들웨어는 라우터가 아님
+즉, 미들웨어 함수는 요청 객체(`req`), 응답 객체(`res`), 그리고 그 다음의 미들웨어 함수(`next`) 대한 액세스 권한을 갖는 함수이다.
 
-요청이 왔을 때 일어나는 기능을 처리하는 것이 미들웨어이다.
+`next()` 함수를 호출해 어플리케이션 내의 그 다음 미들웨어 함수가 호출되게 된다. 이때 현재의 미들웨어 함수가 **요청-응답 주기를 종료하지 않는 경우**에는 `next()`를 호출해 그 다음 미들웨어 함수를 호출해야 한다. 그렇지 않으면 해당 요청이 정지된 채로 방치되기 때문이다.
+
+![미들웨어](img/middleware.png)
+
+---
+
+### Express 미들웨어 `next()`
 
 ```javascript
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.render("index", { title: "Express" });
+// http://localhost:3000/list
+router.get("/", (req, res, next) => {
+  console.log("Test list router."); // 터미널 출력
+  res.send("This page shows list."); // 화면 출력
+  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
+});
+
+router.get("/", (req, res, next) => {
+  console.log("Test item router."); //
+  // res.render('list', {title: "LIST", item: "list-items"})
 });
 
 module.exports = router;
 ```
 
-쉽게 간단한 기능을 만들 수 있는 것이 장점이지만, 페이지가 많아질수록 미들웨어를 지속적으로 만들어야 한다는 점이 단점이다.
+> Test list router.
+> Test item router.
+> GET /list 304 5.909 ms - -
 
-서버를 재시작하면 콘솔에도 찍히고, 화면에도 렌더링된다.
+`next()`를 통해 미들웨어를 연결할 수 있다. 다만, 하나의 미들웨어에 모든 동작을 모두 작성할 수 있는데, 나누어 작성하는 이유는 무엇일까?
 
-test express
-GET /call 200 7.309 ms - 15
+우리는 미들웨어가 끊기지 않고 다음 동작을 원활하게 진행할 수 있기 위해 `next()`를 활용한다. `next()`는 콜백을 끊어주는 느낌으로, 더 간결하고 동기적으로 작성하기 위해 쓴다. 예를들어 소모임, 문토, 소셜링 신청 시 신청은 끝나지만, 그 다음 동작이 중요하다. 따라서, 미들웨어를 활용해 끊기지 않고 계속 동작을 할 수 있게 해주어야 한다.
 
-node의 장점: 싱글 쓰레드 기반으로 빠르게 처리할 수 있다.
+이때 다음 미들웨어에서 `res.method()`를 다시 사용하면, 에러가 발생한다.
 
-```javascript
-router.get("/", (req, res, next) => {
-  console.log("test express");
-  res.send("Hello, Express!");
-  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
-});
+> Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client.
 
-// 다음 미들웨어?
-router.get("/", function (req, res, next) {
-  console.log("2nd express");
-});
+웹에서의 통신 방식은 **1요청 1응답**이 우선이다. 하나의 요청에 다수의 응답을 받을 수 없다. 1요청 1응답 이후에는 통신이 종료되는 것이 정상이다.
 
-module.exports = router; // ==> app.js로
-```
+따라서, 이전 미들웨어에서 1응답을 한 경우, 다음 미들웨어에서 응답을 또 하면 에러가 발생한다. 따라서 주소가 동일한 미들웨어를 설정해서 응답을 해야한다.
 
-test express
-2nd express
-GET /call 304 6.062 ms - -
+---
 
-이렇게 잘 나온다
+### Express Post
 
-```javascript
-router.get("/", (req, res, next) => {
-  console.log("test express");
-  console.log("2nd express");
-  res.send("Hello, Express!");
-  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
-});
-```
-
-이렇게 해도 되는데 왜 두개로 나눠서 써야하는지?
-
--> 미들웨어가 끊기지 않고 다음 동작을 원활하게 진행할 수 있기 위해 next를 활용한다. next는 콜백을 끊어주는 느낌으로, 더 간결하고 동기적으로 작성하기 위해 쓴다.
-
-예를들어 소모임, 문토, 소셜링 신청 시 신청은 끝나지만, 그 다음 동작이 중요하다. 따라서, 미들웨어가 끊기지 않고 계속 동작을 할 수 있게 연결해주는 역할을 한다.
-
-```javascript
-// catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404)); // 404 이후에도 진행해야 하기 때문에 next 활용
-});
-```
-
-API 문서
-함수
-post -> url/test/member/:id
-이떄 id는 회원의 id, DB 키로 한다.
-
-`:` 뭐가 들어가도 사용할 수 있게끔 변수로 만들어 받겠다.
-
-<https://trends.google.co.kr/trends/explore?q=프로그래밍&geo=KR>
-
-한국에서 검색하고 있다는 의미로 geo=KR
-
-q => 데이터 베이스를 동작하는 것
-
-이게 get 기능
-
-id로 이렇게 get 할 수 있음
-
-## 개발 환경 구축
-
-- nodemon 설치: 전역 설치 옵션을 활용해야 된다.
-- mongoDb: 윈도우 환경에서 환경 변수 추가 필요([참고](https://khj93.tistory.com/entry/MongoDB-Window%EC%97%90-MongoDB-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0))
-
-## 리뷰
-
-HTTP 요청 후 위치 라우터 => 우리가 원하는 기능을 함수로 만든 미들웨어 => HTTP 응답
-
-## POST
-
-SSR과 CSR 차이와 SSR 장점 // TODO
-
-views 디렉토리 / post.ejs -> 화면 만들기!
+HTML 템플릿 구현을 할 수 있다. SSR에서 화면을 미리 만드는 작업이다.
 
 ```html
+<!-- views/post.ejs -->
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -269,9 +240,11 @@ views 디렉토리 / post.ejs -> 화면 만들기!
 </html>
 ```
 
-routes 디렉토리 / post.js -> 라우터 생성하기!
+이후 해당 템플릿을 활용하는 라우터를 생성하고 미들웨어를 작성한다.
 
 ```javascript
+// routes/post.js
+
 const express = require("express");
 const router = express.Router();
 
@@ -295,9 +268,11 @@ router.post("/", (req, res, next) => {
 module.exports = router;
 ```
 
-app.js -> 라우터 할당하기!
+라우터 구현이 완료되면, `app.js`에서 해당 라우터를 불러와 설정하면 된다.
 
 ```javascript
+// app.js
+
 const postRouter = require("./routes/post"); // 라우터 불러오기
 
 app.use("/expost", postRouter); // 라우터 설정하기(경로, 사용할 라우터)
@@ -324,16 +299,9 @@ router.post("/", (req, res, next) => {
 });
 ```
 
-에러 발생
-Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client.
-
-웹에서의 통신 방식은 **1요청 1응답**이 우선이다. 하나의 요청에 다수의 응답을 받을 수 없다. 1요청 1응답 이후에는 통신이 종료되는 것이 정상이다.
-
-따라서, 이전 미들웨어에서 1응답을 한 경우, 다음 미들웨어에서 응답을 또 하면 에러가 발생한다.
-
-따라서 주소가 동일한 미들웨어를 설정해서 응답을 해야한다.
-
 ## MongoDB
+
+mongoDb: 윈도우 환경에서 환경 변수 추가 필요([참고](https://khj93.tistory.com/entry/MongoDB-Window%EC%97%90-MongoDB-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0))
 
 No SQL 형식의 데이터베이스(Not only SQL)
 
