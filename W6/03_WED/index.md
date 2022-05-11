@@ -278,18 +278,11 @@ const postRouter = require("./routes/post"); // 라우터 불러오기
 app.use("/expost", postRouter); // 라우터 설정하기(경로, 사용할 라우터)
 ```
 
-> good get
+> GET /expost 200 12.319 ms - 540
 
-`http://localhost:3000/expost` : GET /expost 200 2.813 ms - 498
+페이지에 접속이 잘 되며, JSON 형태의 값이 전송되는 것을 확인할 수 있다.
 
-> good post
-
-웹의 이해 찾아보기
-
-`http://localhost:3000/expost` : POST /expost 200 1.340 ms - 63
-JSON 형태 값이 전송되는 것을 확인할 수 있다. 저장은 별도.
-
-res.redirect 관련 ([참고](https://expressjs.com/ko/api.html#res.redirect)): 호출한 경로로 재접근
+또한 [`res.redirect`](https://expressjs.com/ko/api.html#res.redirect) 메서드를 활용해 전송이 완료된 후 호출한 경로로 재접근할 수 있다.
 
 ```js
 // 다음 미들웨어

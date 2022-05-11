@@ -12,6 +12,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var helloRouter = require('./routes/hello');
 var listRouter = require('./routes/list');
+var postRouter = require('./routes/post');
 
 // The app object conventionally denotes the Express application. Create it by calling the top-level express() function exported by the Express module.
 // 앱 객체는 전통적으로 익스프레스 애플리케이션을 나타낸다. Express 모듈에서 내보낸 최상위 express() 함수를 호출하여 생성합니다.
@@ -32,6 +33,7 @@ app.use('/', indexRouter);  // '/' 현재 페이지를 의미함(여기서는 ht
 app.use('/users', usersRouter); // 따라서 여기 path는 http://localhost:3000/users가 된다.
 app.use('/hello', helloRouter);
 app.use('/list', listRouter);
+app.use('/expost', postRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
