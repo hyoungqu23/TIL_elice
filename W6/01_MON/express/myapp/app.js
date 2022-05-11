@@ -8,10 +8,11 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var callRouter = require('./routes/call');
+const postRouter = require('./routes/post');  // 라우터 불러오기
 
 var app = express();
 
-// view engine setup
+// view engine setup || ejs engine으로 설치
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -24,6 +25,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/call', callRouter);
+app.use('/expost', postRouter); // localhost:3000/expost에서 postRouter로 통신흐름이 연결된다.
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
