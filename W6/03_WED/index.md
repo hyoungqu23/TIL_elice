@@ -1,9 +1,133 @@
 # 0511
 
+## [Express.js](https://expressjs.com/) 복습하면서 만들어보기
+
+다음 명령어로 [express-generator](https://expressjs.com/ko/starter/generator.html)를 전역적으로 설치할 수 있다.
+
+```command
+npm install express-generator -g
+```
+
+설치 이후에 `-h` 옵션을 이용해 명령의 옵션을 확인할 수 있다.
+
+```command
+express --view=ejs myfirstapp
+```
+
+보통 Node.js 템플릿 엔진으로 `ejs`, `pug` 중 하나를 사용하곤 한다. 보통 ejs는 기존 HTML과 문법이 흡사하여 사용하기 쉽다는 장점이 있어 선택한다. 다만, pug의 경우 새로운 문법을 배워야 하지만, 간소화되는 코드와 컴파일 후 렌더링되는 방식으로 인해서 높은 생산성을 자랑한다.([ejs GitHub](https://github.com/mde/ejs), [참고](https://jeong-pro.tistory.com/65), [pug 홈페이지](https://pugjs.org/api/getting-started.html))
+
+`myfirstapp` 프로젝트 디렉토리를 생성하고, 이후 이동한 후 `npm install`을 통해 npm을 설치한다.
+
+추가적으로 다음 명령어를 활용해 `nodemon` 도구를 설치한다. `nodemon`은 node monitor의 약어로 Node.js가 실행하는 파일이 속한 디렉토리를 감시하고 있다가 파일이 수정되면 자동으로 Node.js 어플리케이션을 재시작하는 확장 모듈이다. `nodemon`을 설치하면 재시작 없이 코드를 자동 반영 할수 있다.([참고](https://velog.io/@dami/node-express-%EC%84%9C%EB%B2%84%EC%99%80-nodemon-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0))
+
+```command
+npm install -g nodemon
+```
+
+다음으로 `npm start`로 프로젝트를 시작할 수 있다.
+
+![main page](./img/express%20first%20page.png)
+`http://localhost:3000/`에 접속해 main page를 확인할 수 있다. 또한, `http://localhost:3000/users`에 접근해 "respond with a resource" 텍스트를 확인할 수 있다.
+![users page](img/express%20users%20page.png)
+
+이에 더해, 터미널에서 HTTP 메서드, status code, path, 로딩 시간 등을 확인할 수 있다.
+
+> GET / 200 15.210 ms - 207
+> GET /users 200 1.368 ms - 23
+
+웹의 핵심은 요청(request)에 의해 응답(response)하는 것인데, get 이후의 형태를 미들웨어라고 한다. 즉, router.get(경로, (요청, 응답, 다음으로 갈지말지 여부) => {[기능](https://expressjs.com/ko/4x/api.html#app)})을 보여준다.
+
+Express의 핵심은 좀 더 큰 Router인 middleware이다. 즉, 요청에 따라 response를 보내는 역할로, 다음 코드에서 function이 미들웨어이다.
+
+미들웨어는 라우터가 아님
+
+요청이 왔을 때 일어나는 기능을 처리하는 것이 미들웨어이다.
+
+```javascript
+var express = require("express");
+var router = express.Router();
+
+/* GET home page. */
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
+});
+
+module.exports = router;
+```
+
+쉽게 간단한 기능을 만들 수 있는 것이 장점이지만, 페이지가 많아질수록 미들웨어를 지속적으로 만들어야 한다는 점이 단점이다.
+
+서버를 재시작하면 콘솔에도 찍히고, 화면에도 렌더링된다.
+
+test express
+GET /call 200 7.309 ms - 15
+
+node의 장점: 싱글 쓰레드 기반으로 빠르게 처리할 수 있다.
+
+```javascript
+router.get("/", (req, res, next) => {
+  console.log("test express");
+  res.send("Hello, Express!");
+  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
+});
+
+// 다음 미들웨어?
+router.get("/", function (req, res, next) {
+  console.log("2nd express");
+});
+
+module.exports = router; // ==> app.js로
+```
+
+test express
+2nd express
+GET /call 304 6.062 ms - -
+
+이렇게 잘 나온다
+
+```javascript
+router.get("/", (req, res, next) => {
+  console.log("test express");
+  console.log("2nd express");
+  res.send("Hello, Express!");
+  next(); // 현재 미들웨어의 기능을 마치고, 다음 미들웨어로 연결해주는 역할을 담당.
+});
+```
+
+이렇게 해도 되는데 왜 두개로 나눠서 써야하는지?
+
+-> 미들웨어가 끊기지 않고 다음 동작을 원활하게 진행할 수 있기 위해 next를 활용한다. next는 콜백을 끊어주는 느낌으로, 더 간결하고 동기적으로 작성하기 위해 쓴다.
+
+예를들어 소모임, 문토, 소셜링 신청 시 신청은 끝나지만, 그 다음 동작이 중요하다. 따라서, 미들웨어가 끊기지 않고 계속 동작을 할 수 있게 연결해주는 역할을 한다.
+
+```javascript
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  next(createError(404)); // 404 이후에도 진행해야 하기 때문에 next 활용
+});
+```
+
+API 문서
+함수
+post -> url/test/member/:id
+이떄 id는 회원의 id, DB 키로 한다.
+
+`:` 뭐가 들어가도 사용할 수 있게끔 변수로 만들어 받겠다.
+
+<https://trends.google.co.kr/trends/explore?q=프로그래밍&geo=KR>
+
+한국에서 검색하고 있다는 의미로 geo=KR
+
+q => 데이터 베이스를 동작하는 것
+
+이게 get 기능
+
+id로 이렇게 get 할 수 있음
+
 ## 개발 환경 구축
 
-nodemon 설치: 전역 설치 옵션을 활용해야 된다.
-mongoDb: 환경 변수 추가 필요([참고](https://khj93.tistory.com/entry/MongoDB-Window%EC%97%90-MongoDB-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0))
+- nodemon 설치: 전역 설치 옵션을 활용해야 된다.
+- mongoDb: 윈도우 환경에서 환경 변수 추가 필요([참고](https://khj93.tistory.com/entry/MongoDB-Window%EC%97%90-MongoDB-%EC%84%A4%EC%B9%98%ED%95%98%EA%B8%B0))
 
 ## 리뷰
 

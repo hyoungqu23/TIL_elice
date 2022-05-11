@@ -209,8 +209,10 @@ npm install express-generator -g
 해당 명령어로 설치할 수 있다.
 
 ```command
-express --view=ejs myapp
+express --view=ejs myfirstapp
 ```
+
+보통 Node.js 템플릿 엔진으로 `ejs`, `pug` 중 하나를 사용하곤 한다. 보통 ejs는 기존 HTML과 문법이 흡사하여 사용하기 쉽다는 장점이 있어 선택한다. 다만, pug의 경우 새로운 문법을 배워야 하지만, 간소화되는 코드와 컴파일 후 렌더링되는 방식으로 인해서 높은 생산성을 자랑한다.([ejs GitHub](https://github.com/mde/ejs), [참고](https://jeong-pro.tistory.com/65), [pug 홈페이지](https://pugjs.org/api/getting-started.html))
 
 `myapp` 프로젝트 디렉토리를 생성하고, 이후 이동한 후 `npm install`을 통해 npm을 설치한다. 다음으로 `npm start`로 프로젝트를 시작할 수 있다.
 
