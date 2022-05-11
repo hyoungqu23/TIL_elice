@@ -24,7 +24,14 @@ express --view=ejs myfirstapp
 npm install -g nodemon
 ```
 
-다음으로 `npm start`로 프로젝트를 시작할 수 있다.
+```json
+// package.json
+"scripts": {
+  "start": "nodemon ./bin/www"
+},
+```
+
+다음으로 `npm start`로 프로젝트를 시작할 수 있다. `nodemon`으로 인해 코드 수정 시 서버 재시작 없이 자동 반영할 수 있다.
 
 ![main page](./img/express%20first%20page.png)
 `http://localhost:3000/`에 접속해 main page를 확인할 수 있다. 또한, `http://localhost:3000/users`에 접근해 "respond with a resource" 텍스트를 확인할 수 있다.
@@ -34,6 +41,109 @@ npm install -g nodemon
 
 > GET / 200 15.210 ms - 207
 > GET /users 200 1.368 ms - 23
+
+---
+
+```js
+// app.js
+
+// Creates an Express application. The express() function is a top-level function exported by the express module.
+// Express 응용 프로그램을 만든다. express() 함수는 express 모듈에서 내보내는 최상위 함수이다.
+var express = require("express");
+
+// The app object conventionally denotes the Express application. Create it by calling the top-level express() function exported by the Express module.
+// 앱 객체는 전통적으로 익스프레스 애플리케이션을 나타낸다. Express 모듈에서 내보낸 최상위 express() 함수를 호출하여 생성할 수 있다.
+var app = express();
+
+// 템플릿 엔진이 ejs engine으로 설치되었음을 확인할 수 있다.
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+```
+
+대략적으로 흐름을 확인해보면, express Module을 불러와 `app` 객체를 생성한 후 기타 다른 Module을 불러오고, ejs engine을 세팅하는 등의 동작이 진행된다.
+
+가장 중요한 것은 routes 디렉토리에 존재하는 index.js, users.js 라우터를 불러와 `app.use(path, router)`로 설정한다는 점이다. 즉, 해당 경로에 진입하는 경우 HTTP 요청과 응답을 해당 라우터로 진행하겠다고 설정하는 것이다.
+
+```js
+// app.js
+
+// Router 불러오기
+var indexRouter = require("./routes/index");
+var usersRouter = require("./routes/users");
+
+app.use("/", indexRouter); // '/' 현재 페이지를 의미함(여기서는 http://localhost:3000)
+app.use("/users", usersRouter); // 따라서 여기 path는 http://localhost:3000/users가 된다.
+```
+
+`index.js`의 라우터를 먼저 확인해보면 다음과 같다.
+
+```js
+// routes/index.js
+
+var express = require("express");
+var router = express.Router(); // express 객체의 새로운 라우터를 생성하는 메서드 Router()를 활용해 라우터를 생성하기
+
+/* GET home page. */
+// router.get(), router.post() 메서드는 Express에서 라우팅 기능을 제공한다.
+router.get("/", function (req, res, next) {
+  res.render("index", { title: "Express" });
+  // 응답 객체의 render 메서드를 활용해 views 디렉토리의 index.ejs 템플릿을 화면에 출력한다.
+  // 이때 title 변수에 "Express" 값을 할당해 전달했음을 알 수 있다.
+  // ejs 문법 상 <%= title %>으로 해당 변수 값을 사용할 수 있다.
+});
+// HTTP 메서드로 `get`
+// '/'는 메인 페이지인 http://localhost:3000
+// 콜백 함수는
+
+module.exports = router; // 라우터 내보내기
+```
+
+라우팅은 클라이언트 요청에 대해 어플리케이션의 앤드포인트(URIs)가 응답하는 방식을 말하는데, express에서는 HTTP 메서드에 해당하는 express 라우터 메서드를 사용해 라우팅을 정의한다.([참고](https://velog.io/@hanblueblue/Node.js-3.-express))
+
+> router.get('지정된 경로(URI) 값', 콜백 함수);
+
+같은 방식으로, `users.js`도 라우터를 정의하고 있다.
+
+```js
+// routes/users.js
+
+var express = require("express");
+var router = express.Router(); // 라우터 생성하기
+
+/* GET users listing. */
+// 다만 이때의 경로는 http://localhost:3000/users 이다.
+router.get("/", function (req, res, next) {
+  res.send("respond with a resource");
+  // 응답 객체의 send 메서드로 HTTP 응답을 보낼 수 있다. 이때 매개 변수는 버퍼 객체, 문자열, 객체, Boolean 또는 배열일 수 있다.
+});
+
+module.exports = router; // 라우터 내보내기
+```
+
+이렇게 정의된 라우터는 `app.js`에서 불러와 활용되는 것을 이미 확인했다.
+
+그럼 이제 새로운 라우터를 만들어보자!
+
+```js
+// routes/hello.js
+
+const express = require("express");
+const router = express.Router();
+
+router.get("/", (req, res, next) => {
+  console.log("Test hello router."); // 터미널 출력
+  res.send("Hello Express!"); // 화면 출력
+});
+
+module.exports = router;
+```
+
+이렇게 정의한 라우터를 app.js에서 불러와 use 메서드를 활용해 연결해주면 된다.
+
+> Test hello router.
+> GET /hello 200 6.367 ms - 14
+
+![hello page](img/express%20hello%20page.png)
 
 웹의 핵심은 요청(request)에 의해 응답(response)하는 것인데, get 이후의 형태를 미들웨어라고 한다. 즉, router.get(경로, (요청, 응답, 다음으로 갈지말지 여부) => {[기능](https://expressjs.com/ko/4x/api.html#app)})을 보여준다.
 
