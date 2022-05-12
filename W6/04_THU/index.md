@@ -2,9 +2,9 @@
 
 ## 미들웨어
 
-미들웨어는 Express.js 동작의 핵심으로, HTTP 요청(request)과 응답(response) 사이에서 단계별 동작을 수행해주는 함수이다. 미들웨어는 HTTP 요청이 들어온 시점부터 시작되며, **HTTP 요청과 응답 객체를 처리**하거나, **다음 미들웨어를 실행**하는데, HTTP 응답이 마무리될 때까지 미들웨어의 동작 사이클이 실행된다.
+미들웨어는 Express.js 동작의 핵심으로, HTTP 요청(request)과 응답(response) 사이에서 단계별 동작을 수행해주는 함수이다. 미들웨어는 HTTP 요청이 들어온 시점부터 시작되며, **HTTP 요청과 응답 객체를 처리**하거나, **다음 미들웨어를 실행**하는데, HTTP 응답이 마무리될 때까지 미들웨어의 동작 사이클이 실행된다. 즉, HTTP 응답이 마무리되는 경우에는 다음 미들웨어가 실행되지 않는다.
 
-Route Handler도 라우팅 함수(get, post, put, delete 등)에 적용된 미들웨어로 일반적인 미들웨어와 달리 path parameter를 사용할 수 있다는 것이 특징이다.
+Route Handler도 미들웨어의 한 종류인 라우팅 함수(get, post, put, delete 등)에 적용된 미들웨어로 일반적인 미들웨어와 달리 path parameter를 사용할 수 있다는 것이 특징이다.
 
 ### 미들웨어 작성
 
@@ -56,6 +56,9 @@ app.use((req, res, next) => {
 app.use("/admin", router);
 ```
 
+> 참고: 미들웨어 서브스택
+> use, http 메서드 함수에 여러 미들웨어를 동시에 적용할 수 있다. 주로, 한 개의 경로에 특정해서 미들웨어를 적용하는 데 사용한다. 이 경우, 전달된 인자 순서대로 동작한다.
+
 #### 에러 처리 미들웨어
 
 에러 처리 미들웨어는 일반적으로 가장 마지막에 위치한다. 다른 미들웨어와 달리 `err`, `req`, `res`, `next` 네 가지 인자를 가지며, 앞선 미들웨어에서 `next` 함수에 인자가 전달되면 실행된다. 즉, 중간에 위치한 미들웨어는 실행하지 않고 `next` 함수에 인자가 넘어가는 순간 에러 처리 미들웨어가 실행된다.
@@ -99,4 +102,43 @@ const auth = (memberType) => {
 
 app.use("/admin", auth("admin"), adminLouter);
 app.use("/users", auth("member"), userLouter);
+```
+
+## REST API
+
+REST 아키텍처를 준수하는 웹 API로, RESTful API라고도 한다. 이때 REST는 **RE**presentational **S**tate **T**ransfer의 약어로, 웹에서 **자료를 전송**하기 위한 표현 방법에 대한 아키텍처이다. API는 **A**pplication **P**rogramming **I**nterface의 약어로 서비스나 프로그램 간에 **미리 정해진 기능을 실행할 수 있도록 하는 규약**이다.
+
+REST를 정확히 구현하기에는 어렵지만, 기본적인 REST 가이드를 따른다면 조금 더 좋은 구조의 API를 구성할 수 있다.
+
+### REST API 기본 가이드
+
+1. HTTP 메서드의 적극적인 사용
+
+   API의 동작을 **HTTP 메서드 + 명사형 URL**로 표현해야 한다.(GET, POST, PUT, DELETE 등)
+
+2. URL 표현 방법
+
+   REST API URL의 자원은 복수형으로 표현되며, **복수형 + id**로 특정한 하나의 자원에 대해 접근할 수 있다.
+
+3. 계층적 자원 구조
+
+   URL을 통해 자원을 **계층적으로 표현**해야 한다.
+
+## JSON
+
+JavaScript Object Notation의 약어로, JavaScript에서 객체를 표현하는 표현식을 의미한다. 데이터를 표현하는 방법이 단순하고 쉬워 Web API에서 데이터를 전송할 때 표현식으로 주로 사용된다.
+
+Web API는 기본적으로 데이터를 문자열로 전송하는데, JSON을 활용해 객체 형태를 문자열로 전달할 수 있고 더 적은 표현식을 활용하여 효과적으로 데이터를 표현할 수 있다.
+
+```json
+// Object
+{
+  "name": "김철수",
+  "age": 22,
+  "isAdult": true,
+  "nationality": "KOR"
+}
+
+// Array
+["first", 10, {name: "김영희"}]
 ```
