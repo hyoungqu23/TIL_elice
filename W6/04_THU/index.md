@@ -142,3 +142,23 @@ Web API는 기본적으로 데이터를 문자열로 전송하는데, JSON을 �
 // Array
 ["first", 10, {name: "김영희"}]
 ```
+
+## Express.js 로 REST API 구현하기
+
+### MVC 패턴
+
+MVC 패턴은 웹 서비스의 가장 대표적인 프로젝트 구성 패턴으로, 기능들을 어떻게 분리할 지에 대한 하나의 프로젝트 구성 방법이다. MVC 패턴에 따르면, Model - View - Controller로 프로젝트의 구조를 구성한다.
+
+- Model
+
+  Model은 데이터에 접근하는 기능과 데이터 그 자체를 의미하며, 데이터의 읽기와 쓰기는 Model을 통해서만 이루어지도록 해야 한다.
+
+- View
+
+  View는 데이터를 표현하는 기능으로, 주로 Controller로부터 데이터를 전달 받은 후, 화면에 표시하는 기능을 담당한다.
+
+- Controller
+
+  Controller는 Model을 통해 데이터에 접근하고, 동작을 수행한 후 처리 결과를 View로 전달하는 기능으로, 주로 라우팅 함수가 해당 기능을 수행한다.
+
+Node.js에서는 Module을 활용해 MVC 패턴을 구현할 수 있다.
