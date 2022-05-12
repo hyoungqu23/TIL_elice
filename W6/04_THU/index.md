@@ -162,3 +162,7 @@ MVC 패턴은 웹 서비스의 가장 대표적인 프로젝트 구성 패턴으
   Controller는 Model을 통해 데이터에 접근하고, 동작을 수행한 후 처리 결과를 View로 전달하는 기능으로, 주로 라우팅 함수가 해당 기능을 수행한다.
 
 Node.js에서는 Module을 활용해 MVC 패턴을 구현할 수 있다.
+
+## Postman
+
+Postman은 API를 테스트할 수 있는 도구로, HTTP 요청(GET, POST, PUT, DELETE 등)을 손쉽게 작성해 테스트할 수 있게 도와주는 도구를 포함해 API 문서화 기능 등 다양한 도구를 제공한다.
