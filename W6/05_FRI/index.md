@@ -103,8 +103,14 @@ const { Schema } = require("mongoose");
 // PostSchema 객체 생성
 const PostSchema = new Schema(
   {
-    title: String,
-    content: String,
+    title: {
+      type: String,
+      required: true,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -258,6 +264,8 @@ Mongoose는 Populate를 제공하여, 이를 통해 Join 기능을 간단하게 
 
 Document 내부에 Document를 담지 않고, ObjectID를 가지고 reference할 수 있는 방법을 제공한다. Document에는 reference되는 ObjectID를 담고, 이를 사용할 때 populate해서 마치 하위 Document처럼 사용할 수 있게 해준다.
 
+populate는 aggregate 쿼리를 사용하지 않고, Document에 저장된 ObjectID를 find 하여 찾아진 Document를 Mongoose가 모델에 주입시켜준다.
+
 ```js
 // populate.js
 
@@ -277,3 +285,102 @@ const post = await Post.find().populate(['user', 'comments']);
 
 // post.user.name, post.comments[0].content 등을 사용할 수 있다.
 ```
+
+### Express.js에서 Mongoose ODM 활용하기
+
+보통 Express는 프로젝트 구조를 자유롭게 구성할 수 있어 적절한 위치에 Mongoose ODM을 위치시키면 된다.
+
+일반적으로 models 디렉토리에 Schema와 Model을 같이 위치시키고, app 객체가 선언되는 부분에 데이터베이스 연결을 명시하는 `mongoose.connect`를 위치시킨다.(app 객체: 어플리케이션의 시작을 의미) 또한, models 디렉토리의 `index.js`에 `mongoose.model`을 선언한다.
+
+추가적으로 Express.js 어플리케이션은 종료되지 않고 계속 동작하는 웹 서비스이기 때문에 계속해서 데이터베이스가 정상적으로 동작하고 있는지를 파악하기 위해 동작 중 발생하는 Mongoose ODM이 제공하는 데이터베이스 연결 관련 이벤트에 대한 처리를 하는 것이 권장된다.
+
+Mongoose ODM는 `connection` 객체를 제공하는데, 여기에 이벤트를 추가해 연결 상태에 대해 파악할 수 있다.
+
+```js
+mongoose.connect("----");
+
+mongoose.connection.on("connected", () => {
+  console.log("연결 완료");
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.log("연결 끊김");
+});
+
+mongoose.connection.on("reconnected", () => {
+  console.log("재연결 완료");
+});
+
+mongoose.connection.on("reconnectFailed", () => {
+  console.log("재연결 시도 횟수 초과");
+});
+```
+
+## Sequelize ORM
+
+ORM은 Object-Relational Mapping의 약어로, mySQL, PostgreSQL 등 RDBMS를 이용하는 간단한 방법이다. ODM이 단순히 모델에 집중해 관리하는 반면에 ORM은 테이블 관계와 쿼리 등의 기능을 더욱 단순화하는 용도로 주로 사용된다.
+
+- 데이터 베이스 연결
+
+  ```js
+  const sequelize = new Sequelize("database", "username", "password", {
+    host: "localhost",
+    dialect: "mysql",
+  });
+  ```
+
+  Sequelize ORM 또한, 연결을 관리하는 간단한 방법을 제공한다. mongoose의 경우 MongoDB에만 연결이 가능한데 비해 Sequelize ORM는 mySQL, PostgreSQL, SQLite 등 다양한 RDBMS에 연결이 가능하다.
+
+- 스키마 작성
+
+  ```js
+  const User = sequelize.define(
+    "User",
+    {
+      name: {
+        type: DataType.STRING(10),
+        allowNull: false,
+      },
+      age: {
+        type: DataType.Inteager,
+      },
+    },
+    {}
+  );
+  ```
+
+  Sequelize ORM는 `define`을 통해 스키마를 생성할 수 있으며, DDL도 생성해준다는 점이 mongoose와의 차이점이다.
+
+  ```js
+  User.hasMany(Post);
+  Post.belongsTo(User);
+  Foo.belongsToMany(Bar);
+  Bar.belongsToMany(Foo);
+  ```
+
+  Sequelize ORM를 통해 테이블 간의 관계를 코드 레벨로 관리할 수 있다. 따라서 외래키 설정과 제약 조건까지 DDL로 생성해준다. 또한, 다대다 관계 설정을 통해 Relation Table도 자동으로 생성해준다.
+
+- 쿼리
+
+  ```js
+  User.findAll({
+    where: {
+      name: 'elice',
+      age: {
+        [0p.lt]: 20,
+        [0p.gte]: 10,
+      },
+    },
+    include: User,
+  })
+  ```
+
+  Operator를 활용해 SQL 쿼리를 코드로 작성할 수 있다. 스키마의 관계 설정을 한 경우에는 `include`를 사용해 자동으로 `join` 쿼리를 생성할 수 있다.
+
+- Synchronization
+
+  ```js
+  sequelize.sync();
+  ```
+
+  `sequelize.sync()` 함수를 사용하면 define된 model 데이터와 앞서 선언한 relation을 바탕으로 DDL을 자동으로 생성해준다. 따라서 직접 데이터베이스에 접속해 테이블 생성 및 관리를 할 필요가 없다. 다만, 자동으로 생성된 DDL을 따르지 않으면 테이블 관리가 어려워지는 문제가 있다.
