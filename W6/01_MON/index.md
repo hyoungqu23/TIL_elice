@@ -1,14 +1,16 @@
 # 0509
 
-## 00. npm
+## 01. npm
 
-Node Package Manager로, Module(예시: [`lite-server`](https://www.npmjs.com/package/lite-server), [`passport`](https://www.npmjs.com/package/passport)(sns 로그인) 등)을 사용할 때 활용한다.
+npm은 **N**ode **P**ackage **M**anager의 약어로, Node.js에서 Module(예시: [`lite-server`](https://www.npmjs.com/package/lite-server), [`passport`](https://www.npmjs.com/package/passport)(sns 로그인) 등)을 사용할 때 주로 활용한다.
 
-```command
+```ps
 npm init
 ```
 
-세부 설정을 마치면 `package.json`이 생성된 것을 확인할 수 있다.
+### `package.json`
+
+세부 설정을 마치면 `package.json`이 생성된 것을 확인할 수 있다. `package.json`에 모든 npm 패키지들이 정의된다.
 
 ```json
 {
@@ -24,7 +26,9 @@ npm init
 }
 ```
 
-`scripts`에서 명령어를 추가할 수 있다.
+### `package.json`의 `scripts`
+
+`scripts`에서 명령어를 추가할 수 있다. 프로젝트 개발을 진행하다보면 특정 명령어를 활용해서 test, lint, build 등 반복적으로 수행해야 하는 작업들이 생기는데, 이때 `scripts`에 등록해 활용하면 간편하고 쉽게 사용할 수 있다. `scripts`에 등록된 모든 명령어는 `npm run` 명령어를 통해 확인할 수 있다.
 
 ```json
 "scripts": {
@@ -33,11 +37,17 @@ npm init
 },
 ```
 
-다음 명령어를 통해 특정 모듈을 설치할 수 있다. 그렇게 되면 `node_modules` 디렉토리가 생성되고, 필요한 파일이 설치된다. 또한, `package-lock.json` 파일이 생성되는데, `package.json` 두 가지 파일을 통해 협업 시 공유할 수 있게 된다.
+### `npm install`
 
-```command
+```ps
 npm install
 ```
+
+`npm install` 명령어를 통해 특정 모듈을 설치할 수 있다.
+
+이때 `package.json` 파일 내에 설정된 `dependencies` module이 설치되지 않았다면 모두 설치되고, `node_modules` 디렉토리가 생성되고, 필요한 파일이 설치된다. 또한, `package-lock.json` 파일이 생성되는데, `package.json` 두 가지 파일을 통해 협업 시 module을 쉽게 공유할 수 있게 된다.
+
+`-g, --global` 옵션을 활용해 전역에서 설치할 수도 있다. 참고로 서버는 서비스를 운영하게 되는데 해당 서버 운영을 위해 접속 관리, 다중 접속 관리가 중요하므로 pm2, forever 등의 운영을 위한 package를 주로 전역적으로 설치한다.
 
 우리는 `package.json`에서 프로젝트가 어떤 패키지를 활용하고 있는지를 확인할 수 있다.
 
@@ -65,19 +75,17 @@ npm install
 }
 ```
 
+### `npm remove`
+
 해당 명령어로 특정 package를 제거할 수 있다.
 
-```command
+```ps
 npm remove
 ```
 
-`-g, --global` 옵션을 활용해 전역에서 설치할 수 있다.
-
-> 참고 - 서버는 서비스를 운영하는데, 운영을 위해 접속 관리, 다중 접속 관리가 중요하다. 따라서 pm2, forever 등의 운영을 위한 package를 설치하는데, 이때 전역적으로 설치한다.
-
 ### [lite-server](https://www.npmjs.com/package/lite-server)
 
-```command
+```ps
 npm i lite-server
 ```
 
@@ -92,7 +100,7 @@ npm i lite-server
 
 다음 명령어를 통해 `lite-server`를 시작할 수 있다.
 
-```command
+```ps
 npm start
 ```
 
@@ -132,7 +140,7 @@ const calc = require("./calc");
 console.log(calc.add(10, 20));
 ```
 
-```command
+```ps
 node app
 ```
 
@@ -202,13 +210,13 @@ for (let i = 0; i < 10; i++) {
 
 ## [Express.js](https://expressjs.com/)
 
-```command
+```ps
 npm install express-generator -g
 ```
 
 해당 명령어로 설치할 수 있다.
 
-```command
+```ps
 express --view=ejs myfirstapp
 ```
 

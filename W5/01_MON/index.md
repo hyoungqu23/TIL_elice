@@ -16,15 +16,15 @@ Multi Thread 방식은 평균적으로 Single Thread보다 성능이 매우 높�
 
 ```javascript
 // Lock 걸기 -> 해당 작업을 소유
-let lock = 0;  // 0 or 1
+let lock = 0; // 0 or 1
 
 function deposit(amount) {
-  while (lock === 1) {}        // lock 걸려있으면 무한 대기
-  lock = 1;                    // lock 걸기(해당 작업을 소유함)
+  while (lock === 1) {} // lock 걸려있으면 무한 대기
+  lock = 1; // lock 걸기(해당 작업을 소유함)
   let value = getDataFromAccount();
   value += amount;
   savaDataToAccount(value);
-  lock = 0;                    // lock 풀기(해당 작업 소유를 해제함)
+  lock = 0; // lock 풀기(해당 작업 소유를 해제함)
 }
 
 function withdraw(amount) {
@@ -70,8 +70,8 @@ main();
 ```javascript
 function makeAmericano() {
   const startTime = Data.now();
-  while (Data.now() - startTime < 600000) {}      // 아메리카노를 만드는 시간동안 아무것도 하지 못함.
-  return 'Americano';
+  while (Data.now() - startTime < 600000) {} // 아메리카노를 만드는 시간동안 아무것도 하지 못함.
+  return "Americano";
 }
 
 function order(itemName) {
@@ -84,7 +84,7 @@ function order(itemName) {
 
 function main() {
   const americano = order("americano");
-  console.log("아메리카노 받음")
+  console.log("아메리카노 받음");
   moveToSeat();
 }
 
@@ -101,7 +101,7 @@ JavaScript는 실행 환경인 Runtime의 Web APIs, Event Loop의 도움으로 n
 
 ```javascript
 function makeAmericano(callback) {
-  setTimeout(() => callback('americano'), 60000)
+  setTimeout(() => callback("americano"), 60000);
 }
 
 function order(itemName, callback) {
@@ -113,7 +113,7 @@ function order(itemName, callback) {
 function main() {
   order("americano", (item) => {
     moveToCasher();
-    console.log("아메리카노 받음")
+    console.log("아메리카노 받음");
   });
   moveToSeat();
   watchYouTube();
@@ -235,10 +235,10 @@ main();
 ```javascript
 // Promise 패턴 구조
 
-fetch('/data/sample.json')
-  .then(response => response.json())
-  .then(samples => samples.map(sample => sample.id))
-  .catch(error => console.log(error.message))
+fetch("/data/sample.json")
+  .then((response) => response.json())
+  .then((samples) => samples.map((sample) => sample.id))
+  .catch((error) => console.log(error.message));
 ```
 
 > 이벤트 핸들러는 콜백 패턴처럼 보이지만, Promise 패턴으로 활용할 수 없다.
@@ -253,7 +253,7 @@ function promisifiedSetTimeout(ms) {
     setTimeout(() => {
       resolve();
     }, ms);
-  })
+  });
 }
 ```
 
@@ -285,11 +285,11 @@ Async/Await 패턴은 비동기 코드를 **동기 코드처럼 확인**할 수 
 
 async function main() {
   try {
-    const response = await fetch('/data/sample.json');
+    const response = await fetch("/data/sample.json");
     const samples = await response.json();
     samples.forEach((sample) => {
       console.log(sample);
-    })
+    });
   } catch (error) {
     console.log(error.message);
   }
@@ -323,15 +323,15 @@ const Counter = {
   // 병렬(Parallel)은 여러 작업을 여러 명이 작업하는 것을 말한다.
   incrementSync: function () {
     const NOW = Date.now();
-    while (Date.now() - NOW <= 3000) {};    // Single Thread를 잡아먹는 중... Event Loop를 막는 중...
+    while (Date.now() - NOW <= 3000) {} // Single Thread를 잡아먹는 중... Event Loop를 막는 중...
     this.count++;
   },
 
   incrementAsync: function (callback) {
     setTimeout(() => {
-        this.count++;
-        callback();
-    }, 3000)
+      this.count++;
+      callback();
+    }, 3000);
   },
 };
 
@@ -366,12 +366,12 @@ C로 작성된 Event Loop로, 비동기 작업이 마친 후 실행되는 콜백
 // EventEmitter
 async function main() {
   const connection = await dbClient.connect();
-  connection.on('connect', () => {
-    console.log('DB연결 완료');
+  connection.on("connect", () => {
+    console.log("DB연결 완료");
   });
-  connection.on('disconnect', () => {
-    console.log('DB종료 완료');
-  })
+  connection.on("disconnect", () => {
+    console.log("DB종료 완료");
+  });
   await connection.disconnect();
 }
 ```
@@ -407,7 +407,7 @@ async function test() {
   try {
     const bad = undefined;
     bad.x;
-    const p = Promise.reject(new Error('Oops!'));
+    const p = Promise.reject(new Error("Oops!"));
     await p;
   } catch (error) {
     // "cannot read property 'x' of undefined"
@@ -420,106 +420,106 @@ async function test() {
 
 ```javascript
 const Form = () => {
-    const formState = {};
+  const formState = {};
 
-    function register(name, validator = (value) => true) {
-        // ! validator 는 기본값으로  `= (value) => true` 가지므로, 기본적으로 true를 반환하는 Boolean 함수이다.
-        // register시, state에 필드를 등록합니다.
-        // 필드 등록 객체는 { value, validator } 입니다.
-        // value는 빈 문자열로 초기화됩니다.
-        
-        // 예시
-        // {
-        //     'food' : { 
-        //         value: '햄버거',
-        //         validator: (value) => value.length > 1;
-        //     }
-        //     'color' : { 
-        //         value: '파란색',
-        //         validator: (value) => value.length > 1;
-        //     }
-        // }
-        
-        // 유저의 작성과 관계 없이 name을 가진 객체 값에 validator를 삽입한다.
-        formState[name] = {
-            value: '',                                      // value의 값은 기본값으로 ''
-            validator,                 // 인자로 들어온 validator 그대로 사용(생략 가능-객체의 key값과 value값이 이름이 같을 때)
-         }
-         // console.log(formState)
-    }
+  function register(name, validator = (value) => true) {
+    // ! validator 는 기본값으로  `= (value) => true` 가지므로, 기본적으로 true를 반환하는 Boolean 함수이다.
+    // register시, state에 필드를 등록합니다.
+    // 필드 등록 객체는 { value, validator } 입니다.
+    // value는 빈 문자열로 초기화됩니다.
 
-    function validate() {
-        // formState의 전체 필드를 유효성 함수 validator에 의해 검사합니다.
-        // `validator(value)` 로 value가 유효한지 검사할 수 있습니다.
-        // 전체 필드가 유효해야만 폼이 유효합니다.
-        // 세 가지 방법이 있다.(formState에 대해 `forEach`, `every`, `reduce`)
-        
-        // console.log(Object.values(formState))
-        // 예시
-        // [
-        //     { 
-        //         value: '햄버거',
-        //         validator: (value) => value.length > 1;
-        //     },
-        //     { 
-        //         value: '파란색',
-        //         validator: (value) => value.length > 1;
-        //     },
-        // ]
-        
-        // forEach
-        // Object.values(formState).forEach((item) => {
-        //     let checkPoint = item.validator(item.value);
-        //     if (!checkPoint) { return false;}
-        // })
-        // return true;
-        
-        // every
-        return Object.values(formState).every((item) => {
-            return item.validator(item.value);
-        })
-        
-        // reduce
-        // Object.values(formState).reduce((prev, {value, validator}) => {
-        //     const checkPoint = validator(value);
-        //     return prev && checkPoint;
-        // }, true);
-        // return false;
-    }
+    // 예시
+    // {
+    //     'food' : {
+    //         value: '햄버거',
+    //         validator: (value) => value.length > 1;
+    //     }
+    //     'color' : {
+    //         value: '파란색',
+    //         validator: (value) => value.length > 1;
+    //     }
+    // }
 
-    function getFormData() {
-        // formState의 각 필드에 있는 value를 모아 하나의 객체로 리턴합니다.
-        // { name : 'Kim', age: 30 } 의 형식으로 반환해야 합니다.
-        
-        // forEach
-        // let result = {};
-        // Object.entries(formState).forEach(([indicator, {value, validator}]) => {
-        //     result[indicator] = value;
-        // })
-        // return result;
-        
-        // reduce
-        Object.entries(formState).reduce((prev, [name, {value, validator}]) => {
-            // prev[name] = value;
-            // return prev;
-            return {...prev, [name]: value, }
-        }, {})
-    }
-
-    function setValue(name, value) {
-        formState[name] = { ...formState[name], value }
-        // name -> food or color
-        // value -> 유저가 작성한 내용
-        // `name`으로 찾은 필드의 `value`를 설정합니다.
-        // name에 해당하는 상태는 반드시 있다고 가정합니다.
-    }
-
-    return {
-        register,
-        validate,
-        getFormData,
-        setValue,
+    // 유저의 작성과 관계 없이 name을 가진 객체 값에 validator를 삽입한다.
+    formState[name] = {
+      value: "", // value의 값은 기본값으로 ''
+      validator, // 인자로 들어온 validator 그대로 사용(생략 가능-객체의 key값과 value값이 이름이 같을 때)
     };
+    // console.log(formState)
+  }
+
+  function validate() {
+    // formState의 전체 필드를 유효성 함수 validator에 의해 검사합니다.
+    // `validator(value)` 로 value가 유효한지 검사할 수 있습니다.
+    // 전체 필드가 유효해야만 폼이 유효합니다.
+    // 세 가지 방법이 있다.(formState에 대해 `forEach`, `every`, `reduce`)
+
+    // console.log(Object.values(formState))
+    // 예시
+    // [
+    //     {
+    //         value: '햄버거',
+    //         validator: (value) => value.length > 1;
+    //     },
+    //     {
+    //         value: '파란색',
+    //         validator: (value) => value.length > 1;
+    //     },
+    // ]
+
+    // forEach
+    // Object.values(formState).forEach((item) => {
+    //     let checkPoint = item.validator(item.value);
+    //     if (!checkPoint) { return false;}
+    // })
+    // return true;
+
+    // every
+    return Object.values(formState).every((item) => {
+      return item.validator(item.value);
+    });
+
+    // reduce
+    // Object.values(formState).reduce((prev, {value, validator}) => {
+    //     const checkPoint = validator(value);
+    //     return prev && checkPoint;
+    // }, true);
+    // return false;
+  }
+
+  function getFormData() {
+    // formState의 각 필드에 있는 value를 모아 하나의 객체로 리턴합니다.
+    // { name : 'Kim', age: 30 } 의 형식으로 반환해야 합니다.
+
+    // forEach
+    // let result = {};
+    // Object.entries(formState).forEach(([indicator, {value, validator}]) => {
+    //     result[indicator] = value;
+    // })
+    // return result;
+
+    // reduce
+    Object.entries(formState).reduce((prev, [name, { value, validator }]) => {
+      // prev[name] = value;
+      // return prev;
+      return { ...prev, [name]: value };
+    }, {});
+  }
+
+  function setValue(name, value) {
+    formState[name] = { ...formState[name], value };
+    // name -> food or color
+    // value -> 유저가 작성한 내용
+    // `name`으로 찾은 필드의 `value`를 설정합니다.
+    // name에 해당하는 상태는 반드시 있다고 가정합니다.
+  }
+
+  return {
+    register,
+    validate,
+    getFormData,
+    setValue,
+  };
 };
 
 export default Form;
@@ -530,54 +530,54 @@ import "./app.css";
 import Form from "./Form";
 
 const App = () => {
-    // Form -> return { register, validate, getFormData, setValue };
-    const favoriteForm = Form();
+  // Form -> return { register, validate, getFormData, setValue };
+  const favoriteForm = Form();
 
-    favoriteForm.register("food", (value) => value.length > 1);
-    favoriteForm.register("color", (value) => value.length > 1);
+  favoriteForm.register("food", (value) => value.length > 1);
+  favoriteForm.register("color", (value) => value.length > 1);
 
-    // DOM ELEMENT 선택
-    const foodInput = document.getElementById("food");
-    const colorInput = document.getElementById("color");
-    const submitButton = document.getElementById("submit");
-    const result = document.getElementById("result");
+  // DOM ELEMENT 선택
+  const foodInput = document.getElementById("food");
+  const colorInput = document.getElementById("color");
+  const submitButton = document.getElementById("submit");
+  const result = document.getElementById("result");
 
-    // EventListener 추가
-    foodInput.addEventListener("input", (e) => {
-        favoriteForm.setValue("food", e.target.value);
-        // e.target.value는 유저가 input에 작성한 내용
-    });
+  // EventListener 추가
+  foodInput.addEventListener("input", (e) => {
+    favoriteForm.setValue("food", e.target.value);
+    // e.target.value는 유저가 input에 작성한 내용
+  });
 
-    colorInput.addEventListener("input", (e) => {
-        favoriteForm.setValue("color", e.target.value);
-        // e.target.value는 유저가 input에 작성한 내용
-    });
+  colorInput.addEventListener("input", (e) => {
+    favoriteForm.setValue("color", e.target.value);
+    // e.target.value는 유저가 input에 작성한 내용
+  });
 
-    submitButton.addEventListener("click", () => {
-        const validationResult = favoriteForm.validate();
-        
-        if (!validationResult) {
-            result.innerHTML = "입력된 값을 확인해주세요.";
-            return;
-        }
-        
-        result.innerHTML = "제출에 성공했습니다!";
-    });
+  submitButton.addEventListener("click", () => {
+    const validationResult = favoriteForm.validate();
+
+    if (!validationResult) {
+      result.innerHTML = "입력된 값을 확인해주세요.";
+      return;
+    }
+
+    result.innerHTML = "제출에 성공했습니다!";
+  });
 };
 
 export default App;
 ```
 
-```javasciprt
+```js
 import App from "./App";
 import "./index.css";
 
 // DOMContentLoaded -> 초기 HTML 문서를 완전히 불러오고 분석했을 때 발생한다.(CSS, img, 하위 프레임의 로딩은 배제)
 
 const run = () => {
-    window.addEventListener("DOMContentLoaded", () => {
-        App();
-    });
+  window.addEventListener("DOMContentLoaded", () => {
+    App();
+  });
 };
 
 run();
