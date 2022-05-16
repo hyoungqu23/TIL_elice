@@ -8,6 +8,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const postRouter = require('./routes/post');  // 라우터 불러오기
+const blogRouter = require('./routes/blog');  // 라우터 불러오기
 const dbconnect = require('./models/index');  // DB 불러오기
 dbconnect();  // 함수형이기 때문에 실행해주어야 한다.
 
@@ -26,6 +27,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/expost', postRouter); // localhost:3000/expost에서 postRouter로 통신흐름이 연결된다.
+app.use('/blog', blogRouter); // localhost:3000/blog
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
