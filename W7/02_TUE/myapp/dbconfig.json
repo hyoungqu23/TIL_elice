@@ -1,0 +1,6 @@
+{
+  "username": "testid",
+  "password": "test12345",
+  "url": "localhost",
+  "dbname": "bookstore"
+}
