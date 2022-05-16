@@ -2,8 +2,11 @@ const express = require('express');
 const router = express.Router();
 const blogSchema = require('../models/blog');
 
-router.get('/', (req, res) => {
-  res.render('blog/blog');  // views/blog/blog.ejs
+router.get('/', async (req, res) => {
+  // 블로그 메인 페이지에 게시글 리스트 추가하기
+  const result = await blogSchema.find({}).exec(); // 검색하기
+  // 변수 넘겨줘서 검색 결과 데이터 활용하기
+  res.render('blog/blog', { titleList: result });  // views/blog/blog.ejs
 });
 
 router.get('/write', (req, res) => {
