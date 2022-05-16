@@ -36,4 +36,4 @@ module.exports = router;
 
 굳이 처음부터 만드는 것보다는 리팩토링 단계에서 수정하는 것이 낫다.
 
-##
+## REST API
