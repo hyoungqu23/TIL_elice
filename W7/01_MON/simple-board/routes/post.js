@@ -99,4 +99,36 @@ router.post('/addbook', (req, res, next) => {
   res.redirect('/expost');
 });
 
+// REST API
+// 모든 책에 대한 정보를 가져오기
+router.get('/getlist', async (req, res) => {
+  const result = await BookSchema.find({}).exec(); // 모두 가져오려면 find({});, .exec() 권장된다.
+  return res.status(200).json(result);
+})
+
+// Error Handling
+
+router.get('/users', (req, res) => {
+  res.render('user');
+})
+
+router.post('/users', async (req, res, next) => {
+  try {
+    const userid = req.body.userid;
+    const job = req.body.job;
+    const user = new userSchema({
+      userid: userid,
+      job: job
+    });
+    const result = await user.save();
+    res.status(200).json({
+      result,
+      message: 'user saved'
+    });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 module.exports = router;

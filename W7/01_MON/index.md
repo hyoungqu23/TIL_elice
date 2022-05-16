@@ -37,3 +37,7 @@ module.exports = router;
 굳이 처음부터 만드는 것보다는 리팩토링 단계에서 수정하는 것이 낫다.
 
 ## REST API
+
+최근에는 Mobile, SPA, 임베디드 기기 등 다양한 클라이언트들이 존재한다. HTTP 통신 방식은 html을 반환하는데, 웹 브라우저만 html을 지원하고, Mobile, SPA, 임베디드 기기 등은 html을 읽지 못한다. 따라서 모든 기기에서 호응 가능한 순수한 **데이터**만을 주고받을 수 있도록 한 API가 REST API이다. 즉, 데이터 중심으로 다양한 클라이언트를 지원하는... (다시 듣기)
+
+따라서, HTTP URI(Uniform Resource Identifier)를 통해 자원(Resource)을 명시하고, HTTP Method(POST, GET, PUT, DELETE)를 통해 해당 자원에 대한 CRUD Operation을 적용하는 것을 의미한다.([참고](https://api.iamport.kr/#/))

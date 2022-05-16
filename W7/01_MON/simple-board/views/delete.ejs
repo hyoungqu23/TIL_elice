@@ -9,7 +9,7 @@
 <body>
     <a data-doc="개미" class="delete">지우기</a>
 </body>
-<script>
+  <script>
     const trashcan = document.querySelector('a.delete');
     trashcan.addEventListener('click', (e) => {
       const endpoint = `/expost/del/${trashcan.dataset.doc}`;
