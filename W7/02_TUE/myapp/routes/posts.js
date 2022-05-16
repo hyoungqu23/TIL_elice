@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { Post } = require('../models');  // 스키마로 만든 모델 가져오기
+const { Post } = require('../models/model');  // 스키마로 만든 모델 가져오기
 const router = Router();
 
 // 전체 목록 검색(find)

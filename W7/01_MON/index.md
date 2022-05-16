@@ -67,3 +67,15 @@ app.use(cors({
 > 포트는 쉽게 설명하면, 우리가 컴퓨터를 사용하면서 채팅도하고 게임도하고 엘리스 강의도 듣지 않나요? 실시간으로 통신하게 될텐데, 포트가 없다면 실시간으로 데이터가 오는것을 구분하지 못하게 됩니다. 따라서 채팅의 데이터 통로가 port 4000이고 게임의 데이터통로가 port 3000이고 엘리스 강의의 데이터 통로가 port 2000이면 데이터 혼선이 없겠죠?
 
 ## CRUD 게시판 구현하기
+
+- [express template engine](https://expressjs.com/ko/guide/using-template-engines.html)
+- [mongoose-auto-increment](https://www.npmjs.com/package/mongoose-auto-increment)
+- [--force 옵션과 --legacy-peer-dev](https://jane-aeiou.tistory.com/79?category=1018076)
+- [cookie-parser](http://expressjs.com/en/resources/middleware/cookie-parser.html)
+- [morgan](https://expressjs.com/en/resources/middleware/morgan.html)
+- [view engine setup](https://expressjs.com/ko/guide/using-template-engines.html)
+- [day.js doc](https://day.js.org/docs/en/display/format), [day.js](https://www.npmjs.com/package/dayjs)
+- [express.static](http://expressjs.com/en/starter/static-files.html)
+- [nanoid](https://www.npmjs.com/package/nanoid)
+- [mongoose.deleteOne](https://mongoosejs.com/docs/api.html#model_Model.deleteOne)
+- [res.locals](http://expressjs.com/en/5x/api.html#res.locals)
