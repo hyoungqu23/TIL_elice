@@ -1,15 +1,19 @@
 var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+var express = require('express'); // 라우터
+var path = require('path'); // 파일 위치 찾기
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// 주소를 찾는 것이 routing이다.
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const postRouter = require('./routes/post');  // 라우터 불러오기
+const dbconnect = require('./models/index');  // DB 불러오기
+dbconnect();  // 함수형이기 때문에 실행해주어야 한다.
 
 var app = express();
 
-// view engine setup
+// view engine setup || ejs engine으로 설치
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -21,10 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/expost', postRouter); // localhost:3000/expost에서 postRouter로 통신흐름이 연결된다.
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  next(createError(404)); // 404 이후에도 진행해야 하기 때문에 next 활용
 });
 
 // error handler
