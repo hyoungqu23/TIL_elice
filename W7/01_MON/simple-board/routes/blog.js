@@ -9,6 +9,14 @@ router.get('/', async (req, res) => {
   res.render('blog/blog', { titleList: result });  // views/blog/blog.ejs
 });
 
+// 게시글 하나의 상세 페이지 만들기
+router.get('/read/:id', async (req, res) => {
+  const contentNumber = req.params.id;
+  const result = await blogSchema.findOne({ no: contentNumber }).exec();
+  res.render('blog/blogContent', { content: result });  // 해당 ejs 파일에 버튼 추가한 것 중요
+});
+
+// 생성 페이지 만들기
 router.get('/write', (req, res) => {
   res.render('blog/write'); // views/blog/write.ejs
 });
@@ -27,16 +35,51 @@ router.post('/write', (req, res, next) => {
     content: content
   })
 
+  // Promise 써보기
   blogPost
     .save() // 저장하기
     .then((result) => {
-      console.log(result);
-      res.redirect('/blog');  // 블로그 첫 화면으로 가기
+      return res.status(200).json({
+        redirect: '/blog',
+      })
+      // console.log(result);
+      // res.redirect('/blog');  // 블로그 첫 화면으로 가기 -> then으로 인해 문제 발생할 수 있음(await가 역시 더...)
     })
     .catch((error) => { // 에러 처리하기
       console.log(error);
       next(error);
     })
+})
+
+// 수정
+router.get('/edit/:id', async (req, res) => {
+  const contentNumber = req.params.id;
+  const result = await blogSchema.findOne({ no: contentNumber }).exec();
+  res.render('blog/edit', { content: result })
+})
+
+router.post('/update/:id', async (req, res) => {
+  const { title, content } = req.body;
+  const contentNumber = req.params.id;
+  const result = await blogSchema.updateOne({
+    no: contentNumber
+  }, 
+  {
+    title: title,
+    content: content,
+  }).exec();
+  res.render('/blog/blogContent', {content: result}); // 캐시 저장때문에 동작 안하는 것을 방지하기 위해
+})
+
+// 본래는 async await
+router.delete('/delete/:id', async (req, res, next) => {
+  const contentNumber = req.params.id;
+  try {
+    await blogSchema.deleteOne({ no: contentNumber });  // findOneAndDelete({ no: contentNumber })와 정확히 동일함
+    res.redirect('/');
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router;

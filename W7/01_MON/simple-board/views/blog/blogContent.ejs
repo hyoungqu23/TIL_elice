@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blog Content</title>
+  </head>
+  <body>
+    <h1 style="color: #6765ab">블로그 <%= content.no %>번째 글</h1>
+    <button id="list">목록으로</button>
+    <button id="update" data-doc="<%= content.no %>">수정하기</button>
+    <button id="delete" data-doc="<%= content.no %>">삭제하기</button>
+    <hr />
+    <h2 style="text-decoration: underline"><%= content.title %></h2>
+    <hr />
+    <p><%= content.content %></p>
+    <script src="/javascripts/list.js" defer></script>
+  </body>
+</html>

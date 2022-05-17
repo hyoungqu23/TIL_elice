@@ -8,7 +8,12 @@ router.get('/', (req, res, next) => {
   }
 })
 
-router.post('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
+  const posts = await Post.find({});
+  res.render('posts/list', { posts });
+})
+
+router.post('/', async (req, res, next) => {
   const { title, content } = req.body;
   
   try {
