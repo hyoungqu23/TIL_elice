@@ -38,6 +38,30 @@ router.post('/signup',
     .then(result => {
       res.status(200).json(result);
     })
+  
+    // SNS 로그인, 이메일 인증 등 추가 가능
 });
+
+// 미들웨어 추가해도 된다.
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  // 실제로 가입한 유저인지 확인
+  const userData = await userSchema.findOne({ email }).exec();
+  if (!userData) {
+    return res.status(401).json({ msg: "가입되지 않은 계정입니다."})
+  } else {
+    const pwMatch = bcrypt.compareSync(password, userData.password);
+    if (pwMatch) {
+      res.status(200).json({ msg: "OK" });
+    } else {
+      res.status(401).json({ msg: "No Match Data"});
+    }
+  }
+});
+
+router.get('/login', (req, res) => {
+  res.render('user/login');
+})
 
 module.exports = router;
