@@ -10,23 +10,17 @@ function Header() {
   );
 }
 
-function Nav() {
+function Nav(props) {
+  const list = props.data.map(({ id, title }) => {
+    return (
+      <li key={id}>
+        <a href={`/read/${id}`}>{title}</a>
+      </li>
+    );
+  });
   return (
     <nav>
-      <ol>
-        <li>
-          <a href="/read/1">HTML</a>
-        </li>
-        <li>
-          <a href="/read/2">CSS</a>
-        </li>
-        <li>
-          <a href="/read/3">JavaScript</a>
-        </li>
-        <li>
-          <a href="/read/4">React.js</a>
-        </li>
-      </ol>
+      <ol>{list}</ol>
     </nav>
   );
 }
@@ -41,10 +35,17 @@ function Article(props) {
 }
 
 function App() {
+  const topics = [
+    { id: 1, title: 'HTML', body: 'HTML is Hyper Text Markup Language' },
+    { id: 2, title: 'CSS', body: 'CSS is Cascading Style Sheets' },
+    { id: 3, title: 'JavaScript', body: 'JavaScript is JavaScript' },
+    { id: 4, title: 'React.js', body: 'React.js is React' },
+  ];
+
   return (
     <div className="App">
       <Header />
-      <Nav />
+      <Nav data={topics} />
       <Article title="Welcome" body="Hello, React!" />
       <img src="logo.svg" alt="" />
       <a href="http://info.cern.ch">WEB</a>
