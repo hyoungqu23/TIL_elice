@@ -57,7 +57,9 @@ function Article(props) {
 
 function App() {
   // let mode = 'READ'; // 단순 지역변수
-  let [mode, setMode] = useState('WELCOME');
+  const [mode, setMode] = useState('WELCOME'); // Destructuring, constant variable로 변경이 setMode 함수로만 가능케 함.
+  const [id, setId] = useState(null);
+  console.log(mode, id); // 바뀔 때만 실행된다 -> 성능 상 이점
 
   const topics = [
     { id: 1, title: 'HTML', body: 'HTML is Hyper Text Markup Language' },
@@ -81,7 +83,10 @@ function App() {
   if (mode === 'WELCOME') {
     content = <Article title="Welcome" body="Welcome, React!" />;
   } else if (mode === 'READ') {
-    content = <Article title="Read" body="Read, React!" />;
+    // id에 따라 동적으로 변경되어야 한다.
+    const topic = topics.filter((e) => e.id === id)[0];
+    console.log(topic);
+    content = <Article title={topic.title} body={topic.body} />;
   }
 
   return (
@@ -99,6 +104,7 @@ function App() {
           console.log('Nav Click', id); // 어떤 것을 클릭했는지 알 수 있어야 한다. -> id를 인자로 받아야 함
           // mode = 'READ';
           setMode('READ');
+          setId(id);
         }}
       />
       {content}
