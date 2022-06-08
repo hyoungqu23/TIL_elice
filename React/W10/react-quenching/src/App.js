@@ -2,11 +2,19 @@ import './App.css';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
-function Header() {
+function Header(props) {
   return (
     <header>
       <h1>
-        <a href="/">WEB</a>
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            props.onSelect();
+          }}
+        >
+          WEB
+        </a>
       </h1>
     </header>
   );
@@ -17,7 +25,15 @@ function Nav(props) {
   const liTags = props.data.map(({ id, title }) => {
     return (
       <li key={id}>
-        <a href={`/read/${id}`}>{title}</a>
+        <a
+          href={`/read/${id}`}
+          onClick={(e) => {
+            e.preventDefault();
+            props.onClick();
+          }}
+        >
+          {title}
+        </a>
       </li>
     );
   });
@@ -46,16 +62,42 @@ function App() {
     { id: 4, title: 'React.js', body: 'React.js is React' },
   ];
 
+  const handleCreateBtn = (e) => {
+    e.preventDefault();
+    console.log('Create Button');
+  };
+
+  const handleUpdateBtn = (e) => {
+    e.preventDefault();
+    console.log('Update Button');
+  };
+
   return (
     <div className="App">
-      <Header />
-      <Nav data={topics} />
+      <Header
+        onSelect={() => {
+          console.log('Header Click');
+        }}
+      />
+      <Nav
+        data={topics}
+        onClick={() => {
+          console.log('Nav Click');
+        }}
+      />
       <Article title="Welcome" body="Hello, React!" />
       <ButtonGroup variant="contained">
-        <Button>Create</Button>
-        <Button>Update</Button>
+        <Button onClick={handleCreateBtn}>Create</Button>
+        <Button onClick={handleUpdateBtn}>Update</Button>
       </ButtonGroup>
-      <Button variant="outlined">Delete</Button>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          console.log('Delete Button');
+        }}
+      >
+        Delete
+      </Button>
       <img src="./logo.svg" alt="" />
       <a href="http://info.cern.ch">WEB</a>
     </div>
