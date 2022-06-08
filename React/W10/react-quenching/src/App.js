@@ -51,9 +51,9 @@ function App() {
       <Header />
       <Nav data={topics} />
       <Article title="Welcome" body="Hello, React!" />
-      <ButtonGroup>
-        <Button variant="contained">Create</Button>
-        <Button variant="contained">Update</Button>
+      <ButtonGroup variant="contained">
+        <Button>Create</Button>
+        <Button>Update</Button>
       </ButtonGroup>
       <Button variant="outlined">Delete</Button>
       <img src="./logo.svg" alt="" />
