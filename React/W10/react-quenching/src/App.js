@@ -1,4 +1,6 @@
 import './App.css';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 function Header() {
   return (
@@ -11,16 +13,18 @@ function Header() {
 }
 
 function Nav(props) {
-  const list = props.data.map(({ id, title }) => {
+  // props.data 배열을 통해 topics 배열에 접근할 수 있다.
+  const liTags = props.data.map(({ id, title }) => {
     return (
       <li key={id}>
         <a href={`/read/${id}`}>{title}</a>
       </li>
     );
   });
+
   return (
     <nav>
-      <ol>{list}</ol>
+      <ol>{liTags}</ol>
     </nav>
   );
 }
@@ -47,7 +51,12 @@ function App() {
       <Header />
       <Nav data={topics} />
       <Article title="Welcome" body="Hello, React!" />
-      <img src="logo.svg" alt="" />
+      <ButtonGroup>
+        <Button variant="contained">Create</Button>
+        <Button variant="contained">Update</Button>
+      </ButtonGroup>
+      <Button variant="outlined">Delete</Button>
+      <img src="./logo.svg" alt="" />
       <a href="http://info.cern.ch">WEB</a>
     </div>
   );
