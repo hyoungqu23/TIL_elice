@@ -34,6 +34,7 @@ const Forms = (props) => {
           padding: '6px 12px',
           backgroundColor: 'transparent',
         }}
+        disabled={props.disabled}
       />
       <button
         type="submit"
