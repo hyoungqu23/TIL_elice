@@ -1,23 +1,27 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Form from './components/Form';
+import ListView from './components/ListView';
 
 function App() {
+  const [todos, setTodos] = useState([]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ListView todos={todos} />
+      <Form
+        onInsert={(value) =>
+          setTodos((currentTodos) => {
+            const newTodos = [...currentTodos];
+            newTodos.push({
+              key: new Date().getTime(),
+              value,
+              isCompleted: false,
+            });
+            return newTodos;
+          })
+        }
+      />
     </div>
   );
 }
