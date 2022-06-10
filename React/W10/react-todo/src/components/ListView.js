@@ -1,15 +1,19 @@
 import React from 'react';
 
-const ListView = ({ todos }) => {
+const ListView = ({ todos, onComplete, onRemove }) => {
   return (
     <div>
       <ol>
-        {todos.map((todo) => {
+        {todos.map((todo, index) => {
           return (
             <li key={todo.key}>
               <span>{todo.value}</span>
-              <button type="button">완료</button>
-              <button type="button">삭제</button>
+              <button type="button" onClick={() => onComplete(index)}>
+                완료
+              </button>
+              <button type="button" onClick={() => onRemove(index)}>
+                삭제
+              </button>
             </li>
           );
         })}
