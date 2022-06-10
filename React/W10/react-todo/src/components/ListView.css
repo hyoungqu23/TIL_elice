@@ -1,0 +1,42 @@
+.listview {
+  display: block;
+  position: relative;
+  min-height: 120px;
+  margin-bottom: 8px;
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 16px;
+}
+
+.listview ol {
+  margin: 0;
+  padding-left: 2em;
+}
+
+.listview ol li {
+  clear: both;
+  margin-bottom: 8px;
+}
+
+.listview ol li span {
+  float: left;
+  font-size: 16px;
+}
+
+.listview ol li.completed span {
+  text-decoration: line-through;
+}
+
+.listview ol li button {
+  float: right;
+  margin-left: 4px;
+  cursor: pointer;
+  border: none;
+  color: #ffffff;
+  background-color: #524fa1;
+  padding: 4px 8px;
+}
+
+.listview ol li button.remove {
+  background-color: #fa466a;
+}
