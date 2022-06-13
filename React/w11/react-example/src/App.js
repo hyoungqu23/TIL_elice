@@ -172,12 +172,20 @@ function App() {
       <Create
         onCreate={(title, body) => {
           const newTopic = {
-            // id: topics.length + 1, // 삭제 기능으로 인해 불가능
+            // id: topics.length + 1, // 삭제 기능으로 인해 uniqueness 훼손 가능성 존재하여 불가능
             id: nextId,
             title,
             body,
           };
+          // 객체의 불변성 유지로 인해 push 메서드는 렌더링이 되지 않음(기존 배열 객체와 달라야 렌더링이 된다.)
+          // Hot Module Replacement(HMR), Reloading를 사용하여 불변성 유지를 위해 setState를 사용하여 배열을 변경하는 방법
           setTopics((currentTopics) => [...currentTopics, newTopic]);
+
+          // 작성한 글 보기로 전환
+          setId(nextId);
+          setMode('READ');
+
+          // 다음 추가를 위한 준비
           setNextId((currentNextId) => currentNextId + 1);
         }}
       />
@@ -211,6 +219,11 @@ function App() {
         <Button variant="outlined">Update</Button>
       </ButtonGroup>
       <Button variant="outlined">Delete</Button>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       <MyButton>Styled Button 1</MyButton>
       <MyButton>Styled Button 2</MyButton>
       <MyStyledButton>Styled Button 3</MyStyledButton>
