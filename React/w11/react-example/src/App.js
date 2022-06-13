@@ -5,8 +5,44 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 function MyButton(props) {
-  return <button>{props.children}</button>;
+  return <MyStyledButton>{props.children}</MyStyledButton>;
 }
+
+const MyStyledButton = styled.button`
+  display: block;
+  padding: 1.25em 2.5em;
+  margin: 1.25em;
+
+  background-color: #52d8af;
+
+  border: none;
+  border-radius: 0.25em;
+
+  color: #fff;
+  font-size: 1.25em;
+  font-weight: bold;
+`;
+
+const MyAnotherButton = styled(MyStyledButton)`
+  background-color: #d34d4d;
+`;
+
+function colorFn(props) {
+  if (props.primary) return 'yellow';
+  if (props.secondary) return 'blue';
+  if (props.warning) return 'red';
+}
+
+function backgroundColorFn(props) {
+  if (props.primary) return '#52d8af';
+  if (props.secondary) return '#8af';
+  if (props.warning) return '#c3c3c3';
+}
+
+const MyPropsButton = styled(MyAnotherButton)`
+  color: ${colorFn};
+  background-color: ${backgroundColorFn};
+`;
 
 function Header(props) {
   console.log(props);
@@ -125,7 +161,14 @@ function App() {
       <Button variant="outlined">Delete</Button>
       <MyButton>Styled Button 1</MyButton>
       <MyButton>Styled Button 2</MyButton>
-      <MyButton>Styled Button 3</MyButton>
+      <MyStyledButton>Styled Button 3</MyStyledButton>
+      <MyAnotherButton>Styled Button 4</MyAnotherButton>
+      <MyAnotherButton as="a" href="https://google.com">
+        Google
+      </MyAnotherButton>
+      <MyPropsButton primary>Primary Styled Button 5</MyPropsButton>
+      <MyPropsButton secondary>Secondary Button 6</MyPropsButton>
+      <MyPropsButton warning>Warning Button 7</MyPropsButton>
     </div>
   );
 }
