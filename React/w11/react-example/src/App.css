@@ -1,5 +1,9 @@
-header {
-  border-bottom: 10px solid #e5e5e5;
-  padding: 1.25em;
-  font-size: 1.25em;
+* {
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+  list-style: none;
+  text-decoration: none;
 }
