@@ -1,10 +1,17 @@
 import './App.css'; // 스타일링 방법 1
-import { useState } from 'react';
+import { Children, useState } from 'react';
+import styled from 'styled-components'; // 스타일링 방법 3
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
+function MyButton(props) {
+  return <button>{props.children}</button>;
+}
+
 function Header(props) {
   console.log(props);
+
+  // 스타일링 방법 2
   const myHeaderStyle = {
     backgroundColor: '#f5f5f5',
     padding: '1.25em 2.5em',
@@ -116,6 +123,9 @@ function App() {
         <Button variant="outlined">Update</Button>
       </ButtonGroup>
       <Button variant="outlined">Delete</Button>
+      <MyButton>Styled Button 1</MyButton>
+      <MyButton>Styled Button 2</MyButton>
+      <MyButton>Styled Button 3</MyButton>
     </div>
   );
 }
