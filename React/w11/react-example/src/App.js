@@ -233,12 +233,9 @@ function App() {
 
           // 선택한 글 삭제
           setTopics(newTopic);
-
-          // 작성한 글 보기로 전환
+          // 둘 모두 State이기 때문에 비동기적으로 처리되어 문제가 없다.
+          // Welcome 페이지로 전환
           setMode('WELCOME');
-
-          // 다음 추가를 위한 준비
-          setNextId((currentNextId) => currentNextId + 1);
         }}
       >
         Delete
