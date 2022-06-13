@@ -1,5 +1,5 @@
 import './App.css'; // 스타일링 방법 1
-import { Children, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components'; // 스타일링 방법 3
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -81,6 +81,13 @@ function Article(props) {
   );
 }
 
+const MyNavStyle = styled(Nav)`
+  background-color: #f5f5f5;
+  padding: 1.25em 2.5em;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 1.25em;
+`;
+
 function Nav(props) {
   const liTags = props.data.map((e) => {
     return (
@@ -139,13 +146,13 @@ function App() {
           setMode('WELCOME');
         }}
       ></Header>
-      <Nav
+      <MyNavStyle
         data={topics}
         onSelect={(id) => {
           setMode('READ');
           setId(id);
         }}
-      ></Nav>
+      ></MyNavStyle>
       {content}
       <ButtonGroup>
         <Button
