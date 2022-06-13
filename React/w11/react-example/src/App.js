@@ -45,8 +45,6 @@ const MyPropsButton = styled(MyAnotherButton)`
 `;
 
 function Header(props) {
-  console.log(props);
-
   // 스타일링 방법 2
   const myHeaderStyle = {
     backgroundColor: '#f5f5f5',
@@ -77,6 +75,39 @@ function Article(props) {
     <article>
       <h2>{props.title}</h2>
       {props.body}
+    </article>
+  );
+}
+
+function Create({ onCreate }) {
+  return (
+    <article>
+      <h2>Create</h2>
+      <form
+        onSubmit={(evt) => {
+          evt.preventDefault();
+          // 데이터 가져오는 방법 확인~
+          const title = evt.target.title.value;
+          const body = evt.target.body.value;
+          onCreate(title, body);
+        }}
+      >
+        <p>
+          <input name="title" type="text" placeholder="title" />
+        </p>
+        <p>
+          <textarea name="body" placeholder="body"></textarea>
+        </p>
+        <p>
+          <input
+            type="submit"
+            value="Create"
+            onSubmit={(evt) => {
+              evt.preventDefault();
+            }}
+          />
+        </p>
+      </form>
     </article>
   );
 }
@@ -114,15 +145,14 @@ function Nav(props) {
 function App() {
   const [mode, setMode] = useState('WELCOME');
   const [id, setId] = useState(null);
-
-  console.log(mode, id);
-
-  const topics = [
+  // State화
+  const [topics, setTopics] = useState([
     { id: 1, title: 'HTML5', body: 'HTML5 is ...' },
     { id: 2, title: 'CSS3', body: 'CSS3 is ...' },
     { id: 3, title: 'JavaScript', body: 'JavaScript is ...' },
     { id: 4, title: 'React.js', body: 'React.js is ...' },
-  ];
+  ]);
+  const [nextId, setNextId] = useState(5);
 
   let content = null;
 
@@ -137,6 +167,21 @@ function App() {
       }
     })[0];
     content = <Article title={topic.title} body={topic.body}></Article>;
+  } else if (mode === 'CREATE') {
+    content = (
+      <Create
+        onCreate={(title, body) => {
+          const newTopic = {
+            // id: topics.length + 1, // 삭제 기능으로 인해 불가능
+            id: nextId,
+            title,
+            body,
+          };
+          setTopics((currentTopics) => [...currentTopics, newTopic]);
+          setNextId((currentNextId) => currentNextId + 1);
+        }}
+      />
+    );
   }
 
   return (
@@ -158,7 +203,7 @@ function App() {
         <Button
           variant="outlined"
           onClick={() => {
-            alert('create!');
+            setMode('CREATE');
           }}
         >
           Create
