@@ -1,12 +1,19 @@
-import './App.css';
+import './App.css'; // 스타일링 방법 1
 import { useState } from 'react';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
 function Header(props) {
   console.log(props);
+  const myHeaderStyle = {
+    backgroundColor: '#f5f5f5',
+    padding: '1.25em 2.5em',
+    borderBottom: '1px solid #e5e5e5',
+    fontSize: '1.25em',
+  };
+
   return (
-    <header>
+    <header style={myHeaderStyle}>
       <h1>
         <a
           href="/"
@@ -21,6 +28,7 @@ function Header(props) {
     </header>
   );
 }
+
 function Article(props) {
   return (
     <article>
@@ -29,6 +37,7 @@ function Article(props) {
     </article>
   );
 }
+
 function Nav(props) {
   const liTags = props.data.map((e) => {
     return (
@@ -51,17 +60,22 @@ function Nav(props) {
     </nav>
   );
 }
+
 function App() {
   const [mode, setMode] = useState('WELCOME');
   const [id, setId] = useState(null);
+
   console.log(mode, id);
+
   const topics = [
     { id: 1, title: 'HTML5', body: 'HTML5 is ...' },
     { id: 2, title: 'CSS3', body: 'CSS3 is ...' },
     { id: 3, title: 'JavaScript', body: 'JavaScript is ...' },
     { id: 4, title: 'React.js', body: 'React.js is ...' },
   ];
+
   let content = null;
+
   if (mode === 'WELCOME') {
     content = <Article title="Welcome" body="Hello, WEB!"></Article>;
   } else if (mode === 'READ') {
@@ -74,6 +88,7 @@ function App() {
     })[0];
     content = <Article title={topic.title} body={topic.body}></Article>;
   }
+
   return (
     <div>
       <Header
