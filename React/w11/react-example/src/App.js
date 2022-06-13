@@ -218,7 +218,31 @@ function App() {
         </Button>
         <Button variant="outlined">Update</Button>
       </ButtonGroup>
-      <Button variant="outlined">Delete</Button>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          setMode('DELETE');
+          const newTopic = topics.filter((e) => {
+            // 선택한 글의 id와 같은 id를 가진 글을 제거
+            if (e.id === id) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+
+          // 선택한 글 삭제
+          setTopics(newTopic);
+
+          // 작성한 글 보기로 전환
+          setMode('WELCOME');
+
+          // 다음 추가를 위한 준비
+          setNextId((currentNextId) => currentNextId + 1);
+        }}
+      >
+        Delete
+      </Button>
       <br />
       <br />
       <br />
