@@ -2,22 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import RegisterForm from './ResisterForm';
-import MathProblem from './MathProblem';
 import reportWebVitals from './reportWebVitals';
-import Register from './Register';
-import Calculator from './Calculator';
 import GlobalStyle from './GlobalStyle';
+// import RegisterForm from './ResisterForm';
+// import MathProblem from './MathProblem';
+// import Register from './Register';
+// import Calculator from './Calculator';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <GlobalStyle />
     <App />
-    <RegisterForm />
+    {/* <RegisterForm />
     <MathProblem />
     <Register />
-    <Calculator />
+    <Calculator /> */}
   </React.StrictMode>,
 );
 
