@@ -1,0 +1,26 @@
+.reset-button {
+  background: #adb5bd;
+}
+
+.submit-button {
+  background: #37b24d;
+}
+
+.debug {
+  font-size: 0.75rem;
+}
+
+.form-input.invalid {
+  border: 2px solid #ff6b6b;
+}
+
+.form-input.valid {
+  border: 2px solid #37b24d;
+}
+
+.form-input {
+  display: block;
+  padding: 4px;
+  border: 2px solid #dee2e6;
+  border-radius: 3px;
+}
