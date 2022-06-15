@@ -8,16 +8,29 @@ import { Article } from './Article';
 import { Create } from './Create';
 import { Nav } from './Nav';
 
-function Read({ topics }) {
+function Read() {
+  // 안쓰므로 props.onRead 삭제
+  const [topic, setTopic] = useState({ title: null, body: null });
+
   // id 값을 가져오기 위해 useParams Hook 사용, App 밖에 존재해 App 내부의 state에 접근 불가
   const { id } = useParams();
 
-  const topic = topics.filter((e) => {
-    // refactoring
-    return e.id === +id;
-  })[0];
+  // ajax
+  // id 값 변경 시 마다 useEffect 실행
+  useEffect(() => {
+    (async () => {
+      const response = await fetch(`http://localhost:3333/topics/${id}`);
+      const data = await response.json();
+      setTopic(data);
+    })();
+  }, [id]);
 
   return <Article title={topic.title} body={topic.body}></Article>;
+
+  // const topic = topics.filter((e) => {
+  //   // refactoring
+  //   return e.id === +id;
+  // })[0];
 }
 
 function Control({ onDelete }) {
@@ -42,6 +55,7 @@ function Control({ onDelete }) {
   ) : (
     ''
   );
+
   return (
     <>
       <Button
@@ -73,13 +87,16 @@ function App() {
   // side effect를 정의함
   // useEffect는 async 함수를 사용하지 못함
   // 따라서 ()를 붙여 호출 바로 해버려야 함
+  // 네비게이션 바 리프레쉬하는 함수
+  const refreshTopics = async () => {
+    const response = await fetch('http://localhost:3333/topics');
+    const data = await response.json();
+    setTopics(data);
+  };
+
   useEffect(() => {
     console.log('side Effect!');
-    (async () => {
-      const response = await fetch('http://localhost:3333/topics');
-      const data = await response.json();
-      setTopics(data);
-    })();
+    refreshTopics();
   }, []);
 
   return (
@@ -92,7 +109,7 @@ function App() {
           element={<Article title="Welcome" body="Hello, WEB!"></Article>}
         />
         <Route path="/Create" element={<Create onCreate={handleOnCreate} />} />
-        <Route path="/read/:id" element={<Read topics={topics}></Read>} />
+        <Route path="/read/:id" element={<Read></Read>} />
       </Routes>
       {/* 버튼 UI 수정 방법 1 - 가능은 하지만, 중복이 심하고, URL parameter를 가져올 수 없다. */}
       {/* <Routes>
@@ -171,6 +188,9 @@ function App() {
 
     // 방금 생성한 글로 사용자 이동
     navigate(`/read/${data.id}`);
+
+    // Nav bar 리프레시
+    refreshTopics();
 
     // // State가 객체인 경우, immutable하게 처리해야 한다.
     // const newTopic = {
