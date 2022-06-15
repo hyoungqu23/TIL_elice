@@ -84,7 +84,7 @@ function MathProblem() {
 
 export default MathProblem;
 
-// styled-componets를 이용해 스타일을 적용하는 코드를 작성하세요.
+// styled-components를 이용해 스타일을 적용하는 코드를 작성하세요.
 
 const Problem = styled.div`
   font-size: 2rem;

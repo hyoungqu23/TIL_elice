@@ -4,10 +4,12 @@ import styled from 'styled-components'; // 스타일링 방법 3
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 
+// MyButton Component
 function MyButton(props) {
   return <MyStyledButton>{props.children}</MyStyledButton>;
 }
 
+// MyStyledButton Component with styled-components
 const MyStyledButton = styled.button`
   display: block;
   padding: 1.25em 2.5em;
@@ -23,27 +25,32 @@ const MyStyledButton = styled.button`
   font-weight: bold;
 `;
 
+// MyAnotherButton Component with styled-components (inherit MyStyledButton)
 const MyAnotherButton = styled(MyStyledButton)`
   background-color: #d34d4d;
 `;
 
+// colorFunction (button color)
 function colorFn(props) {
   if (props.primary) return 'yellow';
   if (props.secondary) return 'blue';
   if (props.warning) return 'red';
 }
 
+// colorFunction (background color)
 function backgroundColorFn(props) {
   if (props.primary) return '#52d8af';
   if (props.secondary) return '#8af';
   if (props.warning) return '#c3c3c3';
 }
 
+// MyPropsButton Component with styled-components & colorFunction (inherit MyAnotherButton)
 const MyPropsButton = styled(MyAnotherButton)`
   color: ${colorFn};
   background-color: ${backgroundColorFn};
 `;
 
+// Header Component with inline style(myHeaderStyle)
 function Header(props) {
   // 스타일링 방법 2
   const myHeaderStyle = {
@@ -70,6 +77,7 @@ function Header(props) {
   );
 }
 
+// Article Component
 function Article(props) {
   return (
     <article>
@@ -79,6 +87,7 @@ function Article(props) {
   );
 }
 
+// Create Component
 function Create({ onCreate }) {
   return (
     <article>
@@ -86,7 +95,7 @@ function Create({ onCreate }) {
       <form
         onSubmit={(evt) => {
           evt.preventDefault();
-          // 데이터 가져오는 방법 확인~
+          // 데이터 가져오는 방법 확인 ~
           const title = evt.target.title.value;
           const body = evt.target.body.value;
           onCreate(title, body);
@@ -99,26 +108,52 @@ function Create({ onCreate }) {
           <textarea name="body" placeholder="body"></textarea>
         </p>
         <p>
-          <input
-            type="submit"
-            value="Create"
-            onSubmit={(evt) => {
-              evt.preventDefault();
-            }}
-          />
+          <input type="submit" value="Create" />
         </p>
       </form>
     </article>
   );
 }
 
+// function Update({ onUpdate, title, body }) {
+//   return (
+//     <article>
+//       <h2>Update</h2>
+//       <form
+//         onSubmit={(evt) => {
+//           evt.preventDefault();
+//           const title = evt.target.title.value;
+//           const body = evt.target.body.value;
+//           onUpdate(title, body);
+//         }}
+//       >
+//         <p>
+//           <input name="title" type="text" placeholder="title" value={title} />
+//         </p>
+//         <p>
+//           <textarea name="body" placeholder="body" value={body}></textarea>
+//         </p>
+//         <p>
+//           <input type="submit" value="Update" />
+//         </p>
+//       </form>
+//     </article>
+//   );
+// }
+
+// MyNav Component with styled-components (inherit Nav)
 const MyNavStyle = styled(Nav)`
   background-color: #f5f5f5;
   padding: 1.25em 2.5em;
   border-bottom: 1px solid #e5e5e5;
   font-size: 1.25em;
+
+  & > li {
+    height: 3em;
+  }
 `;
 
+// Nav Component
 function Nav(props) {
   const liTags = props.data.map((e) => {
     return (
@@ -135,6 +170,7 @@ function Nav(props) {
       </li>
     );
   });
+
   return (
     <nav>
       <ol>{liTags}</ol>
@@ -142,10 +178,11 @@ function Nav(props) {
   );
 }
 
+// App Component
 function App() {
+  // State
   const [mode, setMode] = useState('WELCOME');
   const [id, setId] = useState(null);
-  // State화
   const [topics, setTopics] = useState([
     { id: 1, title: 'HTML5', body: 'HTML5 is ...' },
     { id: 2, title: 'CSS3', body: 'CSS3 is ...' },
@@ -154,10 +191,14 @@ function App() {
   ]);
   const [nextId, setNextId] = useState(5);
 
+  // mode State에 따른 내용 변경
   let content = null;
 
+  // WELCOME Mode
   if (mode === 'WELCOME') {
     content = <Article title="Welcome" body="Hello, WEB!"></Article>;
+
+    // READ Mode
   } else if (mode === 'READ') {
     const topic = topics.filter((e) => {
       if (e.id === id) {
@@ -167,10 +208,13 @@ function App() {
       }
     })[0];
     content = <Article title={topic.title} body={topic.body}></Article>;
+
+    // CREATE Mode
   } else if (mode === 'CREATE') {
     content = (
       <Create
         onCreate={(title, body) => {
+          // State가 객체인 경우, immutable하게 처리해야 한다.
           const newTopic = {
             // id: topics.length + 1, // 삭제 기능으로 인해 uniqueness 훼손 가능성 존재하여 불가능
             id: nextId,
@@ -190,7 +234,25 @@ function App() {
         }}
       />
     );
-  }
+
+    // UPDATE Mode
+  } // else if (mode === 'UPDATE') {
+  //   content = (
+  //     <Update
+  //       onUpdate={(title, body) => {
+  //         const newTopic = {
+  //           id,
+  //           title,
+  //           body,
+  //         };
+  //         setTopics((currentTopics) => [...currentTopics, newTopic]); // ! 아님
+  //       }}
+  //       // ! 아님
+  //       title={topics[id - 1].title}
+  //       body={topics[id - 1].body}
+  //     />
+  //   );
+  // }
 
   return (
     <div>
@@ -216,11 +278,19 @@ function App() {
         >
           Create
         </Button>
-        <Button variant="outlined">Update</Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setMode('UPDATE');
+          }}
+        >
+          Update
+        </Button>
       </ButtonGroup>
       <Button
         variant="outlined"
         onClick={() => {
+          // Delete Mode
           setMode('DELETE');
           const newTopic = topics.filter((e) => {
             // 선택한 글의 id와 같은 id를 가진 글을 제거
@@ -249,7 +319,7 @@ function App() {
       <MyButton>Styled Button 2</MyButton>
       <MyStyledButton>Styled Button 3</MyStyledButton>
       <MyAnotherButton>Styled Button 4</MyAnotherButton>
-      <MyAnotherButton as="a" href="https://google.com">
+      <MyAnotherButton as="a" href="https://google.com" target="_blank">
         Google
       </MyAnotherButton>
       <MyPropsButton primary>Primary Styled Button 5</MyPropsButton>
