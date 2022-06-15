@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import styled from '@emotion/styled';
 
 // Nav Component
 
@@ -21,8 +22,24 @@ export function Nav(props) {
   });
 
   return (
-    <nav>
+    <NavWrapper>
       <ol>{liTags}</ol>
-    </nav>
+    </NavWrapper>
   );
 }
+
+const NavWrapper = styled.nav`
+  border: 1px solid #8af;
+  padding: 10px;
+  margin-bottom: 10px;
+
+  ol {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    align-items: center;
+  }
+  li {
+    margin-bottom: 5px;
+  }
+`;
