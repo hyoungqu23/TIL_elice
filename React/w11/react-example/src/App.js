@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components'; // 스타일링 방법 3
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { Link } from 'react-router-dom';
 
 // MyButton Component
 function MyButton(props) {
@@ -63,15 +64,15 @@ function Header(props) {
   return (
     <header style={myHeaderStyle}>
       <h1>
-        <a
-          href="/"
+        <Link
+          to="/"
           onClick={(evt) => {
-            evt.preventDefault();
+            // evt.preventDefault(); 링크 내부에서는 불가능
             props.onSelect();
           }}
         >
           WWW
-        </a>
+        </Link>
       </h1>
     </header>
   );
@@ -158,15 +159,15 @@ function Nav(props) {
   const liTags = props.data.map((e) => {
     return (
       <li key={e.id}>
-        <a
-          href={'/read/' + e.id}
+        <Link
+          to={'/read/' + e.id}
           onClick={(evt) => {
-            evt.preventDefault();
+            // evt.preventDefault();
             props.onSelect(e.id);
           }}
         >
           {e.title}
-        </a>
+        </Link>
       </li>
     );
   });
@@ -271,6 +272,8 @@ function App() {
       {content}
       <ButtonGroup>
         <Button
+          Component={Link}
+          to="/create"
           variant="outlined"
           onClick={() => {
             setMode('CREATE');
