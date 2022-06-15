@@ -1,0 +1,34 @@
+{
+  "topics": [
+    {
+      "id": 1,
+      "title": "HTML5",
+      "body": "HTML5 is ..."
+    },
+    {
+      "id": 2,
+      "title": "CSS3",
+      "body": "CSS3 is ..."
+    },
+    {
+      "id": 3,
+      "title": "JavaScript",
+      "body": "JavaScript is ..."
+    },
+    {
+      "id": 4,
+      "title": "React.js",
+      "body": "React.js is ..."
+    }
+  ],
+  "comments": [
+    {
+      "id": 1,
+      "body": "some comment",
+      "postId": 1
+    }
+  ],
+  "profile": {
+    "name": "typicode"
+  }
+}

@@ -1,8 +1,8 @@
 import './App.css'; // 스타일링 방법 1
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import styled from 'styled-components'; // 스타일링 방법 3
 import Button from '@mui/material/Button';
-import { Link, Routes, Route, useParams } from 'react-router-dom';
+import { Link, Routes, Route, useParams, useNavigate } from 'react-router-dom';
 import { Header } from './Header';
 import { Article } from './Article';
 import { Create } from './Create';
@@ -20,7 +20,7 @@ function Read({ topics }) {
   return <Article title={topic.title} body={topic.body}></Article>;
 }
 
-function Control() {
+function Control({ onDelete }) {
   const { id } = useParams();
   let contextUI = id ? (
     <>
@@ -32,7 +32,9 @@ function Control() {
       </Button>
       <Button
         variant="outlined"
-        // onClick={handleDeleteButton()}
+        onClick={() => {
+          onDelete(id); // 그냥 함수를 작성했을 때 에러 발생했음.
+        }}
       >
         Delete
       </Button>
@@ -68,6 +70,19 @@ function App() {
     { id: 4, title: 'React.js', body: 'React.js is ...' },
   ]);
   const [nextId, setNextId] = useState(5);
+  const navigate = useNavigate();
+
+  // side effect를 정의함
+  // useEffect는 async 함수를 사용하지 못함
+  // 따라서 ()를 붙여 호출 바로 해버려야 함
+  useEffect(() => {
+    console.log('side Effect!');
+    (async () => {
+      const response = await fetch('http://localhost:3333/topics');
+      const data = await response.json();
+      setTopics(data);
+    })();
+  }, []);
 
   return (
     <div>
@@ -126,7 +141,17 @@ function App() {
       <Routes>
         {['/', '/read/:id', '/update/:id'].map((path) => {
           return (
-            <Route key={path} path={path} element={<Control></Control>}></Route>
+            <Route
+              key={path}
+              path={path}
+              element={
+                <Control
+                  onDelete={(id) => {
+                    handleDeleteButton(id);
+                  }}
+                ></Control>
+              }
+            ></Route>
           );
         })}
       </Routes>
@@ -168,22 +193,21 @@ function App() {
     };
   }
 
-  function handleDeleteButton() {
-    return () => {
-      // Delete Mode
-      setMode('DELETE');
-      const newTopic = topics.filter((e) => {
-        // 선택한 글의 id와 같은 id를 가진 글을 제거
-        // refactoring
-        return e.id === id;
-      });
+  function handleDeleteButton(id) {
+    const newTopic = topics.filter((e) => {
+      // 선택한 글의 id와 같은 id를 가진 글을 제거
+      // refactoring
+      return e.id === id;
+    });
 
-      // 선택한 글 삭제
-      setTopics(newTopic);
-      // 둘 모두 State이기 때문에 비동기적으로 처리되어 문제가 없다.
-      // Welcome 페이지로 전환
-      setMode('WELCOME');
-    };
+    // // Welcome 페이지로 전환
+    // setMode('WELCOME');
+    // 선택한 글 삭제
+    setTopics(newTopic);
+    // 둘 모두 State이기 때문에 비동기적으로 처리되어 문제가 없다.
+
+    // 삭제 이후 홈으로 가기
+    navigate('/');
   }
 
   function handleCreateButton() {
