@@ -9,11 +9,24 @@ import { Article } from './Article';
 import { Create } from './Create';
 import { Nav } from './Nav';
 
+function Read({ topics }) {
+  // id 값을 가져오기 위해 useParams Hook 사용, App 밖에 존재해 App 내부의 state에 접근 불가
+  const { id } = useParams();
+
+  const topic = topics.filter((e) => {
+    // refactoring
+    return e.id === +id;
+  })[0];
+
+  return <Article title={topic.title} body={topic.body}></Article>;
+}
+
 // App Component
 function App() {
   // State
-  const [mode, setMode] = useState('WELCOME');
-  const [id, setId] = useState(null);
+  // react-router-dom이 대체
+  const [mode, setMode] = useState('WELCOME'); // TODO 삭제 예정
+  const [id, setId] = useState(null); // TODO 삭제 예정
   const [topics, setTopics] = useState([
     { id: 1, title: 'HTML5', body: 'HTML5 is ...' },
     { id: 2, title: 'CSS3', body: 'CSS3 is ...' },
@@ -56,17 +69,6 @@ function App() {
     </div>
   );
 
-  function Read({ topics }) {
-    // id 값을 가져오기 위해 useParams Hook 사용
-    const { id } = useParams();
-
-    const topic = topics.filter((e) => {
-      // refactoring
-      return e.id === +id;
-    })[0];
-    return <Article title={topic.title} body={topic.body}></Article>;
-  }
-
   function handleOnCreate() {
     return (title, body) => {
       // State가 객체인 경우, immutable하게 처리해야 한다.
@@ -108,11 +110,8 @@ function App() {
       setMode('DELETE');
       const newTopic = topics.filter((e) => {
         // 선택한 글의 id와 같은 id를 가진 글을 제거
-        if (e.id === id) {
-          return false;
-        } else {
-          return true;
-        }
+        // refactoring
+        return e.id === id;
       });
 
       // 선택한 글 삭제
