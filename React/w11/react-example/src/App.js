@@ -2,7 +2,6 @@ import './App.css'; // 스타일링 방법 1
 import React, { useState } from 'react';
 // import styled from 'styled-components'; // 스타일링 방법 3
 import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import { Link, Routes, Route, useParams } from 'react-router-dom';
 import { Header } from './Header';
 import { Article } from './Article';
@@ -19,6 +18,41 @@ function Read({ topics }) {
   })[0];
 
   return <Article title={topic.title} body={topic.body}></Article>;
+}
+
+function Control() {
+  const { id } = useParams();
+  let contextUI = id ? (
+    <>
+      <Button
+        variant="outlined"
+        // onClick={handleUpdateButton()}
+      >
+        Update
+      </Button>
+      <Button
+        variant="outlined"
+        // onClick={handleDeleteButton()}
+      >
+        Delete
+      </Button>
+    </>
+  ) : (
+    ''
+  );
+  return (
+    <>
+      <Button
+        component={Link}
+        to="/create"
+        variant="outlined"
+        // onClick={handleCreateButton()}
+      >
+        Create
+      </Button>
+      {contextUI}
+    </>
+  );
 }
 
 // App Component
@@ -50,22 +84,52 @@ function App() {
         />
         <Route path="/read/:id" element={<Read topics={topics}></Read>} />
       </Routes>
-      <ButtonGroup>
-        <Button
-          component={Link}
-          to="/create"
-          variant="outlined"
-          onClick={handleCreateButton()}
-        >
-          Create
-        </Button>
-        <Button variant="outlined" onClick={handleUpdateButton()}>
-          Update
-        </Button>
-      </ButtonGroup>
-      <Button variant="outlined" onClick={handleDeleteButton()}>
-        Delete
-      </Button>
+      {/* 버튼 UI 수정 방법 1 - 가능은 하지만, 중복이 심하고, URL parameter를 가져올 수 없다. */}
+      {/* <Routes>
+        <Route
+          path="/"
+          element={
+            <Button
+              component={Link}
+              to="/create"
+              variant="outlined"
+              onClick={handleCreateButton()}
+            >
+              Create
+            </Button>
+          }
+        />
+        <Route
+          path="/read/:id"
+          element={
+            <>
+              <Button
+                component={Link}
+                to="/create"
+                variant="outlined"
+                onClick={handleCreateButton()}
+              >
+                Create
+              </Button>
+              <Button variant="outlined" onClick={handleUpdateButton()}>
+                Update
+              </Button>
+              <Button variant="outlined" onClick={handleDeleteButton()}>
+                Delete
+              </Button>
+            </>
+          }
+        />
+      </Routes> */}
+
+      {/* 버튼 UI 수정 2 개선안 */}
+      <Routes>
+        {['/', '/read/:id', '/update/:id'].map((path) => {
+          return (
+            <Route key={path} path={path} element={<Control></Control>}></Route>
+          );
+        })}
+      </Routes>
     </div>
   );
 
