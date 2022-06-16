@@ -1,5 +1,4 @@
 import React from 'react';
-// 필요한 모듈을 추가로 import하세요.
 import {
   BrowserRouter,
   Routes,
@@ -8,6 +7,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import LoginForm from './LoginForm';
+import RegisterForm from './RegisterForm';
 
 // Router Component
 export default function UserLogin() {
@@ -16,6 +16,7 @@ export default function UserLogin() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/detail" element={<UserDetailPage />} />
       </Routes>
     </BrowserRouter>
@@ -24,12 +25,13 @@ export default function UserLogin() {
 
 // HomePage Component
 function HomePage() {
-  // Link 컴포넌트를 추가하세요.
   return (
     <div>
       <h2>Home Page</h2>
       <div>
-        <Link to="/login">Log in</Link>
+        <Link to="/register">Go to Register</Link>
+        <br />
+        <Link to="/login">Go to Login</Link>
       </div>
     </div>
   );
@@ -48,10 +50,23 @@ function LoginPage() {
   );
 }
 
+function RegisterPage() {
+  return (
+    <div>
+      <h2>Register Page</h2>
+      <RegisterForm />
+      <div>
+        <Link to="/">Back to Home</Link>
+        <br />
+        <Link to="/login">Go to Login</Link>
+      </div>
+    </div>
+  );
+}
+
 // DetailPage Component
 function UserDetailPage() {
-  // email, password 정보를
-  // query param 으로 받아와 저장하고, 정보를 보여주세요.
+  // email, password 정보를 query param 으로 받아와 저장
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
 
