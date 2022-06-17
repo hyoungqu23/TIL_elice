@@ -8,6 +8,21 @@ import {
 } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
+import { loginUser, registerUser } from './services/auth';
+
+function PageLayout({ heading, links, children }) {
+  return (
+    <div>
+      <h2>{heading}</h2>
+      <nav>
+        {links.map(({ to, text }) => (
+          <Link to={to}>{text}</Link>
+        ))}
+      </nav>
+      <main>{children}</main>
+    </div>
+  );
+}
 
 // Router Component
 export default function UserLogin() {
@@ -39,10 +54,27 @@ function HomePage() {
 
 // LoginPage Component
 function LoginPage() {
+  const history = useHistory();
+
+  const handleSubmit = (formData) => {
+    const foundUser = loginUser(formData);
+
+    if (!foundUser) return;
+
+    const location = {
+      pathname: '/detail',
+      state: {
+        user: foundUser,
+      },
+    };
+
+    history.push(location);
+  };
+
   return (
     <div>
       <h2>Login Page</h2>
-      <LoginForm />
+      <LoginForm onSubmit={handleSubmit} />
       <div>
         <Link to="/">Back to Home</Link>
       </div>
@@ -51,10 +83,17 @@ function LoginPage() {
 }
 
 function RegisterPage() {
+  const history = useHistory();
+
+  const handleSubmit = (formData) => {
+    registerUser(formData);
+    history.push('/login');
+  };
+
   return (
     <div>
       <h2>Register Page</h2>
-      <RegisterForm />
+      <RegisterForm onSubmit={handleSubmit} />
       <div>
         <Link to="/">Back to Home</Link>
         <br />
