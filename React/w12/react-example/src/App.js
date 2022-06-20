@@ -47,15 +47,84 @@ const Read = () => {
   }, [id]);
 
   return (
-    <article>
+    <StyledArticle>
       <h2>{topic.title}</h2>
       <p>{topic.body}</p>
-    </article>
+    </StyledArticle>
   );
 };
 
-const Create = () => {
+const Create = ({ onCreate }) => {
+  const handleSubmitButton = async (event) => {
+    event.preventDefault();
+
+    // 데이터 가져오기
+    const title = event.target.title.value;
+    const body = event.target.body.value;
+
+    onCreate(title, body);
+  };
+
+  return (
+    <form onSubmit={handleSubmitButton}>
+      <h2>Create New Topic</h2>
+      <label htmlFor="title">제목: </label>
+      <input name="title" type="text" placeholder="제목을 작성하세요." />
+      <label htmlFor="body">내용: </label>
+      <textarea
+        name="body"
+        rows="10"
+        cols="50"
+        placeholder="내용을 작성하세요."
+      ></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+const Control = () => {
+  const { id } = useParams();
+
+  let contextUI = null;
+
+  if (+id) {
+    contextUI = (
+      <>
+        <PrimaryButton>
+          <Link to={`/update/${id}`}>Update</Link>
+        </PrimaryButton>
+      </>
+    );
+  }
+
+  return (
+    <ul>
+      <li>
+        <PrimaryButton>
+          <Link to="/create">Create</Link>
+        </PrimaryButton>
+      </li>
+      {contextUI}
+    </ul>
+  );
+};
+
+const Update = () => {
   const navigate = useNavigate();
+  const { id } = useParams(); // 주소에서 id 값을 추출한다.
+  const [title, setTitle] = useState(null);
+  const [body, setBody] = useState(null);
+
+  const refreshTopic = async () => {
+    const response = await fetch('http://localhost:3333/topics/' + id);
+    const { title, body } = await response.json();
+    setTitle(title);
+    setBody(body);
+  };
+
+  useEffect(() => {
+    refreshTopic();
+  }, [id]);
 
   const handleSubmitButton = async (event) => {
     event.preventDefault();
@@ -81,50 +150,39 @@ const Create = () => {
     navigate(`/read/${result.id}`); // 상세 보기로 이동
   };
 
+  const handleChangeTitleInput = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleChangeBodyInput = (event) => {
+    setBody(event.target.value);
+  };
+
   return (
     <form onSubmit={handleSubmitButton}>
-      <h2>Create New Topic</h2>
+      <h2>Update Topic</h2>
       <label htmlFor="title">제목: </label>
-      <input name="title" type="text" placeholder="제목을 작성하세요." />
+      <input
+        name="title"
+        type="text"
+        placeholder="제목을 작성하세요."
+        onChange={handleChangeTitleInput}
+      />
       <label htmlFor="body">내용: </label>
       <textarea
         name="body"
         rows="10"
-        cols="50"
+        cols="20"
         placeholder="내용을 작성하세요."
+        onChange={handleChangeBodyInput}
       ></textarea>
       <button type="submit">Submit</button>
     </form>
   );
 };
 
-const Control = () => {
-  const { id } = useParams();
-
-  let contextUI = null;
-  if (id) {
-    contextUI = (
-      <>
-        <PrimaryButton>
-          <Link to={`/update/${id}`}>Update</Link>
-        </PrimaryButton>
-      </>
-    );
-  }
-
-  return (
-    <ul>
-      <li>
-        <PrimaryButton>
-          <Link to="/create">Create</Link>
-        </PrimaryButton>
-      </li>
-      {contextUI}
-    </ul>
-  );
-};
-
 function App() {
+  const navigate = useNavigate();
   const [topics, setTopics] = useState([]);
 
   const refreshTopics = async () => {
@@ -137,6 +195,26 @@ function App() {
   useEffect(() => {
     refreshTopics();
   }, []); // 최초 1회 실행
+
+  const handleCreate = async (title, body) => {
+    // 추가할 데이터 전송
+    const response = await fetch('http://localhost:3333/topics', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        body,
+      }),
+    });
+
+    const result = await response.json(); // 추가한 글 정보를 받아온다.
+
+    navigate(`/read/${result.id}`); // 상세 보기로 이동
+
+    refreshTopics();
+  };
 
   return (
     <StyledApp>
@@ -154,7 +232,7 @@ function App() {
           }
         />
         <Route path="/read/:id" element={<Read />} />
-        <Route path="/create" element={<Create />} />
+        <Route path="/create" element={<Create onCreate={handleCreate} />} />
         <Route path="/update/:id" element={<Update />} />
       </Routes>
       <Routes>
@@ -212,6 +290,13 @@ const StyledNavBar = styled.nav`
     text-decoration: none;
     color: #fff;
   }
+`;
+
+const StyledArticle = styled.article`
+  padding: 20px;
+  background-color: #f9f9f9;
+  width: 100%;
+  height: 30%;
 `;
 
 const PrimaryButton = styled.button`

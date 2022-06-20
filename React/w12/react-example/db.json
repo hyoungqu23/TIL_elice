@@ -9,6 +9,11 @@
       "id": 2,
       "title": "HTML5",
       "body": "HTML5 is the new standard for the web. It is the fifth and current version of the HTML standard."
+    },
+    {
+      "title": "JavaScript",
+      "body": "JavaScript is a good",
+      "id": 3
     }
   ]
 }
