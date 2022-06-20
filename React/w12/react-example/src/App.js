@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Reset } from 'styled-reset';
-import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import GlobalStyle from './GlobalStyle';
+import { Routes, Route, Link, useParams } from 'react-router-dom';
 
 const Header = () => {
   return (
-    <header>
+    <StyledHeader>
       <h1>
         <Link to="/">WEB</Link>
       </h1>
-    </header>
+    </StyledHeader>
   );
 };
 
@@ -22,9 +23,34 @@ const NavBar = ({ menus }) => {
   });
 
   return (
-    <nav>
+    <StyledNavBar>
       <ul>{menuItems}</ul>
-    </nav>
+    </StyledNavBar>
+  );
+};
+
+const Read = () => {
+  const { id } = useParams(); // 주소에서 id 값을 추출한다.
+  const [topic, setTopic] = useState({
+    title: '',
+    body: '',
+  });
+
+  const refreshTopic = async () => {
+    const response = await fetch('http://localhost:3333/topics/' + id);
+    const result = await response.json();
+    setTopic(result);
+  };
+
+  useEffect(() => {
+    refreshTopic();
+  }, [id]);
+
+  return (
+    <article>
+      <h2>{topic.title}</h2>
+      <p>{topic.body}</p>
+    </article>
   );
 };
 
@@ -43,12 +69,67 @@ function App() {
   }, []); // 최초 1회 실행
 
   return (
-    <div className="App">
-      <Reset />
+    <StyledApp>
+      <GlobalStyle />
       <Header />
       <NavBar menus={topics} />
-    </div>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <h2>Welcome</h2>
+              <p>Hello, React!</p>
+            </>
+          }
+        />
+        <Route path="/read/:id" element={<Read menus={topics} />} />
+      </Routes>
+    </StyledApp>
   );
 }
 
 export default App;
+
+const StyledApp = styled.div`
+  width: 90%;
+  height: 100vh;
+  margin: 0 auto;
+`;
+
+const StyledHeader = styled.header`
+  background-color: #333;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  a {
+    color: #fff;
+  }
+`;
+
+const StyledNavBar = styled.nav`
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  background-color: #999;
+
+  ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  li {
+    font-size: 1.2rem;
+    padding: 0 10px;
+    list-style: none;
+    text-decoration: none;
+    font-weight: bold;
+    color: #fff;
+  }
+`;
