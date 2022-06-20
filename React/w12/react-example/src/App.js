@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Reset } from 'styled-reset';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
     <header>
       <h1>
-        <a href="/">WEB</a>
+        <Link to="/">WEB</Link>
       </h1>
     </header>
   );
@@ -15,7 +16,7 @@ const NavBar = ({ menus }) => {
   const menuItems = menus.map((menu) => {
     return (
       <li key={menu.id}>
-        <a href={`/read/${menu.id}`}>{menu.title}</a>
+        <Link to={`/read/${menu.id}`}>{menu.title}</Link>
       </li>
     );
   });
