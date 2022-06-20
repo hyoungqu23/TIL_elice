@@ -13,6 +13,14 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Helvetica", "Arial", sans-serif;
     line-height: 1.5;
   }
+
+  input, textarea {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    padding: 10px;
+    outline: none;
+    font-size: 1.2rem;
+  }
 `;
 
 export default GlobalStyle;
