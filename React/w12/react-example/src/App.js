@@ -66,7 +66,7 @@ const Create = ({ onCreate }) => {
   };
 
   return (
-    <form onSubmit={handleSubmitButton}>
+    <StyledForm onSubmit={handleSubmitButton}>
       <h2>Create New Topic</h2>
       <label htmlFor="title">제목: </label>
       <input name="title" type="text" placeholder="제목을 작성하세요." />
@@ -77,8 +77,8 @@ const Create = ({ onCreate }) => {
         cols="50"
         placeholder="내용을 작성하세요."
       ></textarea>
-      <button type="submit">Submit</button>
-    </form>
+      <PrimaryButton type="submit">Submit</PrimaryButton>
+    </StyledForm>
   );
 };
 
@@ -109,8 +109,7 @@ const Control = () => {
   );
 };
 
-const Update = () => {
-  const navigate = useNavigate();
+const Update = ({ onUpdate }) => {
   const { id } = useParams(); // 주소에서 id 값을 추출한다.
   const [title, setTitle] = useState(null);
   const [body, setBody] = useState(null);
@@ -133,21 +132,7 @@ const Update = () => {
     const title = event.target.title.value;
     const body = event.target.body.value;
 
-    // 추가할 데이터 전송
-    const response = await fetch('http://localhost:3333/topics', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        title,
-        body,
-      }),
-    });
-
-    const result = await response.json(); // 추가한 글 정보를 받아온다.
-
-    navigate(`/read/${result.id}`); // 상세 보기로 이동
+    onUpdate(id, title, body);
   };
 
   const handleChangeTitleInput = (event) => {
@@ -159,7 +144,7 @@ const Update = () => {
   };
 
   return (
-    <form onSubmit={handleSubmitButton}>
+    <StyledForm onSubmit={handleSubmitButton}>
       <h2>Update Topic</h2>
       <label htmlFor="title">제목: </label>
       <input
@@ -167,17 +152,19 @@ const Update = () => {
         type="text"
         placeholder="제목을 작성하세요."
         onChange={handleChangeTitleInput}
+        value={title}
       />
       <label htmlFor="body">내용: </label>
       <textarea
         name="body"
-        rows="10"
+        rows="5"
         cols="20"
         placeholder="내용을 작성하세요."
         onChange={handleChangeBodyInput}
+        value={body}
       ></textarea>
-      <button type="submit">Submit</button>
-    </form>
+      <PrimaryButton type="submit">Submit</PrimaryButton>
+    </StyledForm>
   );
 };
 
@@ -216,6 +203,26 @@ function App() {
     refreshTopics();
   };
 
+  const handleUpdate = async (id, title, body) => {
+    // 추가할 데이터 전송
+    const response = await fetch('http://localhost:3333/topics/' + id, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        body,
+      }),
+    });
+
+    const result = await response.json(); // 추가한 글 정보를 받아온다.
+
+    navigate(`/read/${result.id}`); // 상세 보기로 이동
+
+    refreshTopics();
+  };
+
   return (
     <StyledApp>
       <GlobalStyle />
@@ -233,7 +240,10 @@ function App() {
         />
         <Route path="/read/:id" element={<Read />} />
         <Route path="/create" element={<Create onCreate={handleCreate} />} />
-        <Route path="/update/:id" element={<Update />} />
+        <Route
+          path="/update/:id"
+          element={<Update onUpdate={handleUpdate} />}
+        />
       </Routes>
       <Routes>
         {['/', '/read/:id', '/create'].map((path) => {
@@ -297,6 +307,11 @@ const StyledArticle = styled.article`
   background-color: #f9f9f9;
   width: 100%;
   height: 30%;
+`;
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
 `;
 
 const PrimaryButton = styled.button`
