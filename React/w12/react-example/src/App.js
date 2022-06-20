@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import GlobalStyle from './GlobalStyle';
-import { Routes, Route, Link, useParams } from 'react-router-dom';
+import { Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -50,7 +50,49 @@ const Read = () => {
     <article>
       <h2>{topic.title}</h2>
       <p>{topic.body}</p>
+      <button>Create</button>
     </article>
+  );
+};
+
+const Create = () => {
+  const navigate = useNavigate();
+
+  const handleSubmitButton = async (event) => {
+    event.preventDefault();
+    const title = event.target.title.value;
+    const body = event.target.body.value;
+
+    const response = await fetch('http://localhost:3333/topics', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        body,
+      }),
+    });
+
+    const result = await response.json(); // 추가한 글 정보를 받아온다.
+
+    navigate(`/read/${result.id}`); // 상세 보기로 이동
+  };
+
+  return (
+    <form onSubmit={handleSubmitButton}>
+      <h2>Create New Topic</h2>
+      <label htmlFor="title">제목: </label>
+      <input name="title" type="text" placeholder="제목을 작성하세요." />
+      <label htmlFor="body">내용: </label>
+      <textarea
+        name="body"
+        rows="10"
+        cols="50"
+        placeholder="내용을 작성하세요."
+      ></textarea>
+      <button type="submit">Submit</button>
+    </form>
   );
 };
 
@@ -83,7 +125,8 @@ function App() {
             </>
           }
         />
-        <Route path="/read/:id" element={<Read menus={topics} />} />
+        <Route path="/read/:id" element={<Read />} />
+        <Route path="/create" element={<Create />} />
       </Routes>
     </StyledApp>
   );
@@ -128,8 +171,11 @@ const StyledNavBar = styled.nav`
     font-size: 1.2rem;
     padding: 0 10px;
     list-style: none;
-    text-decoration: none;
     font-weight: bold;
+  }
+
+  a {
+    text-decoration: none;
     color: #fff;
   }
 `;
