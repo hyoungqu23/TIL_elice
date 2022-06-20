@@ -82,7 +82,7 @@ const Create = ({ onCreate }) => {
   );
 };
 
-const Control = () => {
+const Control = ({ onDelete }) => {
   const { id } = useParams();
 
   let contextUI = null;
@@ -102,6 +102,13 @@ const Control = () => {
       <li>
         <PrimaryButton>
           <Link to="/create">Create</Link>
+        </PrimaryButton>
+        <PrimaryButton
+          onClick={() => {
+            onDelete(id);
+          }}
+        >
+          Delete
         </PrimaryButton>
       </li>
       {contextUI}
@@ -223,6 +230,17 @@ function App() {
     refreshTopics();
   };
 
+  const handleDelete = async (id) => {
+    // 추가할 데이터 전송
+    const response = await fetch('http://localhost:3333/topics/' + id, {
+      method: 'DELETE',
+    });
+
+    navigate(`/`); // 홈 페이지로 이동
+
+    refreshTopics();
+  };
+
   return (
     <StyledApp>
       <GlobalStyle />
@@ -247,7 +265,13 @@ function App() {
       </Routes>
       <Routes>
         {['/', '/read/:id', '/create'].map((path) => {
-          return <Route path={path} element={<Control />} key={path} />;
+          return (
+            <Route
+              path={path}
+              element={<Control onDelete={handleDelete} />}
+              key={path}
+            />
+          );
         })}
       </Routes>
     </StyledApp>
