@@ -1,19 +1,70 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useReducer } from 'react';
+
+// function App() {
+//   const [count, setCount] = useState(0);
+
+//   return (
+//     <div>
+//       <h1>Counter with useState</h1>
+//       <div style={{ fontSize: '50px' }}>{count}</div>
+//       <StyledButton
+//         value="-"
+//         onClick={() => {
+//           setCount((count) => count - 1);
+//           setCount((count) => count - 1);
+//           setCount((count) => count - 1);
+//         }}
+//       >
+//         -
+//       </StyledButton>
+//       <StyledButton
+//         value="0"
+//         onClick={() => {
+//           setCount(0);
+//         }}
+//       >
+//         0
+//       </StyledButton>
+//       <StyledButton
+//         value="+"
+//         onClick={() => {
+//           setCount((count) => count + 1);
+//           setCount((count) => count + 1);
+//           setCount((count) => count + 1);
+//         }}
+//       >
+//         +
+//       </StyledButton>
+//     </div>
+//   );
+// }
 
 function App() {
-  const [count, setCount] = useState(0);
+  const countReducer = (count, action) => {
+    console.log(count, action);
+
+    // switch - case 문으로도 활용 가능
+    if (action === 'UP') {
+      return count + 1;
+    } else if (action === 'DOWN') {
+      return count - 1;
+    } else if (action === 'RESET') {
+      return 0;
+    }
+  };
+  const countInitialState = 0;
+
+  const [count, countDispatch] = useReducer(countReducer, countInitialState);
 
   return (
     <div>
-      <h1>Counter</h1>
+      <h1>Counter with useReducer</h1>
       <div style={{ fontSize: '50px' }}>{count}</div>
       <StyledButton
         value="-"
         onClick={() => {
-          setCount((count) => count - 1);
-          setCount((count) => count - 1);
-          setCount((count) => count - 1);
+          countDispatch('DOWN');
         }}
       >
         -
@@ -21,7 +72,7 @@ function App() {
       <StyledButton
         value="0"
         onClick={() => {
-          setCount(0);
+          countDispatch('RESET');
         }}
       >
         0
@@ -29,9 +80,7 @@ function App() {
       <StyledButton
         value="+"
         onClick={() => {
-          setCount((count) => count + 1);
-          setCount((count) => count + 1);
-          setCount((count) => count + 1);
+          countDispatch('UP');
         }}
       >
         +
