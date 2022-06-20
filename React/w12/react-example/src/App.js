@@ -346,6 +346,7 @@ const PrimaryButton = styled.button`
   border: none;
   border-radius: 5px;
   padding: 10px;
+  color: #fff;
   font-size: 1.2rem;
   font-weight: bold;
   cursor: pointer;
