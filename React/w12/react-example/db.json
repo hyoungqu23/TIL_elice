@@ -3,7 +3,12 @@
     {
       "id": 1,
       "title": "json-server",
-      "author": "typicode"
+      "body": "json-server is a free JSON API server, written in Node.js, that can be used to easily mock JSON APIs."
+    },
+    {
+      "id": 2,
+      "title": "HTML5",
+      "body": "HTML5 is the new standard for the web. It is the fifth and current version of the HTML standard."
     }
   ]
 }
