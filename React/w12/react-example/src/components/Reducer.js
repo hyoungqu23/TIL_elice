@@ -12,6 +12,8 @@ function App() {
         value="-"
         onClick={() => {
           setCount((count) => count - 1);
+          setCount((count) => count - 1);
+          setCount((count) => count - 1);
         }}
       >
         -
@@ -28,6 +30,8 @@ function App() {
         value="+"
         onClick={() => {
           setCount((count) => count + 1);
+          setCount((count) => count + 1);
+          setCount((count) => count + 1);
         }}
       >
         +
@@ -41,7 +45,9 @@ export default App;
 const StyledButton = styled.button`
   background-color: #8af;
   border-radius: 5px;
+  border: none;
   width: 50px;
   height: 50px;
   font-size: 30px;
+  margin-left: 20px;
 `;
