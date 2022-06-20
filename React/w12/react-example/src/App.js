@@ -50,7 +50,6 @@ const Read = () => {
     <article>
       <h2>{topic.title}</h2>
       <p>{topic.body}</p>
-      <button>Create</button>
     </article>
   );
 };
@@ -60,9 +59,12 @@ const Create = () => {
 
   const handleSubmitButton = async (event) => {
     event.preventDefault();
+
+    // 데이터 가져오기
     const title = event.target.title.value;
     const body = event.target.body.value;
 
+    // 추가할 데이터 전송
     const response = await fetch('http://localhost:3333/topics', {
       method: 'POST',
       headers: {
@@ -93,6 +95,32 @@ const Create = () => {
       ></textarea>
       <button type="submit">Submit</button>
     </form>
+  );
+};
+
+const Control = () => {
+  const { id } = useParams();
+
+  let contextUI = null;
+  if (id) {
+    contextUI = (
+      <>
+        <PrimaryButton>
+          <Link to={`/update/${id}`}>Update</Link>
+        </PrimaryButton>
+      </>
+    );
+  }
+
+  return (
+    <ul>
+      <li>
+        <PrimaryButton>
+          <Link to="/create">Create</Link>
+        </PrimaryButton>
+      </li>
+      {contextUI}
+    </ul>
   );
 };
 
@@ -127,6 +155,12 @@ function App() {
         />
         <Route path="/read/:id" element={<Read />} />
         <Route path="/create" element={<Create />} />
+        <Route path="/update/:id" element={<Update />} />
+      </Routes>
+      <Routes>
+        {['/', '/read/:id', '/create'].map((path) => {
+          return <Route path={path} element={<Control />} key={path} />;
+        })}
       </Routes>
     </StyledApp>
   );
@@ -141,7 +175,7 @@ const StyledApp = styled.div`
 `;
 
 const StyledHeader = styled.header`
-  background-color: #333;
+  background-color: #8af;
 
   h1 {
     font-size: 2rem;
@@ -159,7 +193,7 @@ const StyledNavBar = styled.nav`
   height: 50px;
   justify-content: center;
   align-items: center;
-  background-color: #999;
+  background-color: #9bf;
 
   ul {
     display: flex;
@@ -176,6 +210,24 @@ const StyledNavBar = styled.nav`
 
   a {
     text-decoration: none;
+    color: #fff;
+  }
+`;
+
+const PrimaryButton = styled.button`
+  width: 15%;
+  height: 50px;
+  margin-bottom: 10px;
+  background-color: #9bf;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  outline: none;
+
+  & > * {
     color: #fff;
   }
 `;
