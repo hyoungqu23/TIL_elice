@@ -1,0 +1,13 @@
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+
+.app-container {
+  width: 328px;
+  height: 428px;
+  border: 2px solid gray;
+}
