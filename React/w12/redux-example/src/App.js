@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
 
 function Left1(props) {
@@ -70,17 +70,34 @@ function Right3(props) {
 }
 
 export default function App() {
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
+  const countReducer = (state, action) => {
+    if (action.type === 'UP') {
+      return { ...state, value: state.value + action.step };
+    }
+    return state;
+  };
+
+  const initialState = {
+    value: 0,
+  };
+
+  const [count, dispatch] = useReducer(countReducer, initialState);
+
+  const up = (step) => {
+    return { type: 'UP', step: step };
+  };
+
   return (
     <div id="app">
       <h1>Root</h1>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         <Left1
           onUp={() => {
-            setCount((prevState) => prevState + 1);
+            dispatch(up(1));
           }}
         ></Left1>
-        <Right1 count={count}></Right1>
+        <Right1 count={count.value}></Right1>
       </div>
     </div>
   );
