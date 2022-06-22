@@ -1,25 +1,67 @@
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+function Left1() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Left1</h1>
+      <Left2></Left2>
     </div>
   );
 }
 
-export default App;
+function Left2() {
+  return (
+    <div>
+      <h1>Left1</h1>
+      <Left3></Left3>
+    </div>
+  );
+}
+
+function Left3() {
+  return (
+    <div>
+      <h1>Left3</h1>
+      <button>+</button>
+    </div>
+  );
+}
+
+function Right1() {
+  return (
+    <div>
+      <h1>Right1</h1>
+      <Right2></Right2>
+    </div>
+  );
+}
+
+function Right2() {
+  return (
+    <div>
+      <h1>Right2</h1>
+      <Right3></Right3>
+    </div>
+  );
+}
+
+function Right3() {
+  return (
+    <div>
+      <h1>Right3</h1>
+      <div></div>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <div id="app">
+      <h1>Root</h1>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
+        <Left1></Left1>
+        <Right1></Right1>
+      </div>
+    </div>
+  );
+}
