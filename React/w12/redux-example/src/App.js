@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import countUp, { up } from './countUpSlice';
 import countDown from './countDownSlice';
@@ -24,10 +24,11 @@ function Left2() {
 
 function Left3() {
   const dispatch = useDispatch();
+  const countUpValue = useSelector((state) => state.countUp.value);
   return (
     <div>
       <h1>Left3</h1>
-      <button
+      {/* <button
         onClick={() => {
           // dispatch({type: "countUp/up", payload: 2});
           // action create function 만들면 다음과 같음 function up(step) return {type: "countUp/up", payload: step}
@@ -36,6 +37,21 @@ function Left3() {
           console.log(countUp);
           console.log(countUp.actions);
           dispatch(up(2));
+        }}
+      >
+        +
+      </button> */}
+      <button
+        onClick={async () => {
+          const resp = await fetch('http://localhost:3333/countUp', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ value: countUpValue + 1 }),
+          });
+          const result = await resp.json();
+          dispatch(countUp.actions.up(1));
         }}
       >
         +
@@ -103,6 +119,15 @@ export default function App() {
   // const up = (step) => {
   //   return { type: 'UP', step: step };
   // };
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      const resp = await fetch('http://localhost:3333/countUp');
+      const result = await resp.json();
+      dispatch(countUp.actions.set(result.value));
+    })();
+  }, []);
 
   return (
     <div id="app">

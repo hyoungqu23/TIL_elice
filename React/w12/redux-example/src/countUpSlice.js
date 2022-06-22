@@ -15,6 +15,9 @@ const slice = createSlice({
       // 불변성 고민하지 말고 값 변경 가능(immer 사용)
       state.value = state.value + action.payload;
     },
+    set: (state, action) => {
+      state.value = action.payload;
+    },
   },
 });
 
