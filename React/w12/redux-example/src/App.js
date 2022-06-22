@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
 
 function Left1() {
@@ -21,10 +21,17 @@ function Left2() {
 }
 
 function Left3() {
+  const dispatch = useDispatch();
   return (
     <div>
       <h1>Left3</h1>
-      <button>+</button>
+      <button
+        onClick={() => {
+          dispatch({ type: 'UP', step: 1 });
+        }}
+      >
+        +
+      </button>
     </div>
   );
 }
