@@ -1,0 +1,29 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "json-server",
+      "body": "typicode"
+    },
+    {
+      "id": 2,
+      "title": "HTML5",
+      "body": "HTML5 is a simple HTML."
+    },
+    {
+      "id": 3,
+      "title": "CSS3",
+      "body": "CSS3 is a simple CSS."
+    },
+    {
+      "id": 4,
+      "title": "JavaScript",
+      "body": "JavaScript is a simple JavaScript."
+    },
+    {
+      "id": 5,
+      "title": "React.js",
+      "body": "React.js is a simple React.js"
+    }
+  ]
+}
