@@ -7,8 +7,8 @@ const Nav = ({ topics }) => {
       <ol>
         {topics.map(({ id, title }) => {
           return (
-            <li>
-              <Link to="/read/:id">{title}</Link>
+            <li key={id}>
+              <Link to={`/read/${id}`}>{title}</Link>
             </li>
           );
         })}

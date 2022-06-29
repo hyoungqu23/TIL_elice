@@ -28,7 +28,7 @@ const App = () => {
       <Nav topics={topics} />
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/read/1" element={<Read />} />
+        <Route path="/read/:id" element={<Read />} />
       </Routes>
     </div>
   );
