@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Header from './components/UI/Header';
 import Nav from './components/UI/Nav';
@@ -10,6 +10,7 @@ import Create from './components/ContentsList/Create';
 
 const App = () => {
   const [topics, setTopics] = useState([]);
+  const navigate = useNavigate();
 
   const getTopicsData = async () => {
     const response = await fetch('/topics');
@@ -28,7 +29,7 @@ const App = () => {
       body,
     };
 
-    await fetch(`/topics`, {
+    const response = await fetch(`/topics`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +37,10 @@ const App = () => {
       body: JSON.stringify(newTopic),
     });
 
+    const data = await response.json();
+
     getTopicsData();
+    navigate(`/read/${data.id}`);
   };
 
   return (
