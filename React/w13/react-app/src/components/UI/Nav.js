@@ -1,13 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Nav = () => {
+const Nav = ({ topics }) => {
   return (
     <nav>
       <ol>
-        <li>
-          <Link to="/read/1">HTML5</Link>
-        </li>
+        {topics.map(({ id, title }) => {
+          return (
+            <li>
+              <Link to="/read/:id">{title}</Link>
+            </li>
+          );
+        })}
       </ol>
     </nav>
   );
