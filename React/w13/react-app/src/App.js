@@ -52,7 +52,10 @@ const App = () => {
         <Route path="/read/:id" element={<Read />} />
         <Route path="/create" element={<Create onCreate={handleCreate} />} />
       </Routes>
-      <Control />
+      <Routes>
+        <Route path="/" element={<Control />} />
+        <Route path="/read/:id" element={<Control />} />
+      </Routes>
     </div>
   );
 };
