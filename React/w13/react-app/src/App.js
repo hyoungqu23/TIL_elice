@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
 import Header from './components/UI/Header';
 import Nav from './components/UI/Nav';
 import Welcome from './components/ContentsList/Welcome';
@@ -9,8 +10,10 @@ const App = () => {
     <div>
       <Header />
       <Nav />
-      <Welcome />
-      <Read />
+      <Routes>
+        <Route path="/" element={<Welcome />} />
+        <Route path="/read/1" element={<Read />} />
+      </Routes>
     </div>
   );
 };
