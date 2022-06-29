@@ -10,9 +10,7 @@ const App = () => {
   const [topics, setTopics] = useState([]);
 
   const getTopicsData = async () => {
-    const url = 'http://localhost:3333/topics';
-
-    const response = await fetch(url);
+    const response = await fetch('/topics');
     const data = await response.json();
 
     setTopics(data);
@@ -28,7 +26,7 @@ const App = () => {
       <Nav topics={topics} />
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/read/:id" element={<Read />} />
+        <Route path="/read/:id" element={<Read topics={topics} />} />
       </Routes>
     </div>
   );
