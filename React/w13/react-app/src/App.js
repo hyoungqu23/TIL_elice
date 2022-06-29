@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Header from './components/UI/Header';
 import Nav from './components/UI/Nav';
+import Control from './components/UI/Control';
 import Welcome from './components/ContentsList/Welcome';
 import Read from './components/ContentsList/Read';
 
@@ -26,8 +27,9 @@ const App = () => {
       <Nav topics={topics} />
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/read/:id" element={<Read topics={topics} />} />
+        <Route path="/read/:id" element={<Read />} />
       </Routes>
+      <Control />
     </div>
   );
 };
