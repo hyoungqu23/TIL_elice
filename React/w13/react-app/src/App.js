@@ -1,7 +1,12 @@
 import React from 'react';
+import Header from './components/UI/Header';
 
 const App = () => {
-  return <div>HI</div>;
+  return (
+    <div>
+      <Header />
+    </div>
+  );
 };
 
 export default App;
