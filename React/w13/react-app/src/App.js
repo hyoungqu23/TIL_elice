@@ -6,6 +6,7 @@ import Nav from './components/UI/Nav';
 import Control from './components/UI/Control';
 import Welcome from './components/ContentsList/Welcome';
 import Read from './components/ContentsList/Read';
+import Create from './components/ContentsList/Create';
 
 const App = () => {
   const [topics, setTopics] = useState([]);
@@ -21,6 +22,10 @@ const App = () => {
     getTopicsData();
   }, []);
 
+  const handleCreate = (title, body) => {
+    console.log(title, body);
+  };
+
   return (
     <div>
       <Header />
@@ -28,6 +33,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/read/:id" element={<Read />} />
+        <Route path="/create" element={<Create onCreate={handleCreate} />} />
       </Routes>
       <Control />
     </div>
