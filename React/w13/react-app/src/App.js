@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './components/UI/Header';
 import Nav from './components/UI/Nav';
 import Welcome from './components/ContentsList/Welcome';
+import Read from './components/ContentsList/Read';
 
 const App = () => {
   return (
@@ -9,6 +10,7 @@ const App = () => {
       <Header />
       <Nav />
       <Welcome />
+      <Read />
     </div>
   );
 };
