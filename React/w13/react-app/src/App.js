@@ -22,8 +22,21 @@ const App = () => {
     getTopicsData();
   }, []);
 
-  const handleCreate = (title, body) => {
-    console.log(title, body);
+  const handleCreate = async (title, body) => {
+    const newTopic = {
+      title,
+      body,
+    };
+
+    await fetch(`/topics`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTopic),
+    });
+
+    getTopicsData();
   };
 
   return (
