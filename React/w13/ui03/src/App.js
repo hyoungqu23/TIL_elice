@@ -1,8 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import styled from 'styled-components';
+import CourseCard from './components/Course/CourseCard.js';
 
-function App() {
-  return <div className="App">UI project</div>;
+const Container = styled.div`
+  background-color: #f0f1f3;
+`;
+
+export default function App() {
+  return (
+    <Container>
+      <CourseCard />
+    </Container>
+  );
 }
-
-export default App;
