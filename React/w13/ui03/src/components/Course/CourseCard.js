@@ -1,24 +1,7 @@
 import Chart from '../../icons/Chart.js';
 import Computer from '../../icons/Computer.js';
 import Calendar from '../../icons/Calendar.js';
-import {
-  Container,
-  Tags,
-  Title,
-  Description,
-  TextsWrapper,
-  TextWrapper,
-  Text,
-  Image,
-  LanguageWrapper,
-  Language,
-  SeperatorLine,
-  FreeCost,
-  CostWrapper,
-  CurrentCost,
-  OriginalCost,
-  DiscountRate,
-} from '../UI/Card';
+import * as Card from '../UI/Card';
 
 const CourseCard = ({
   tags,
@@ -33,45 +16,50 @@ const CourseCard = ({
   discountRate,
 }) => {
   return (
-    <Container>
-      <Tags>{tags.join('﹒')}</Tags>
-      <Title>{title}</Title>
-      <Description>{summary}</Description>
-      <TextsWrapper>
-        <TextWrapper>
+    <Card.Container>
+      <Card.Tags>{tags.join('﹒')}</Card.Tags>
+      <Card.Title>{title}</Card.Title>
+      <Card.Description>{summary}</Card.Description>
+      <Card.TextsWrapper>
+        <Card.TextWrapper>
           <Chart />
-          <Text>난이도: {description.level}</Text>
-        </TextWrapper>
-        <TextWrapper>
+          <Card.Text>난이도: {description.level}</Card.Text>
+        </Card.TextWrapper>
+        <Card.TextWrapper>
           <Computer />
-          <Text>수업: {description.course}</Text>
-        </TextWrapper>
-        <TextWrapper>
+          <Card.Text>수업: {description.course}</Card.Text>
+        </Card.TextWrapper>
+        <Card.TextWrapper>
           <Computer />
-          <Text>기간: {description.term}</Text>
-        </TextWrapper>
-      </TextsWrapper>
-      <Image src={imgUrl} />
-      <LanguageWrapper>
+          <Card.Text>기간: {description.term}</Card.Text>
+        </Card.TextWrapper>
+      </Card.TextsWrapper>
+      <Card.Image src={imgUrl} />
+      <Card.LanguageWrapper>
         {languages.map((language, index) => {
           return (
-            <Language key={`${language}-${index}-${title}`} language={language}>
+            <Card.Language
+              key={`${language}-${index}-${title}`}
+              language={language}
+            >
               {language}
-            </Language>
+            </Card.Language>
           );
         })}
-      </LanguageWrapper>
-      <SeperatorLine />
+      </Card.LanguageWrapper>
+      <Card.SeperatorLine />
       {isFree ? (
-        <FreeCost>무료</FreeCost>
+        <Card.FreeCost>무료</Card.FreeCost>
       ) : (
-        <CostWrapper>
-          <CurrentCost>{currentCost.toLocaleString()}원</CurrentCost>
-          <OriginalCost>{originalCost.toLocaleString()}원</OriginalCost>
-          <DiscountRate>{discountRate}%</DiscountRate>
-        </CostWrapper>
+        <Card.CostWrapper>
+          <Card.CurrentCost>{currentCost.toLocaleString()}원</Card.CurrentCost>
+          <Card.OriginalCost>
+            {originalCost.toLocaleString()}원
+          </Card.OriginalCost>
+          <Card.DiscountRate>{discountRate}%</Card.DiscountRate>
+        </Card.CostWrapper>
       )}
-    </Container>
+    </Card.Container>
   );
 };
 
