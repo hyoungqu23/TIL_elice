@@ -30,7 +30,7 @@ const CourseCard = ({
           <Card.Text>수업: {description.course}</Card.Text>
         </Card.TextWrapper>
         <Card.TextWrapper>
-          <Computer />
+          <Calendar />
           <Card.Text>기간: {description.term}</Card.Text>
         </Card.TextWrapper>
       </Card.TextsWrapper>
